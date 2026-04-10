@@ -344,7 +344,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _buildField('نقاط القوة ديالك', _empStrengths, const Color(0xFFE65100)),
         _buildField('اختبار توجيه بسيط', _empQuiz, const Color(0xFFE65100)),
       ]),
-      footerText: 'دابا نتا واجد تمشي ل 2 Clé 🔑',
+      footerText: '',
     );
   }
 
@@ -363,7 +363,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _buildField('فين خاصك تزيد تخدم على راسك؟', _empImprove,
             const Color(0xFFE65100)),
       ]),
-      footerText: 'الخطوة الجاية هي 3 Clé 🔑',
+      footerText: '',
     );
   }
 
@@ -373,16 +373,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       keyTitle: 'طريق النجاح',
       bannerTitle: 'طريق النجاح',
       subtitle:
-          'دابا نتا عارف شكون نتا، وعارف آش خاصك...\nجا الوقت تطبق وتوجد راسك لسوق الشغل.',
+          '',
       content: Column(children: [
-        _buildActionItem('Mini-formation', const Color(0xFFE65100)),
-        _buildActionItem('Capsule vidéo', const Color(0xFFE65100)),
-        _buildActionItem('Quiz تفاعلي', const Color(0xFFE65100)),
-        _buildActionItem('جزّب مقابلة حقيقية', const Color(0xFFE65100)),
-        _buildActionItem('صايب CV ديالك', const Color(0xFFE65100)),
+        _buildActionItem('تدريب مصغر', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('مقطع فيديو قصير', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('اختبار تفاعلي', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('جزّب مقابلة حقيقية', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('صايب CV ديالك', const Color.fromARGB(255, 0, 0, 0)),
       ]),
-      footerText:
-          'طريق النجاح ماشي حلم\nهو طريق... ونتا دابا فيه.\nالخطوة الجاية هي 4 Clé 🔑',
+      footerText: '',
     );
   }
 
@@ -392,16 +391,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       keyTitle: 'كاين معامن',
       bannerTitle: 'كاين معامن',
       subtitle:
-          'ماشي بوحدك... كاين اللي معاك.\nدابا نتا واجد، خاص غير تربط الطريق\nبالناس والفرص اللي دايرين بيك.',
+          '',
       content: Column(children: [
         _buildActionItem('اكتشف الفرص اللي قريبة ليك',
-            const Color(0xFFE65100)),
-        _buildActionItem('برامج التكوين', const Color(0xFFE65100)),
+            const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('برامج التكوين', const Color.fromARGB(255, 0, 0, 0)),
         _buildActionItem('مواكبة على أرض الواقع',
-            const Color(0xFFE65100)),
-        _buildActionItem('تواصل', const Color(0xFFE65100)),
+            const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('تواصل', const Color.fromARGB(255, 0, 0, 0)),
       ]),
-      footerText: 'E@Dmaj معاك...\nوخدمتك أقرب مما كتظن',
+      footerText: '',
     );
   }
 
@@ -418,7 +417,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _buildField('نقاط القوة ديالك', _entStrengths, const Color(0xFF2E7D32)),
         _buildField('اختبار توجيه بسيط', _entQuiz, const Color(0xFF2E7D32)),
       ]),
-      footerText: 'دابا واجد تمشي ل باب المقاولة 2 🔑',
+      footerText: '',
     );
   }
 
@@ -434,12 +433,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _buildField('شنو العوائق اللي كتواجهك؟', _entObstacles,
             const Color(0xFF2E7D32)),
         _buildField('فين خاصك الدعم أكثر؟', _entSupport,
-            const Color(0xFF2E7D32)),
-        const SizedBox(height: 8),
-        _buildActionItem('E@Dmaj كيرافقك بالفيديو',
-            const Color(0xFF2E7D32)),
+            const Color(0xFF2E7D32))
       ]),
-      footerText: 'دابا واجد تمشي ل باب المقاولة 3 🔑',
+      footerText: '',
     );
   }
 
@@ -449,15 +445,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       keyTitle: 'طريق النجاح',
       bannerTitle: 'طريق النجاح',
       subtitle:
-          'دابا نتا عارف شكون نتا، وعارف آش خاصك...\nجا الوقت تبني مشروعك وتمشي لقدّام.',
+          '',
       content: Column(children: [
-        _buildActionItem('Mini-formation', const Color(0xFF2E7D32)),
-        _buildActionItem('Capsule vidéo', const Color(0xFF2E7D32)),
-        _buildActionItem('Quiz', const Color(0xFF2E7D32)),
-        _buildActionItem('Génération Mini Business Plan',
-            const Color(0xFF2E7D32)),
+        _buildActionItem('تدريب مصغر', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('مقطع فيديو قصير', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('اختبار تفاعلي', const Color.fromARGB(255, 0, 0, 0)),
+        _buildActionItem('توليد خطة عمل مصغرة', const Color.fromARGB(255, 0, 0, 0)),
       ]),
-      footerText: 'دابا واجد تمشي ل باب المقاولة 4 🔑',
+      footerText: '',
     );
   }
 
@@ -478,7 +473,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         _buildField('شكون باغي تتواصل معاه؟', _entContact,
             const Color(0xFF2E7D32)),
       ]),
-      footerText: 'E@Dmaj معاك...\nوخدمتك أقرب مما كتظن',
+      footerText: '',
     );
   }
 

@@ -13,19 +13,14 @@ class MentorshipService {
 
     return const [
       MentorModel(
-        name: 'Yassine E.',
+        name: 'Dr. Abdeltif Belmkadem',
         focusArea: 'Career Orientation',
-        location: 'Tangier',
+        location: 'Casablanca',
       ),
       MentorModel(
-        name: 'Salma R.',
+        name: 'Salma Amrani',
         focusArea: 'Women Entrepreneurship',
-        location: 'Fes',
-      ),
-      MentorModel(
-        name: 'Local Program Hub',
-        focusArea: 'Community Support Programs',
-        location: 'Agadir',
+        location: 'Rabat',
       ),
     ];
   }
