@@ -54,7 +54,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
   }
 
   Future<void> _loadSaved() async {
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getSavedPlan(userId);
     if (saved != null) {
       setState(() {
@@ -79,7 +79,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
       return;
     }
     setState(() => _generating = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final result = await _service.generatePlan(
       userId: userId,
       projectName: name,
@@ -101,7 +101,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
 
   Future<void> _save() async {
     setState(() => _saving = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.savePlan(
       userId: userId,
       projectName: _nameCtrl.text.trim(),

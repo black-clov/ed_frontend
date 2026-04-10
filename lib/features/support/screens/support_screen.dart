@@ -35,7 +35,7 @@ class _SupportScreenState extends State<SupportScreen> {
 
   Future<void> _load() async {
     final categories = await _service.fetchOptions();
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserData(userId);
     final savedPrefs = (saved['preferences'] as List?)?.cast<String>() ?? [];
 
@@ -63,7 +63,7 @@ class _SupportScreenState extends State<SupportScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submit(
       userId: userId,
       preferences: _selections.values.toList(),

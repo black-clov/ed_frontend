@@ -35,7 +35,7 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
 
   Future<void> _load() async {
     final options = await _service.fetchOptions();
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserData(userId);
     final savedBarriers = (saved['barriers'] as List?)?.cast<String>() ?? [];
 
@@ -55,7 +55,7 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submit(
       userId: userId,
       barriers: _selected.toList(),

@@ -39,7 +39,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
 
   Future<void> _load() async {
     final modules = await _service.fetchModules();
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserData(userId);
 
     final savedSkills = (saved['skills'] as List?)?.cast<String>() ?? [];
@@ -67,7 +67,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submit(
       userId: userId,
       skills: rated.map((e) => e.key).toList(),

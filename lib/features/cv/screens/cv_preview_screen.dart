@@ -26,7 +26,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
   }
 
   Future<void> _loadCv() async {
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final backendCv = await _service.fetchCvFromBackend(userId: userId);
     final cv = backendCv ?? await _service.buildLocalPreview();
     setState(() {
@@ -37,7 +37,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
 
   Future<void> _exportPdf() async {
     setState(() => _downloading = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final path = await _service.downloadPdf(userId: userId);
     setState(() => _downloading = false);
 

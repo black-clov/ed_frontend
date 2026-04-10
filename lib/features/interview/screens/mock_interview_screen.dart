@@ -76,7 +76,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
 
     setState(() => _submitting = true);
 
-    final userId = await _storage.read(key: 'userId') ?? 'anonymous';
+    final userId = await _storage.read(key: 'user_id') ?? 'anonymous';
     final answers = _questions!.map((q) {
       return {
         'questionId': q.id,

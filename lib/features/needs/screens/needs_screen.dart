@@ -29,7 +29,7 @@ class _NeedsScreenState extends State<NeedsScreen> {
   Future<void> _load() async {
     final options = await _service.fetchOptions();
     // Pre-select previously saved
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserNeeds(userId);
     setState(() {
       _options = options;
@@ -46,7 +46,7 @@ class _NeedsScreenState extends State<NeedsScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submitNeeds(userId: userId, needs: _selected.toList());
     setState(() => _submitting = false);
     if (!mounted) return;

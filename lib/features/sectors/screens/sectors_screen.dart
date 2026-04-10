@@ -28,7 +28,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
 
   Future<void> _load() async {
     final options = await _service.fetchOptions();
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserSectors(userId);
     setState(() {
       _options = options;
@@ -45,7 +45,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submitSectors(userId: userId, sectors: _selected.toList());
     setState(() => _submitting = false);
     if (!mounted) return;

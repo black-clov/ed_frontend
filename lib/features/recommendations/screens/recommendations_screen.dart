@@ -9,7 +9,7 @@ class RecommendationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recommendations')),
+      appBar: AppBar(title: const Text('التوصيات')),
       body: FutureBuilder<List<RecommendationModel>>(
         future: RecommendationsService().getRecommendations(),
         builder: (context, snapshot) {
@@ -19,7 +19,7 @@ class RecommendationsScreen extends StatelessWidget {
 
           final recommendations = snapshot.data ?? const [];
           if (recommendations.isEmpty) {
-            return const Center(child: Text('No recommendations available.'));
+            return const Center(child: Text('لا توجد توصيات متاحة.'));
           }
 
           return ListView.builder(

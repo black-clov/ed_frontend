@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../services/api_service.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
 
@@ -13,6 +14,40 @@ class AuthService {
         "password": password
       },
     );
+  }
+
+  Future<Map<String, dynamic>?> signInWithGoogle() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+      );
+      
+      // Sign out first to ensure account picker shows
+      await googleSignIn.signOut();
+      
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return null; // User cancelled
+      
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+      
+      if (idToken == null) {
+        throw Exception('Failed to get Google ID token');
+      }
+      
+      // Send token to backend
+      final response = await api.post(
+        "/auth/google",
+        data: {"idToken": idToken},
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data;
+      }
+      return null;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<Response> register({

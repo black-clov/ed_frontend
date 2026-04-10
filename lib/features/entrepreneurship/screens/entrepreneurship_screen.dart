@@ -28,7 +28,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
 
   Future<void> _load() async {
     final options = await _service.fetchOptions();
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final saved = await _service.getUserData(userId);
 
     final savedSkills = (saved['skills'] as List?)?.cast<String>() ?? [];
@@ -54,7 +54,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
       return;
     }
     setState(() => _submitting = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     await _service.submitSkills(
       userId: userId,
       skills: rated.map((e) => e.key).toList(),

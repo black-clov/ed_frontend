@@ -27,7 +27,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    final userId = await _storage.read(key: 'userId');
+    final userId = await _storage.read(key: 'user_id');
     final list = _showMatched
         ? await _service.getMatchedOpportunities(userId)
         : await _service.getOpportunities();

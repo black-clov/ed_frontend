@@ -3,6 +3,7 @@ import 'auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
 	const RegisterScreen({super.key});
@@ -23,6 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 	final _passwordController = TextEditingController();
 	final AuthService _authService = AuthService();
 	bool _loading = false;
+	bool _googleLoading = false;
 	String _gender = 'boy';
 
 	@override
@@ -34,6 +36,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
 	Future<void> _loadGender() async {
 		final g = await const FlutterSecureStorage().read(key: 'gender');
 		if (g != null && mounted) setState(() => _gender = g);
+	}
+
+	Future<void> _handleGoogleSignIn() async {
+		setState(() => _googleLoading = true);
+		try {
+			final result = await _authService.signInWithGoogle();
+			if (result == null) {
+				setState(() => _googleLoading = false);
+				return;
+			}
+			final storage = const FlutterSecureStorage();
+			final token = result['access_token'];
+			if (token != null) {
+				await storage.write(key: 'token', value: token);
+				final userId = result['userId'];
+				if (userId != null) {
+					await storage.write(key: 'user_id', value: userId.toString());
+				}
+				final role = result['role'];
+				if (role != null) {
+					await storage.write(key: 'role', value: role.toString());
+				}
+				if (!mounted) return;
+				final onboardingDone = await storage.read(key: 'onboarding_done');
+				if (!mounted) return;
+				if (role == 'admin' || onboardingDone == 'true') {
+					Navigator.pushReplacement(
+						context,
+						MaterialPageRoute(builder: (_) => const DashboardScreen()),
+					);
+				} else {
+					Navigator.pushReplacementNamed(context, '/onboarding');
+				}
+			}
+		} catch (e) {
+			if (!mounted) return;
+			ScaffoldMessenger.of(context).showSnackBar(
+				SnackBar(content: Text("فشل التسجيل بـ Google: ${e.toString()}")),
+			);
+		}
+		if (mounted) setState(() => _googleLoading = false);
 	}
 
 	@override
@@ -292,6 +335,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
 																child: _loading
 																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
 																		: const Text('تسجيل', style: TextStyle(fontSize: 18, color:Colors.white)),
+															),
+														),
+														const SizedBox(height: 12),
+														// Google Sign-In Button
+														SizedBox(
+															width: double.infinity,
+															height: 48,
+															child: OutlinedButton.icon(
+																style: OutlinedButton.styleFrom(
+																	side: const BorderSide(color: Color(0xFFDB4437), width: 1.5),
+																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+																),
+																onPressed: _googleLoading ? null : _handleGoogleSignIn,
+																icon: _googleLoading
+																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFDB4437)))
+																		: const Icon(Icons.g_mobiledata, color: Color(0xFFDB4437), size: 28),
+																label: Text(
+																	"التسجيل بـ Google",
+																	style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFDB4437)),
+																),
 															),
 														),
 													],
