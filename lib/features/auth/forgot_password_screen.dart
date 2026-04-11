@@ -49,7 +49,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         _showSnack('حدث خطأ، حاول مرة أخرى');
       }
     } catch (e) {
-      _showSnack('حدث خطأ: ${e.toString()}');
+      _showSnack('حدث خطأ في الاتصال. حاول مرة أخرى.');
     } finally {
       setState(() => _isLoading = false);
     }
@@ -84,7 +84,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         _showSnack('رمز إعادة التعيين غير صالح أو منتهي الصلاحية');
       }
     } catch (e) {
-      _showSnack('حدث خطأ: ${e.toString()}');
+      _showSnack('حدث خطأ. حاول مرة أخرى.');
     } finally {
       setState(() => _isLoading = false);
     }

@@ -5,6 +5,68 @@ import 'package:share_plus/share_plus.dart';
 import '../models/cv_model.dart';
 import '../services/cv_service.dart';
 
+/// Arabic → French translation map for CV display
+const _frenchMap = <String, String>{
+  // Skills
+  'مهارات التواصل': 'Communication',
+  'المهارات الرقمية': 'Compétences numériques',
+  'المهارات التقنية/اليدوية': 'Compétences techniques / manuelles',
+  'العمل الجماعي': 'Travail d\'équipe',
+  'إدارة الوقت': 'Gestion du temps',
+  'الإبداع': 'Créativité',
+  'المبيعات/التفاوض': 'Vente / Négociation',
+  // Interest sub-items
+  'تطوير المواقع': 'Développement web',
+  'تطبيقات الهاتف': 'Applications mobiles',
+  'تحليل البيانات': 'Analyse de données',
+  'التصميم الرقمي': 'Design numérique',
+  'الدعم التقني': 'Support technique',
+  'الفنون والحرف': 'Arts et artisanat',
+  'التصوير الفوتوغرافي': 'Photographie',
+  'الكتابة والتحرير': 'Rédaction et édition',
+  'الموسيقى والصوت': 'Musique et audio',
+  'الأزياء والتصميم': 'Mode et design',
+  'الطبخ والمطعمة': 'Cuisine et restauration',
+  'الفلاحة': 'Agriculture',
+  'الميكانيك والصيانة': 'Mécanique et maintenance',
+  'التجميل والحلاقة': 'Coiffure et esthétique',
+  'الصناعة التقليدية': 'Artisanat traditionnel',
+  'البيع والتجارة': 'Vente et commerce',
+  'الرعاية الصحية': 'Soins de santé',
+  'التعليم والتدريب': 'Enseignement et formation',
+  'العمل الاجتماعي': 'Travail social',
+  'السياحة والضيافة': 'Tourisme et hôtellerie',
+  // Interest categories
+  'التكنولوجيا': 'Technologie',
+  'الخدمات اليدوية': 'Services manuels',
+  'التعامل مع الناس': 'Relations humaines',
+  // Work Preferences (English keys from backend)
+  'remote': 'Travail à distance',
+  'hybrid': 'Hybride',
+  'on-site': 'Sur site',
+  'flexible-hours': 'Horaires flexibles',
+  // Needs (keys or Arabic labels)
+  'learning': 'Apprentissage et formation',
+  'training': 'Formation professionnelle',
+  'confidence': 'Confiance en soi',
+  'cv': 'Aide au CV',
+  'jobs': 'Recherche d\'emploi',
+  'networking': 'Réseautage',
+  'languages': 'Apprentissage des langues',
+  'digital': 'Compétences numériques',
+  'entrepreneurship': 'Entrepreneuriat',
+  'التعلم والتكوين': 'Apprentissage et formation',
+  'تدريب مهني': 'Formation professionnelle',
+  'الثقة بالنفس': 'Confiance en soi',
+  'المساعدة في الـ CV': 'Aide au CV',
+  'البحث عن عمل': 'Recherche d\'emploi',
+  'بناء شبكة علاقات': 'Réseautage',
+  'تعلم اللغات': 'Apprentissage des langues',
+  'ريادة الأعمال': 'Entrepreneuriat',
+};
+
+String _fr(String value) => _frenchMap[value] ?? value;
+
 class CvPreviewScreen extends StatefulWidget {
   const CvPreviewScreen({super.key});
 
@@ -45,7 +107,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
     if (path != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('تم تحميل الـ CV بنجاح!'),
+          content: Text('CV téléchargé avec succès !'),
           backgroundColor: Color(0xFF2E7D32),
         ),
       );
@@ -56,7 +118,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('فشل التحميل. تحقق من الاتصال بالخادم'),
+          content: Text('Échec du téléchargement. Vérifiez la connexion.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -66,13 +128,13 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: TextDirection.ltr,
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
         body: _loading
             ? const Center(child: CircularProgressIndicator())
             : _cv == null
-                ? const Center(child: Text('لا توجد بيانات'))
+                ? const Center(child: Text('Aucune donnée disponible'))
                 : CustomScrollView(
                     slivers: [
                       SliverAppBar(
@@ -117,7 +179,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   const Text(
-                                    'شاب(ة) باحث(ة) عن فرص مهنية',
+                                    'Jeune à la recherche d\'opportunités professionnelles',
                                     style: TextStyle(color: Colors.white70, fontSize: 13),
                                   ),
                                 ],
@@ -135,7 +197,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                     child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                                   )
                                 : const Icon(Icons.picture_as_pdf),
-                            tooltip: 'تحميل PDF',
+                            tooltip: 'Télécharger PDF',
                           ),
                         ],
                       ),
@@ -152,15 +214,15 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                   _cv!.age.isNotEmpty)
                                 _buildSection(
                                   icon: Icons.person,
-                                  title: 'معلومات الاتصال',
+                                  title: 'Informations personnelles',
                                   color: const Color(0xFF1565C0),
                                   child: Column(
                                     children: [
-                                      if (_cv!.email.isNotEmpty) _infoRow(Icons.email, 'البريد', _cv!.email),
-                                      if (_cv!.phone.isNotEmpty) _infoRow(Icons.phone, 'الهاتف', _cv!.phone),
-                                      if (_cv!.city.isNotEmpty) _infoRow(Icons.location_city, 'المدينة', _cv!.city),
-                                      if (_cv!.education.isNotEmpty) _infoRow(Icons.school, 'المستوى', _cv!.education),
-                                      if (_cv!.age.isNotEmpty) _infoRow(Icons.cake, 'العمر', '${_cv!.age} سنة'),
+                                      if (_cv!.email.isNotEmpty) _infoRow(Icons.email, 'Email', _cv!.email),
+                                      if (_cv!.phone.isNotEmpty) _infoRow(Icons.phone, 'Téléphone', _cv!.phone),
+                                      if (_cv!.city.isNotEmpty) _infoRow(Icons.location_city, 'Ville', _cv!.city),
+                                      if (_cv!.education.isNotEmpty) _infoRow(Icons.school, 'Niveau scolaire', _cv!.education),
+                                      if (_cv!.age.isNotEmpty) _infoRow(Icons.cake, 'Âge', '${_cv!.age} ans'),
                                     ],
                                   ),
                                 ),
@@ -169,7 +231,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                               if (_cv!.skills.isNotEmpty)
                                 _buildSection(
                                   icon: Icons.star,
-                                  title: 'المهارات',
+                                  title: 'Compétences',
                                   color: const Color(0xFFE65100),
                                   child: Wrap(
                                     spacing: 8,
@@ -189,7 +251,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                                 children: [
                                                   const Icon(Icons.check_circle, size: 16, color: Color(0xFFE65100)),
                                                   const SizedBox(width: 6),
-                                                  Text(s, style: const TextStyle(fontSize: 13, color: Color(0xFFE65100), fontWeight: FontWeight.w600)),
+                                                  Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFFE65100), fontWeight: FontWeight.w600)),
                                                 ],
                                               ),
                                             ))
@@ -201,7 +263,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                               if (_cv!.interests.isNotEmpty)
                                 _buildSection(
                                   icon: Icons.favorite,
-                                  title: 'الاهتمامات',
+                                  title: 'Centres d\'intérêt',
                                   color: const Color(0xFF7B1FA2),
                                   child: Wrap(
                                     spacing: 8,
@@ -214,7 +276,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                                 borderRadius: BorderRadius.circular(20),
                                                 border: Border.all(color: const Color(0xFF7B1FA2).withAlpha(60)),
                                               ),
-                                              child: Text(s, style: const TextStyle(fontSize: 13, color: Color(0xFF6A1B9A))),
+                                              child: Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFF6A1B9A))),
                                             ))
                                         .toList(),
                                   ),
@@ -224,7 +286,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                               if (_cv!.needs.isNotEmpty)
                                 _buildSection(
                                   icon: Icons.lightbulb,
-                                  title: 'الاحتياجات',
+                                  title: 'Besoins',
                                   color: const Color(0xFF00838F),
                                   child: Column(
                                     children: _cv!.needs
@@ -241,7 +303,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                                     ),
                                                   ),
                                                   const SizedBox(width: 10),
-                                                  Expanded(child: Text(n, style: const TextStyle(fontSize: 14))),
+                                                  Expanded(child: Text(_fr(n), style: const TextStyle(fontSize: 14))),
                                                 ],
                                               ),
                                             ))
@@ -253,7 +315,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                               if (_cv!.workPreferences.isNotEmpty)
                                 _buildSection(
                                   icon: Icons.work,
-                                  title: 'تفضيلات العمل',
+                                  title: 'Préférences de travail',
                                   color: const Color(0xFF2E7D32),
                                   child: Wrap(
                                     spacing: 8,
@@ -266,7 +328,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                                 borderRadius: BorderRadius.circular(20),
                                                 border: Border.all(color: const Color(0xFF2E7D32).withAlpha(60)),
                                               ),
-                                              child: Text(s, style: const TextStyle(fontSize: 13, color: Color(0xFF1B5E20))),
+                                              child: Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFF1B5E20))),
                                             ))
                                         .toList(),
                                   ),
@@ -287,7 +349,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                         )
                                       : const Icon(Icons.download, color: Colors.white),
                                   label: Text(
-                                    _downloading ? 'جاري التحميل...' : 'تحميل CV بصيغة PDF',
+                                    _downloading ? 'Téléchargement...' : 'Télécharger CV en PDF',
                                     style: const TextStyle(fontSize: 16, color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(

@@ -65,9 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("فشل تسجيل الدخول بـ Google: ${e.toString()}")),
-      );
+      _showErrorPopup('فشل تسجيل الدخول بـ Google. حاول مرة أخرى.');
     }
     if (mounted) setState(() => _googleLoading = false);
   }
@@ -79,7 +77,35 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _showErrorPopup(String msg) {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.error_outline, color: Color(0xFFE65100)),
+            SizedBox(width: 8),
+            Text('خطأ', style: TextStyle(color: Color(0xFFE65100))),
+          ],
+        ),
+        content: Text(msg, style: const TextStyle(fontSize: 15)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('حسنا', style: TextStyle(color: Color(0xFFE65100))),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> login() async {
+    if (emailController.text.trim().isEmpty || passwordController.text.trim().isEmpty) {
+      _showErrorPopup('يرجى ملء جميع الحقول');
+      return;
+    }
     try {
       final response = await authService.login(
         emailController.text,
@@ -118,15 +144,11 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("فشل تسجيل الدخول: بيانات الاعتماد غير صحيحة"))
-        );
+        _showErrorPopup('البريد الإلكتروني أو كلمة المرور غير صحيحة');
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("فشل تسجيل الدخول: ${e.toString()}"))
-      );
+      _showErrorPopup('حدث خطأ في الاتصال. حاول مرة أخرى.');
     }
   }
   @override

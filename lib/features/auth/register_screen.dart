@@ -72,9 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 			}
 		} catch (e) {
 			if (!mounted) return;
-			ScaffoldMessenger.of(context).showSnackBar(
-				SnackBar(content: Text("فشل التسجيل بـ Google: ${e.toString()}")),
-			);
+			_showErrorPopup('فشل التسجيل بـ Google. حاول مرة أخرى.');
 		}
 		if (mounted) setState(() => _googleLoading = false);
 	}
@@ -90,6 +88,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
 		_emailController.dispose();
 		_passwordController.dispose();
 		super.dispose();
+	}
+
+	void _showErrorPopup(String msg) {
+		if (!mounted) return;
+		showDialog(
+			context: context,
+			builder: (_) => AlertDialog(
+				shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+				title: const Row(
+					children: [
+						Icon(Icons.error_outline, color: Color(0xFFE65100)),
+						SizedBox(width: 8),
+						Text('خطأ', style: TextStyle(color: Color(0xFFE65100))),
+					],
+				),
+				content: Text(msg, style: const TextStyle(fontSize: 15)),
+				actions: [
+					TextButton(
+						onPressed: () => Navigator.pop(context),
+						child: const Text('حسنا', style: TextStyle(color: Color(0xFFE65100))),
+					),
+				],
+			),
+		);
 	}
 
 	void _register() async {
@@ -142,22 +164,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 				// Go to onboarding flow
 				Navigator.pushReplacementNamed(context, '/onboarding');
 			} else {
-				final msg = response.data?.toString() ?? 'لا يوجد رد من الخادم.';
-				ScaffoldMessenger.of(context).showSnackBar(
-					SnackBar(content: Text('فشل التسجيل: $msg')),
-				);
+				_showErrorPopup('فشل التسجيل. تحقق من بياناتك وحاول مرة أخرى.');
 			}
 		} on DioError catch (e) {
 			setState(() => _loading = false);
-			final msg = e.response?.data?.toString() ?? e.message ?? e.toString();
-			ScaffoldMessenger.of(context).showSnackBar(
-				SnackBar(content: Text('خطأ في التسجيل: $msg')),
-			);
+			_showErrorPopup('فشل التسجيل. تحقق من البيانات وحاول مرة أخرى.');
 		} catch (e) {
 			setState(() => _loading = false);
-			ScaffoldMessenger.of(context).showSnackBar(
-				SnackBar(content: Text('خطأ في التسجيل: ${e.toString()}')),
-			);
+			_showErrorPopup('حدث خطأ. حاول مرة أخرى.');
 		}
 	}
 
