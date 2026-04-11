@@ -75,6 +75,33 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+    try {
+      final data = await _authService.signInWithGoogle();
+      if (data != null && data['access_token'] != null) {
+        await _storage.write(key: 'token', value: data['access_token']);
+        final userId = data['userId'];
+        if (userId != null) await _storage.write(key: 'user_id', value: userId.toString());
+        final role = data['role'];
+        if (role != null) await _storage.write(key: 'role', value: role.toString());
+        if (!mounted) return;
+        final onboardingDone = await _storage.read(key: 'onboarding_done');
+        if (!mounted) return;
+        if (role == 'admin' || onboardingDone == 'true') {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const DashboardScreen()));
+        } else {
+          Navigator.pushReplacementNamed(context, '/onboarding');
+        }
+      } else {
+        _showSnack('فشل التسجيل عبر جوجل');
+      }
+    } catch (e) {
+      _showSnack('خطأ في التسجيل عبر جوجل');
+    }
+    if (mounted) setState(() => _isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -212,28 +239,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   width: double.infinity,
                   height: 44,
                   child: OutlinedButton.icon(
-                    onPressed: () => _showSnack('قريبًا'),
+                    onPressed: _isLoading ? null : _signInWithGoogle,
                     icon: const Text('G', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red)),
-                    label: const Text('se connecter avec google', style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    label: const Text('التسجيل عبر جوجل', style: TextStyle(color: Colors.black87, fontSize: 14)),
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       side: BorderSide(color: Colors.grey.shade300),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Facebook button
-                SizedBox(
-                  width: double.infinity,
-                  height: 44,
-                  child: ElevatedButton.icon(
-                    onPressed: () => _showSnack('قريبًا'),
-                    icon: const Icon(Icons.facebook, color: Colors.white),
-                    label: const Text('se connecter avec facebook', style: TextStyle(color: Colors.white, fontSize: 14)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1877F2),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
                 ),
