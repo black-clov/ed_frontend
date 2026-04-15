@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../models/video_model.dart';
 import '../services/videos_service.dart';
+import 'video_player_screen.dart';
 
 class VideosScreen extends StatefulWidget {
   const VideosScreen({super.key});
@@ -327,12 +327,17 @@ class _VideoCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () async {
+                  onPressed: () {
                     Navigator.pop(ctx);
-                    final uri = Uri.parse(video.videoUrl);
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    }
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => VideoPlayerScreen(
+                          videoUrl: video.videoUrl,
+                          title: video.title,
+                        ),
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.play_arrow),
                   label: const Text('شاهد الفيديو', style: TextStyle(fontSize: 16)),
