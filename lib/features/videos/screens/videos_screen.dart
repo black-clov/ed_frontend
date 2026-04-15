@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../models/video_model.dart';
 import '../services/videos_service.dart';
@@ -326,13 +327,12 @@ class _VideoCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pop(ctx);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('قريبًا: تشغيل الفيديو'),
-                      ),
-                    );
+                    final uri = Uri.parse(video.videoUrl);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
                   },
                   icon: const Icon(Icons.play_arrow),
                   label: const Text('شاهد الفيديو', style: TextStyle(fontSize: 16)),

@@ -19,6 +19,7 @@ import '../entbarriers/screens/ent_barriers_screen.dart';
 import '../support/screens/support_screen.dart';
 import '../commtraining/screens/comm_training_screen.dart';
 import '../admin/screens/admin_dashboard_screen.dart';
+import '../content/screens/content_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -57,6 +58,8 @@ class _DashboardScreenState extends State<DashboardScreen>
         Color(0xFFFF8F00), NeedsScreen(), 'شنو خاصك'),
     _DashboardSection('الإرشاد والمواكبة', Icons.groups_outlined,
         Color(0xFFE65100), MentorshipScreen(), 'كاين معامن'),
+    _DashboardSection('المحتوى والمقالات', Icons.library_books_outlined,
+        Color(0xFF1565C0), ContentScreen(), 'مقالات ودلائل'),
   ];
 
   final List<_DashboardSection> _entrepreneurshipSections = [
