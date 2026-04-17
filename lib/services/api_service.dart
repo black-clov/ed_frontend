@@ -8,9 +8,12 @@ import 'package:flutter/material.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class ApiService {
+  static final ApiService _instance = ApiService._internal();
+  factory ApiService() => _instance;
+
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  ApiService() {
+  ApiService._internal() {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
@@ -43,24 +46,44 @@ class ApiService {
   final Dio dio = Dio(
     BaseOptions(
       baseUrl: Env.apiUrl,
-      connectTimeout: const Duration(seconds: 60),
-      receiveTimeout: const Duration(seconds: 60),
+      connectTimeout: const Duration(seconds: 90),
+      receiveTimeout: const Duration(seconds: 90),
       headers: {
         "Content-Type": "application/json",
       },
     ),
   );
 
+  /// Retry-aware wrapper for GET requests (handles Render cold starts)
+  Future<Response<dynamic>> _retryRequest(
+    Future<Response<dynamic>> Function() request, {
+    int maxRetries = 2,
+  }) async {
+    for (int attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        return await request();
+      } on DioException catch (e) {
+        final isRetryable = e.type == DioExceptionType.connectionTimeout ||
+            e.type == DioExceptionType.receiveTimeout ||
+            e.type == DioExceptionType.connectionError;
+        if (!isRetryable || attempt == maxRetries) rethrow;
+        // Wait before retry (1s, then 3s)
+        await Future.delayed(Duration(seconds: attempt == 0 ? 1 : 3));
+      }
+    }
+    throw Exception('Unreachable');
+  }
+
   Future<Response<dynamic>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) async {
-    return dio.get(
+    return _retryRequest(() => dio.get(
       path,
       queryParameters: queryParameters,
       options: options,
-    );
+    ));
   }
 
   Future<Response<dynamic>> post(

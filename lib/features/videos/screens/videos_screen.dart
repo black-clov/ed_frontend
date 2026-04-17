@@ -17,6 +17,7 @@ class _VideosScreenState extends State<VideosScreen> {
   List<VideoModel> _videos = [];
   String? _selectedCategory;
   bool _loading = true;
+  String? _error;
 
   @override
   void initState() {
@@ -25,25 +26,41 @@ class _VideosScreenState extends State<VideosScreen> {
   }
 
   Future<void> _loadData() async {
-    final cats = await _service.fetchCategories();
-    final videos = await _service.fetchVideos();
-    setState(() {
-      _categories = cats;
-      _videos = videos;
-      _loading = false;
-    });
+    setState(() { _loading = true; _error = null; });
+    try {
+      final cats = await _service.fetchCategories();
+      final videos = await _service.fetchVideos();
+      setState(() {
+        _categories = cats;
+        _videos = videos;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+        _error = 'تعذر تحميل الفيديوهات. تحقق من الاتصال وأعد المحاولة.';
+      });
+    }
   }
 
   Future<void> _filterByCategory(String? categoryId) async {
     setState(() {
       _selectedCategory = categoryId;
       _loading = true;
+      _error = null;
     });
-    final videos = await _service.fetchVideos(category: categoryId);
-    setState(() {
-      _videos = videos;
-      _loading = false;
-    });
+    try {
+      final videos = await _service.fetchVideos(category: categoryId);
+      setState(() {
+        _videos = videos;
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _loading = false;
+        _error = 'تعذر تحميل الفيديوهات. أعد المحاولة.';
+      });
+    }
   }
 
   IconData _iconForCategory(String catId) {
@@ -139,7 +156,24 @@ class _VideosScreenState extends State<VideosScreen> {
             Expanded(
               child: _loading
                   ? const Center(child: CircularProgressIndicator())
-                  : _videos.isEmpty
+                  : _error != null
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
+                              const SizedBox(height: 12),
+                              Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: _loadData,
+                                icon: const Icon(Icons.refresh),
+                                label: const Text('إعادة المحاولة'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : _videos.isEmpty
                       ? const Center(
                           child: Text(
                             'ما كاين حتى فيديو فهاد القسم',

@@ -12,22 +12,22 @@ class VideosService {
           .map((e) => VideoCategory.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (_) {
+      // Categories are static, safe to use defaults as fallback
       return _defaultCategories();
     }
   }
 
   Future<List<VideoModel>> fetchVideos({String? category}) async {
-    try {
-      final queryParams = category != null ? {'category': category} : null;
-      final response =
-          await _api.get('/videos', queryParameters: queryParams);
-      final List<dynamic> raw = response.data;
-      return raw
+    final queryParams = category != null ? {'category': category} : null;
+    final response =
+        await _api.get('/videos', queryParameters: queryParams);
+    final data = response.data;
+    if (data is List) {
+      return data
           .map((e) => VideoModel.fromJson(e as Map<String, dynamic>))
           .toList();
-    } catch (_) {
-      return _defaultVideos();
     }
+    return [];
   }
 
   List<VideoCategory> _defaultCategories() {

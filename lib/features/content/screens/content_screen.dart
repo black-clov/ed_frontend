@@ -14,6 +14,7 @@ class _ContentScreenState extends State<ContentScreen> {
   final _service = ContentService();
   List<ContentModel> _items = [];
   bool _loading = true;
+  String? _error;
   String _selectedType = 'all';
 
   final _types = [
@@ -30,12 +31,14 @@ class _ContentScreenState extends State<ContentScreen> {
   }
 
   Future<void> _load() async {
-    setState(() => _loading = true);
+    setState(() { _loading = true; _error = null; });
     try {
       _items = await _service.fetchContent(
         type: _selectedType == 'all' ? null : _selectedType,
       );
-    } catch (_) {}
+    } catch (_) {
+      _error = 'تعذر تحميل المحتوى. تحقق من الاتصال وأعد المحاولة.';
+    }
     setState(() => _loading = false);
   }
 
@@ -84,7 +87,24 @@ class _ContentScreenState extends State<ContentScreen> {
             Expanded(
               child: _loading
                   ? const Center(child: CircularProgressIndicator())
-                  : _items.isEmpty
+                  : _error != null
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
+                              const SizedBox(height: 12),
+                              Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: _load,
+                                icon: const Icon(Icons.refresh),
+                                label: const Text('إعادة المحاولة'),
+                              ),
+                            ],
+                          ),
+                        )
+                      : _items.isEmpty
                       ? const Center(
                           child: Text('لا يوجد محتوى حالياً',
                               style: TextStyle(color: Colors.grey)))
