@@ -20,7 +20,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _loadData();
   }
 
@@ -69,7 +69,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             tabs: const [
               Tab(icon: Icon(Icons.dashboard), text: 'الإحصائيات'),
               Tab(icon: Icon(Icons.people), text: 'المستخدمين'),
-              Tab(icon: Icon(Icons.analytics), text: 'التحليلات'),
             ],
           ),
         ),
@@ -89,7 +88,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                     children: [
                       _buildStatsTab(),
                       _buildUsersTab(),
-                      _buildAnalyticsTab(),
                     ],
                   ),
       ),
@@ -99,8 +97,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   Widget _buildStatsTab() {
     if (_stats == null) return const SizedBox();
     final features = _stats!['features'] as Map<String, dynamic>? ?? {};
-    final dailyEvents = _stats!['dailyEvents'] as List<dynamic>? ?? [];
-    final eventsByAction = _stats!['eventsByAction'] as List<dynamic>? ?? [];
 
     return RefreshIndicator(
       onRefresh: _loadData,
@@ -124,61 +120,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             const Text('استخدام الميزات', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             ...features.entries.map((e) => _buildFeatureRow(e.key, e.value)),
-
-            const SizedBox(height: 20),
-            const Text('الأحداث اليومية (آخر 30 يوم)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            if (dailyEvents.isEmpty)
-              const Text('لا توجد بيانات بعد', style: TextStyle(color: Colors.grey))
-            else
-              SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: dailyEvents.length,
-                  itemBuilder: (ctx, i) {
-                    final d = dailyEvents[i];
-                    final count = int.tryParse('${d['count']}') ?? 0;
-                    final maxCount = dailyEvents.fold<int>(0, (prev, e) {
-                      final c = int.tryParse('${e['count']}') ?? 0;
-                      return c > prev ? c : prev;
-                    });
-                    final height = maxCount > 0 ? (count / maxCount * 100).toDouble() : 0.0;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('$count', style: const TextStyle(fontSize: 10)),
-                          Container(
-                            width: 20,
-                            height: height,
-                            decoration: BoxDecoration(
-                              color: Colors.indigo,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${d['date']}'.substring(5),
-                            style: const TextStyle(fontSize: 8),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-            const SizedBox(height: 20),
-            const Text('أكثر الإجراءات استخداماً', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            ...eventsByAction.take(10).map((e) => ListTile(
-              dense: true,
-              leading: const Icon(Icons.arrow_left, size: 18),
-              title: Text('${e['action']}', style: const TextStyle(fontSize: 13)),
-              trailing: Text('${e['count']}', style: const TextStyle(fontWeight: FontWeight.bold)),
-            )),
           ],
         ),
       ),
@@ -298,26 +239,5 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     }
   }
 
-  Widget _buildAnalyticsTab() {
-    final eventsByAction = _stats?['eventsByAction'] as List<dynamic>? ?? [];
-    if (eventsByAction.isEmpty) {
-      return const Center(child: Text('لا توجد بيانات تحليلية بعد'));
-    }
-    return ListView.separated(
-      padding: const EdgeInsets.all(12),
-      itemCount: eventsByAction.length,
-      separatorBuilder: (_, __) => const Divider(height: 1),
-      itemBuilder: (context, index) {
-        final event = eventsByAction[index] as Map<String, dynamic>;
-        return ListTile(
-          leading: const Icon(Icons.bar_chart, color: Colors.indigo),
-          title: Text('${event['action']}'),
-          trailing: Text(
-            '${event['count']}',
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo),
-          ),
-        );
-      },
-    );
-  }
 }
+

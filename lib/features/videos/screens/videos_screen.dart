@@ -189,31 +189,59 @@ class _VideoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thumbnail placeholder
-            Container(
-              height: 160,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+            // Thumbnail
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+              child: SizedBox(
+                height: 180,
+                width: double.infinity,
+                child: Stack(
+                  fit: StackFit.expand,
                   children: [
-                    Icon(Icons.play_circle_fill, size: 56, color: color),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(12),
+                    if (video.thumbnailUrl != null && video.thumbnailUrl!.isNotEmpty)
+                      Image.network(
+                        video.thumbnailUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: color.withValues(alpha: 0.1),
+                          child: Icon(Icons.play_circle_fill, size: 56, color: color),
+                        ),
+                      )
+                    else
+                      Container(
+                        color: color.withValues(alpha: 0.1),
+                        child: Center(
+                          child: Icon(Icons.play_circle_fill, size: 56, color: color),
+                        ),
                       ),
-                      child: Text(
-                        video.formattedDuration,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 13),
+                    // Duration badge
+                    Positioned(
+                      bottom: 8,
+                      left: 8,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          video.formattedDuration,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 13),
+                        ),
+                      ),
+                    ),
+                    // Play overlay
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(Icons.play_arrow, size: 36, color: Colors.white),
                       ),
                     ),
                   ],
