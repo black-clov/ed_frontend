@@ -16,7 +16,7 @@ class AdminService {
   }
 
   Future<void> updateUserRole(String userId, String role) async {
-    await _api.put('/admin/users/$userId/role', data: {'role': role});
+    await _api.patch('/admin/users/$userId/role', data: {'role': role});
   }
 
   Future<List<dynamic>> getAnalytics({int limit = 100}) async {
