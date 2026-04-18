@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/video_model.dart';
 import '../services/videos_service.dart';
@@ -234,10 +235,14 @@ class _VideoCard extends StatelessWidget {
                   fit: StackFit.expand,
                   children: [
                     if (video.thumbnailUrl != null && video.thumbnailUrl!.isNotEmpty)
-                      Image.network(
-                        video.thumbnailUrl!,
+                      CachedNetworkImage(
+                        imageUrl: video.thumbnailUrl!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
+                        placeholder: (_, __) => Container(
+                          color: color.withValues(alpha: 0.1),
+                          child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                        ),
+                        errorWidget: (_, __, ___) => Container(
                           color: color.withValues(alpha: 0.1),
                           child: Icon(Icons.play_circle_fill, size: 56, color: color),
                         ),
