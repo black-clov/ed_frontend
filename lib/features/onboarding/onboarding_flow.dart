@@ -372,15 +372,17 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       isEmployment: true,
       keyTitle: 'طريق النجاح',
       bannerTitle: 'طريق النجاح',
-      subtitle:
-          '',
-      content: Column(children: [
-        _buildActionItem('تدريب مصغر', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('مقطع فيديو قصير', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('اختبار تفاعلي', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('جزّب مقابلة حقيقية', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('صايب CV ديالك', const Color.fromARGB(255, 0, 0, 0)),
-      ]),
+      subtitle: '',
+      content: _buildStepTimeline(
+        items: [
+          'تدريب مصغر',
+          'مقطع فيديو قصير',
+          'اختبار تفاعلي',
+          'جزّب مقابلة حقيقية',
+          'صايب CV ديالك',
+        ],
+        color: const Color(0xFFE65100),
+      ),
       footerText: '',
     );
   }
@@ -390,16 +392,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       isEmployment: true,
       keyTitle: 'كاين معامن',
       bannerTitle: 'كاين معامن',
-      subtitle:
-          '',
-      content: Column(children: [
-        _buildActionItem('اكتشف الفرص اللي قريبة ليك',
-            const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('برامج التكوين', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('مواكبة على أرض الواقع',
-            const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('تواصل', const Color.fromARGB(255, 0, 0, 0)),
-      ]),
+      subtitle: '',
+      content: _buildStepTimeline(
+        items: [
+          'اكتشف الفرص اللي قريبة ليك',
+          'برامج التكوين',
+          'مواكبة على أرض الواقع',
+          'تواصل',
+        ],
+        color: const Color(0xFFE65100),
+      ),
       footerText: '',
     );
   }
@@ -444,14 +446,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       isEmployment: false,
       keyTitle: 'طريق النجاح',
       bannerTitle: 'طريق النجاح',
-      subtitle:
-          '',
-      content: Column(children: [
-        _buildActionItem('تدريب مصغر', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('مقطع فيديو قصير', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('اختبار تفاعلي', const Color.fromARGB(255, 0, 0, 0)),
-        _buildActionItem('توليد خطة عمل مصغرة', const Color.fromARGB(255, 0, 0, 0)),
-      ]),
+      subtitle: '',
+      content: _buildStepTimeline(
+        items: [
+          'تدريب مصغر',
+          'مقطع فيديو قصير',
+          'اختبار تفاعلي',
+          'توليد خطة عمل مصغرة',
+        ],
+        color: const Color(0xFF2E7D32),
+      ),
       footerText: '',
     );
   }
@@ -642,6 +646,106 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildStepTimeline({
+    required List<String> items,
+    required Color color,
+  }) {
+    return Column(
+      children: List.generate(items.length, (i) {
+        final isLast = i == items.length - 1;
+        return IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Timeline column: circle + connector line
+              SizedBox(
+                width: 44,
+                child: Column(
+                  children: [
+                    // Numbered circle
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: color.withAlpha(60),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${i + 1}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Connector line + arrow
+                    if (!isLast)
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                width: 3,
+                                color: color.withAlpha(80),
+                              ),
+                            ),
+                            Icon(
+                              Icons.keyboard_arrow_down,
+                              color: color.withAlpha(150),
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              // Step content card
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: isLast ? 0 : 8),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: color.withAlpha(60)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(15),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    items[i],
+                    style: TextStyle(
+                      color: color.withAlpha(220),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

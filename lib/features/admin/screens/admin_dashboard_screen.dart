@@ -195,7 +195,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
               title: Text('${user['first_name'] ?? ''} ${user['last_name'] ?? ''}'.trim()),
               subtitle: Text(user['email'] ?? ''),
               trailing: PopupMenuButton<String>(
-                onSelected: (role) => _changeRole(user['id'], role),
+                onSelected: (role) {
+                  final uid = user['id'];
+                  if (uid == null || uid.toString().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('خطأ: معرّف المستخدم غير متوفر')),
+                    );
+                    return;
+                  }
+                  _changeRole(uid.toString(), role);
+                },
                 itemBuilder: (_) => [
                   const PopupMenuItem(value: 'user', child: Text('مستخدم عادي')),
                   const PopupMenuItem(value: 'admin', child: Text('مدير')),
@@ -232,10 +241,21 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
         const SnackBar(content: Text('تم تحديث الدور بنجاح')),
       );
     } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ: ${e.toString()}')),
-      );
+      // Retry once on failure (handles Render cold starts)
+      try {
+        await Future.delayed(const Duration(seconds: 2));
+        await _adminService.updateUserRole(userId, role);
+        await _loadData();
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم تحديث الدور بنجاح')),
+        );
+      } catch (e2) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('خطأ في تغيير الدور: ${e2.toString()}')),
+        );
+      }
     }
   }
 
