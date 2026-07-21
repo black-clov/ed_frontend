@@ -77,7 +77,7 @@ class SupportService {
       await _api.post('/support', data: {
         'userId': userId ?? 'anonymous',
         'preferences': preferences,
-        if (details != null) 'details': details,
+        'details': ?details,
       });
       return true;
     } catch (_) {

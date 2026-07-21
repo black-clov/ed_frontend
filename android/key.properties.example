@@ -1,0 +1,18 @@
+# -----------------------------------------------------------------------------
+# TEMPLATE — copy this file to `key.properties` (same folder) and fill in your
+# real values. `key.properties` and *.jks are gitignored, so your secrets and
+# keystore are NEVER committed. Back up the keystore + these passwords securely:
+# if you lose them you can NEVER update the app on the Play Store again.
+# -----------------------------------------------------------------------------
+
+# Passwords you chose when running `keytool -genkey ...`
+storePassword=CHANGE_ME_store_password
+keyPassword=CHANGE_ME_key_password
+
+# The alias you passed to keytool (-alias). "upload" is the conventional name.
+keyAlias=upload
+
+# Path to the keystore file. Resolved relative to android/app/, so if you place
+# the .jks at android/app/upload-keystore.jks, just the filename works.
+# You can also use an absolute path, e.g. C:/keys/upload-keystore.jks
+storeFile=upload-keystore.jks

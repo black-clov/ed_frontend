@@ -3,7 +3,9 @@ import 'auth_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../../core/config/env.dart';
 
 class RegisterScreen extends StatefulWidget {
 	const RegisterScreen({super.key});
@@ -36,6 +38,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 	Future<void> _loadGender() async {
 		final g = await const FlutterSecureStorage().read(key: 'gender');
 		if (g != null && mounted) setState(() => _gender = g);
+	}
+
+	Future<void> _openPrivacyPolicy() async {
+		final uri = Uri.parse(Env.privacyPolicyUrl);
+		if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+			if (!mounted) return;
+			ScaffoldMessenger.of(context).showSnackBar(
+				const SnackBar(content: Text('تعذر فتح سياسة الخصوصية')),
+			);
+		}
 	}
 
 	Future<void> _handleGoogleSignIn() async {
@@ -166,10 +178,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 			} else {
 				_showErrorPopup('فشل التسجيل. تحقق من بياناتك وحاول مرة أخرى.');
 			}
-		} on DioError catch (e) {
+		} on DioException catch (_) {
 			setState(() => _loading = false);
 			_showErrorPopup('فشل التسجيل. تحقق من البيانات وحاول مرة أخرى.');
-		} catch (e) {
+		} catch (_) {
 			setState(() => _loading = false);
 			_showErrorPopup('حدث خطأ. حاول مرة أخرى.');
 		}
@@ -399,6 +411,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 												),
 											),
 										],
+									),
+									const SizedBox(height: 16),
+									GestureDetector(
+										onTap: _openPrivacyPolicy,
+										child: Text(
+											"بالتسجيل، أنت توافق على سياسة الخصوصية",
+											textAlign: TextAlign.center,
+											style: TextStyle(
+												color: Colors.grey.shade600,
+												fontSize: 12.5,
+												decoration: TextDecoration.underline,
+											),
+										),
 									),
 								],
 							),

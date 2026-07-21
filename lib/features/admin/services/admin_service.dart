@@ -34,4 +34,22 @@ class AdminService {
     if (resp.data is List) return resp.data;
     return [];
   }
+
+  Future<List<dynamic>> getVideos() async {
+    final resp = await _api.get('/admin/videos');
+    if (resp.data is List) return resp.data;
+    return [];
+  }
+
+  Future<void> createVideo(Map<String, dynamic> data) async {
+    await _api.post('/admin/videos', data: data);
+  }
+
+  Future<void> updateVideo(String id, Map<String, dynamic> data) async {
+    await _api.put('/admin/videos/$id', data: data);
+  }
+
+  Future<void> deleteVideo(String id) async {
+    await _api.delete('/admin/videos/$id');
+  }
 }

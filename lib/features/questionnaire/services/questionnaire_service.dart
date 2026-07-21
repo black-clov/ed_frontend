@@ -54,7 +54,7 @@ class QuestionnaireService {
 
   Future<bool> submitAnswers({String? userId}) async {
     final payload = {
-      if (userId != null) 'userId': userId,
+      'userId': ?userId,
       'answers': _answers.entries
           .map((e) => {'questionId': e.key, 'answer': e.value})
           .toList(),

@@ -14,13 +14,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
 
   Map<String, dynamic>? _stats;
   List<dynamic>? _users;
+  List<dynamic>? _videos;
   bool _loading = true;
   String? _error;
+
+  static const _categories = [
+    'cv', 'interview', 'skills', 'softskills', 'opportunities', 'entrepreneurship',
+  ];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+
     _loadData();
   }
 
@@ -36,11 +41,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       final results = await Future.wait([
         _adminService.getStats(),
         _adminService.getUsers(),
+        _adminService.getVideos(),
       ]);
       if (!mounted) return;
       setState(() {
         _stats = results[0] as Map<String, dynamic>;
         _users = results[1] as List<dynamic>;
+        _videos = results[2] as List<dynamic>;
         _loading = false;
       });
     } catch (e) {
@@ -69,6 +76,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             tabs: const [
               Tab(icon: Icon(Icons.dashboard), text: 'الإحصائيات'),
               Tab(icon: Icon(Icons.people), text: 'المستخدمين'),
+              Tab(icon: Icon(Icons.video_library), text: 'الفيديوهات'),
             ],
           ),
         ),
@@ -88,6 +96,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                     children: [
                       _buildStatsTab(),
                       _buildUsersTab(),
+                      _buildVideosTab(),
                     ],
                   ),
       ),

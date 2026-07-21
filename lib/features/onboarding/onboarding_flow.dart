@@ -151,8 +151,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: Colors.black.withOpacity(
-                        (_step == 1 || _step == 6) ? 0.0 : 0.15,
+                      color: Colors.black.withValues(
+                        alpha: (_step == 1 || _step == 6) ? 0.0 : 0.15,
                       ), // optional slight dim on text steps
                       child: _buildCurrentStep(),
                     ),
@@ -749,23 +749,4 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     );
   }
 
-  Widget _buildActionItem(String label, Color color) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withAlpha(100)),
-      ),
-      child: Text(
-        '• $label',
-        style: TextStyle(
-            color: color, fontWeight: FontWeight.bold, fontSize: 15),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
 }

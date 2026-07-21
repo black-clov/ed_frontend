@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/profile_service.dart';
+import '../../../core/config/env.dart';
 import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -203,6 +205,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton.icon(
+                    onPressed: _openPrivacyPolicy,
+                    icon: const Icon(Icons.privacy_tip_outlined, size: 18),
+                    label: const Text('سياسة الخصوصية'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF5D4037),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // Danger zone — permanent account deletion (required by Play Store)
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton.icon(
+                    onPressed: _confirmDeleteAccount,
+                    icon: const Icon(Icons.delete_forever, size: 20),
+                    label: const Text('حذف الحساب نهائياً'),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red.shade700,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 30),
               ],
             ),
@@ -210,6 +237,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _openPrivacyPolicy() async {
+    final uri = Uri.parse(Env.privacyPolicyUrl);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر فتح سياسة الخصوصية')),
+      );
+    }
+  }
+
+  Future<void> _confirmDeleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              Icon(Icons.warning_amber_rounded,
+                  color: Colors.red.shade700, size: 26),
+              const SizedBox(width: 8),
+              const Text('حذف الحساب',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+          content: const Text(
+            'واش بصح باغي تمسح الحساب ديالك؟ غادي يتمسحو جميع معطياتك (الملف، المهارات، السيرة الذاتية، المشاريع...) بشكل نهائي وما يمكنش ترجعهم.',
+            style: TextStyle(height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('لا، بقى',
+                  style: TextStyle(color: Colors.grey, fontSize: 15)),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade700,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: const Text('أيه، امسح',
+                  style: TextStyle(color: Colors.white, fontSize: 15)),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    // Show a blocking progress indicator while deleting.
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await ProfileService().deleteAccount();
+      await const FlutterSecureStorage().deleteAll();
+      if (!mounted) return;
+      Navigator.of(context).pop(); // close progress
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/welcome', (route) => false);
+    } catch (e) {
+      if (!mounted) return;
+      Navigator.of(context).pop(); // close progress
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('تعذر حذف الحساب، حاول مرة أخرى'),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
   }
 
   Widget _buildCard({

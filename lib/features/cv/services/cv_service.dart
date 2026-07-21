@@ -68,8 +68,8 @@ class CvService {
       final response = await _apiService.post(
         '/cv/pdf',
         data: {
-          if (userId != null) 'userId': userId,
-          if (headline != null) 'headline': headline,
+          'userId': ?userId,
+          'headline': ?headline,
         },
         options: Options(responseType: ResponseType.bytes),
       );

@@ -32,7 +32,7 @@ class VideoModel {
   String get formattedDuration {
     final minutes = durationSeconds ~/ 60;
     final seconds = durationSeconds % 60;
-    return '${minutes}:${seconds.toString().padLeft(2, '0')}';
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
   }
 }
 

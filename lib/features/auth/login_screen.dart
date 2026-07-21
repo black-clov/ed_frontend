@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
         emailController.text,
         passwordController.text
       );
-      print('Login response: \\${response.statusCode} \\${response.data}');
+      debugPrint('Login response: ${response.statusCode} ${response.data}');
       // Check for HTTP 200 and access_token in response
       if ((response.statusCode == 200 || response.statusCode == 201) && response.data != null && response.data["access_token"] != null) {
         final token = response.data["access_token"];

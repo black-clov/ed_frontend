@@ -36,8 +36,8 @@ class CommTrainingService {
       await _api.post('/commtraining', data: {
         'userId': userId ?? 'anonymous',
         'skills': skills,
-        if (ratings != null) 'ratings': ratings,
-        if (completedModules != null) 'completedModules': completedModules,
+        'ratings': ?ratings,
+        'completedModules': ?completedModules,
       });
       return true;
     } catch (_) {

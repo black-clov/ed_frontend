@@ -35,7 +35,7 @@ class EntrepreneurshipService {
       await _api.post('/entrepreneurship', data: {
         'userId': userId ?? 'anonymous',
         'skills': skills,
-        if (ratings != null) 'ratings': ratings,
+        'ratings': ?ratings,
       });
       return true;
     } catch (_) {

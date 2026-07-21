@@ -70,21 +70,23 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
           _submitting = false;
           _submitted = ok;
         });
+        if (!mounted) return;
         if (ok) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Answers submitted successfully!')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Submission failed.')), 
+            const SnackBar(content: Text('Submission failed.')),
           );
         }
       } catch (e) {
         setState(() {
           _submitting = false;
         });
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Submission failed.')), 
+          const SnackBar(content: Text('Submission failed.')),
         );
       }
       return;
@@ -170,7 +172,23 @@ class _QuestionnaireScreenState extends State<QuestionnaireScreen> {
                   .toList(),
             ),
             const Spacer(),
-            
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _submitting ? null : _onNext,
+                child: _submitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(
+                        _currentIndex == (_questions?.length ?? 1) - 1
+                            ? 'إرسال'
+                            : 'التالي',
+                      ),
+              ),
+            ),
           ],
         ),
       ),

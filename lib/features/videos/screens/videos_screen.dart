@@ -238,11 +238,11 @@ class _VideoCard extends StatelessWidget {
                       CachedNetworkImage(
                         imageUrl: video.thumbnailUrl!,
                         fit: BoxFit.cover,
-                        placeholder: (_, __) => Container(
+                        placeholder: (_, _) => Container(
                           color: color.withValues(alpha: 0.1),
                           child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
                         ),
-                        errorWidget: (_, __, ___) => Container(
+                        errorWidget: (_, _, _) => Container(
                           color: color.withValues(alpha: 0.1),
                           child: Icon(Icons.play_circle_fill, size: 56, color: color),
                         ),

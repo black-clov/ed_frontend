@@ -39,7 +39,7 @@ class EntBarriersService {
       await _api.post('/entbarriers', data: {
         'userId': userId ?? 'anonymous',
         'barriers': barriers,
-        if (notes != null) 'notes': notes,
+        'notes': ?notes,
       });
       return true;
     } catch (_) {

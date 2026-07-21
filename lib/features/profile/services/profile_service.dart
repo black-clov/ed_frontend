@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../models/profile_model.dart';
 import '../../../services/api_service.dart';
 
@@ -16,14 +17,14 @@ class ProfileService {
 
   Future<String> fetchUserName(String userId) async {
     final response = await _apiService.get('/users/$userId');
-    print('API response for /users/$userId: \\${response.data}');
+    debugPrint('API response for /users/$userId: ${response.data}');
     final data = response.data;
     return data['full_name'] ?? data['fullName'] ?? '';
   }
 
   Future<Map<String, dynamic>> fetchUserData(String userId) async {
     final response = await _apiService.get('/users/$userId');
-    print('API response for /users/$userId: \\${response.data}');
+    debugPrint('API response for /users/$userId: ${response.data}');
     if (response.data is Map<String, dynamic>) {
       return response.data;
     } else if (response.data is String) {
@@ -39,6 +40,11 @@ class ProfileService {
       return response.data;
     }
     return {};
+  }
+
+  /// Permanently deletes the authenticated user's account and all their data.
+  Future<void> deleteAccount() async {
+    await _apiService.delete('/users/me');
   }
 
   ProfileModel getInitialProfile() {

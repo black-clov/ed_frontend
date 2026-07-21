@@ -17,7 +17,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   bool _isLoading = false;
   bool _resetRequested = false;
-  String? _resetToken; // For dev/testing — stored from response
 
   @override
   void dispose() {
@@ -37,14 +36,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     try {
       final resp = await _authService.requestPasswordReset(_emailController.text.trim());
       if (resp.data != null && resp.data['ok'] == true) {
-        setState(() {
-          _resetRequested = true;
-          _resetToken = resp.data['resetToken'];
-          if (_resetToken != null) {
-            _tokenController.text = _resetToken!;
-          }
-        });
-        _showSnack('تم إرسال رمز إعادة التعيين');
+        setState(() => _resetRequested = true);
+        _showSnack('إذا كان البريد مسجلاً، ستصلك رسالة بها رمز إعادة التعيين');
       } else {
         _showSnack('حدث خطأ، حاول مرة أخرى');
       }
@@ -175,7 +168,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         Icon(Icons.vpn_key, size: 64, color: const Color(0xFFE65100)),
         const SizedBox(height: 16),
         const Text(
-          'أدخل رمز إعادة التعيين وكلمة المرور الجديدة',
+          'أدخل الرمز الذي وصلك على بريدك الإلكتروني وكلمة المرور الجديدة',
           style: TextStyle(fontSize: 16),
           textAlign: TextAlign.center,
         ),

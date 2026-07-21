@@ -12,7 +12,7 @@ class PitchService {
       final resp = await _api.post('/pitch/generate', data: {
         'userId': userId ?? 'anonymous',
         'projectName': projectName,
-        if (sector != null) 'sector': sector,
+        'sector': ?sector,
       });
       if (resp.data is Map<String, dynamic>) return resp.data;
     } catch (_) {}
@@ -56,7 +56,7 @@ class PitchService {
         'userId': userId ?? 'anonymous',
         'projectName': projectName,
         'pitchText': pitchText,
-        if (sector != null) 'sector': sector,
+        'sector': ?sector,
       });
       return true;
     } catch (_) {
