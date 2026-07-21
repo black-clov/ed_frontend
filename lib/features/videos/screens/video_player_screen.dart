@@ -141,6 +141,26 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             : const SizedBox.shrink(),
           ),
 
+          // Top gradient scrim — keeps the title & back button readable
+          // over any video (bright frames, YouTube controls, etc.).
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: IgnorePointer(
+              child: Container(
+                height: MediaQuery.of(context).padding.top + 72,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Color(0xB3000000), Color(0x00000000)],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           // Back button
           Positioned(
             top: MediaQuery.of(context).padding.top + 8,
