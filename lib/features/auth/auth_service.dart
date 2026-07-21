@@ -18,8 +18,12 @@ class AuthService {
 
   Future<Map<String, dynamic>?> signInWithGoogle() async {
     try {
+      // On Android the web client ID must be passed as `serverClientId` (NOT
+      // `clientId`) so Google issues an idToken whose audience matches the
+      // backend's GOOGLE_CLIENT_ID. The Android OAuth client (package name +
+      // SHA-1) is matched automatically by Google Play Services.
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: '689368638634-vsfudtbs1c7aloclsgr1uua055lpmvb8.apps.googleusercontent.com',
+        serverClientId: '689368638634-vsfudtbs1c7aloclsgr1uua055lpmvb8.apps.googleusercontent.com',
         scopes: ['email', 'profile'],
       );
       
