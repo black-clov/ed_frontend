@@ -7,7 +7,7 @@ class Env {
   ///
   ///   flutter run --dart-define=API_URL=http://localhost:3000/api
   ///   flutter build appbundle --dart-define=API_URL=https://ed-backend-o1dv.onrender.com/api
-  static const String _prodApiUrl = 'https://ed-backend-o1dv.onrender.com/api';
+  static const String _prodApiUrl = 'https://ed-backend-1.onrender.com/api';
 
   static String get apiUrl {
     return const String.fromEnvironment('API_URL', defaultValue: _prodApiUrl);
