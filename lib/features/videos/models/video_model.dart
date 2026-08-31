@@ -1,3 +1,5 @@
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 class VideoModel {
   final String id;
   final String title;
@@ -33,6 +35,15 @@ class VideoModel {
     final minutes = durationSeconds ~/ 60;
     final seconds = durationSeconds % 60;
     return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  /// Thumbnail to display: the provided one if set, otherwise the YouTube
+  /// thumbnail derived from the video link (so admins only need to paste a URL).
+  String? get displayThumbnail {
+    if (thumbnailUrl != null && thumbnailUrl!.isNotEmpty) return thumbnailUrl;
+    final ytId = YoutubePlayer.convertUrlToId(videoUrl);
+    if (ytId != null) return 'https://img.youtube.com/vi/$ytId/hqdefault.jpg';
+    return null;
   }
 }
 
