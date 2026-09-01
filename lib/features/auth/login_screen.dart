@@ -20,19 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final AuthService authService = AuthService();
   final storage = const FlutterSecureStorage();
-  String _gender = 'boy';
   bool _googleLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadGender();
-  }
-
-  Future<void> _loadGender() async {
-    final g = await storage.read(key: 'gender');
-    if (g != null && mounted) setState(() => _gender = g);
-  }
 
   Future<void> _handleGoogleSignIn() async {
     setState(() => _googleLoading = true);
@@ -204,11 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     tr('login_subtitle'),
                     style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 24),
-                  Image.asset(
-                    _gender == 'boy' ? 'assets/images/mascott_garcon.png' : 'assets/images/mascott_fille.png',
-                    height: 160,
                   ),
                   const SizedBox(height: 24),
                   Card(

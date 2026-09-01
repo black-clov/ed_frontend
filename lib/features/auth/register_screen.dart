@@ -28,18 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 	final AuthService _authService = AuthService();
 	bool _loading = false;
 	bool _googleLoading = false;
-	String _gender = 'boy';
-
-	@override
-	void initState() {
-		super.initState();
-		_loadGender();
-	}
-
-	Future<void> _loadGender() async {
-		final g = await const FlutterSecureStorage().read(key: 'gender');
-		if (g != null && mounted) setState(() => _gender = g);
-	}
 
 	Future<void> _openPrivacyPolicy() async {
 		final uri = Uri.parse(Env.privacyPolicyUrl);
@@ -216,11 +204,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 								Text(
 									tr('auth_register_subtitle'),
 									style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-								),
-								const SizedBox(height: 16),
-								Image.asset(
-									_gender == 'boy' ? 'assets/images/mascott_garcon.png' : 'assets/images/mascott_fille.png',
-									height: 120,
 								),
 								const SizedBox(height: 16),
 								Card(
