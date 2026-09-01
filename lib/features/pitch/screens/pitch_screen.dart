@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/pitch_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class PitchScreen extends StatefulWidget {
   const PitchScreen({super.key});
@@ -22,13 +23,13 @@ class _PitchScreenState extends State<PitchScreen> {
   Map<String, dynamic>? _result;
   List<dynamic> _tips = [];
 
-  static const _sectors = [
-    {'key': 'innovation', 'label': 'الابتكار', 'icon': '💡'},
-    {'key': 'sales', 'label': 'المبيعات', 'icon': '🛒'},
-    {'key': 'marketing', 'label': 'التسويق', 'icon': '📢'},
-    {'key': 'manual_services', 'label': 'الخدمات اليدوية', 'icon': '🔧'},
-    {'key': 'management', 'label': 'الإدارة', 'icon': '📊'},
-    {'key': 'people', 'label': 'العمل مع الناس', 'icon': '🤝'},
+  List<Map<String, String>> get _sectors => [
+    {'key': 'innovation', 'label': tr('ent_sector_short_innovation'), 'icon': '💡'},
+    {'key': 'sales', 'label': tr('ent_sector_short_sales'), 'icon': '🛒'},
+    {'key': 'marketing', 'label': tr('ent_sector_short_marketing'), 'icon': '📢'},
+    {'key': 'manual_services', 'label': tr('ent_sector_manual_services'), 'icon': '🔧'},
+    {'key': 'management', 'label': tr('ent_sector_short_management'), 'icon': '📊'},
+    {'key': 'people', 'label': tr('ent_sector_people_work'), 'icon': '🤝'},
   ];
 
   @override
@@ -60,7 +61,7 @@ class _PitchScreenState extends State<PitchScreen> {
   Future<void> _generate() async {
     if (_nameCtrl.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('أدخل اسم المشروع')),
+        SnackBar(content: Text(tr('ent_enter_project_name'))),
       );
       return;
     }
@@ -93,7 +94,7 @@ class _PitchScreenState extends State<PitchScreen> {
     setState(() => _saving = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ الـ Pitch ديالك ✅')),
+      SnackBar(content: Text(tr('ent_pitch_saved_success'))),
     );
   }
 
@@ -105,11 +106,9 @@ class _PitchScreenState extends State<PitchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('تحضير العرض التقديمي'),
+          title: Text(tr('ent_pitch_title')),
           centerTitle: true,
           actions: [
             if (_result != null)
@@ -134,19 +133,19 @@ class _PitchScreenState extends State<PitchScreen> {
                   gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
-                    Icon(Icons.mic, color: Colors.white, size: 40),
-                    SizedBox(height: 8),
-                    Text(
+                    const Icon(Icons.mic, color: Colors.white, size: 40),
+                    const SizedBox(height: 8),
+                    const Text(
                       'Elevator Pitch',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'حضّر عرض تقديمي قصير (1 دقيقة) باش تقنع المستثمرين',
+                      tr('ent_pitch_header_subtitle'),
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                      style: const TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
                 ),
@@ -156,9 +155,9 @@ class _PitchScreenState extends State<PitchScreen> {
               // Project name
               TextField(
                 controller: _nameCtrl,
-                textDirection: TextDirection.rtl,
+                textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                 decoration: InputDecoration(
-                  labelText: 'اسم المشروع',
+                  labelText: tr('ent_project_name_label'),
                   prefixIcon: const Icon(Icons.edit),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -166,7 +165,7 @@ class _PitchScreenState extends State<PitchScreen> {
               const SizedBox(height: 12),
 
               // Sector chips
-              const Text('القطاع:', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(tr('ent_sector_label'), style: const TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 6),
               Wrap(
                 spacing: 8,
@@ -191,7 +190,7 @@ class _PitchScreenState extends State<PitchScreen> {
                   icon: _generating
                       ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                       : const Icon(Icons.auto_awesome),
-                  label: Text(_generating ? 'جاري التوليد...' : 'توليد Pitch', style: const TextStyle(fontSize: 16)),
+                  label: Text(_generating ? tr('ent_generating_ellipsis') : tr('ent_pitch_generate_btn'), style: const TextStyle(fontSize: 16)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2E7D32),
                     foregroundColor: Colors.white,
@@ -210,7 +209,7 @@ class _PitchScreenState extends State<PitchScreen> {
                     const Icon(Icons.timer, size: 18, color: Color(0xFF2E7D32)),
                     const SizedBox(width: 6),
                     Text(
-                      '$_wordCount كلمة ≈ ${(_wordCount / 130).toStringAsFixed(1)} دقيقة',
+                      '$_wordCount ${tr('ent_word_unit')} ≈ ${(_wordCount / 130).toStringAsFixed(1)} ${tr('ent_minute_unit')}',
                       style: const TextStyle(fontSize: 13, color: Color(0xFF2E7D32), fontWeight: FontWeight.w600),
                     ),
                     const Spacer(),
@@ -218,13 +217,13 @@ class _PitchScreenState extends State<PitchScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(color: Colors.red.shade50, borderRadius: BorderRadius.circular(8)),
-                        child: const Text('طويل شوية ⚠️', style: TextStyle(fontSize: 11, color: Colors.red)),
+                        child: Text(tr('ent_pitch_too_long'), style: const TextStyle(fontSize: 11, color: Colors.red)),
                       ),
                     if (_wordCount <= 160 && _wordCount > 0)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(color: Colors.green.shade50, borderRadius: BorderRadius.circular(8)),
-                        child: const Text('مدة مناسبة ✅', style: TextStyle(fontSize: 11, color: Colors.green)),
+                        child: Text(tr('ent_pitch_good_duration'), style: const TextStyle(fontSize: 11, color: Colors.green)),
                       ),
                   ],
                 ),
@@ -233,12 +232,12 @@ class _PitchScreenState extends State<PitchScreen> {
                 // Editable pitch
                 TextField(
                   controller: _pitchCtrl,
-                  textDirection: TextDirection.rtl,
+                  textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                   maxLines: null,
                   minLines: 8,
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
-                    labelText: 'النص ديال الـ Pitch',
+                    labelText: tr('ent_pitch_text_label'),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                     contentPadding: const EdgeInsets.all(14),
                   ),
@@ -254,7 +253,7 @@ class _PitchScreenState extends State<PitchScreen> {
                     icon: _saving
                         ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                         : const Icon(Icons.save),
-                    label: Text(_saving ? 'جاري الحفظ...' : 'حفظ', style: const TextStyle(fontSize: 16)),
+                    label: Text(_saving ? tr('ent_saving_ellipsis') : tr('ent_save_btn'), style: const TextStyle(fontSize: 16)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF2E7D32),
                       foregroundColor: Colors.white,
@@ -267,7 +266,7 @@ class _PitchScreenState extends State<PitchScreen> {
 
                 // Tips section
                 if (_tips.isNotEmpty) ...[
-                  const Text('نصائح للـ Pitch الناجح:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(tr('ent_pitch_tips_title'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   ..._tips.map((tip) => Card(
                     margin: const EdgeInsets.only(bottom: 8),
@@ -283,7 +282,6 @@ class _PitchScreenState extends State<PitchScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

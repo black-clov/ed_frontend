@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../models/cv_model.dart';
 import '../services/cv_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 /// Arabic → French translation map for CV display
 const _frenchMap = <String, String>{
@@ -113,7 +114,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
       );
       await SharePlus.instance.share(ShareParams(
         files: [XFile(path)],
-        text: 'CV - إدماج',
+        text: tr('emp2_cv_share_text'),
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -24,7 +24,7 @@ class RecommendationCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(description),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: AlignmentDirectional.centerEnd,
               child: TextButton(onPressed: () {}, child: Text(actionLabel)),
             ),
           ],

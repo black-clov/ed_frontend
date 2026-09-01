@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/comm_module_model.dart';
 import '../services/comm_training_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class CommTrainingScreen extends StatefulWidget {
   const CommTrainingScreen({super.key});
@@ -62,7 +63,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
     final rated = _ratings.entries.where((e) => e.value > 0).toList();
     if (rated.isEmpty && _completed.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('قيّم أو أكمل على الأقل وحدة واحدة')),
+        SnackBar(content: Text(tr('ent_comm_select_or_complete'))),
       );
       return;
     }
@@ -77,28 +78,26 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ تقدمك فالتواصل ✅')),
+      SnackBar(content: Text(tr('ent_comm_saved_success'))),
     );
   }
 
   String _ratingLabel(int value) {
     switch (value) {
-      case 1: return 'مبتدئ';
-      case 2: return 'أساسي';
-      case 3: return 'متوسط';
-      case 4: return 'جيد';
-      case 5: return 'متمكن';
+      case 1: return tr('ent_rating_beginner');
+      case 2: return tr('ent_rating_basic');
+      case 3: return tr('ent_rating_intermediate');
+      case 4: return tr('ent_rating_good');
+      case 5: return tr('ent_rating_proficient');
       default: return '';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('تدريب التواصل'),
+          title: Text(tr('ent_comm_title')),
           centerTitle: true,
         ),
         body: _loading
@@ -115,19 +114,19 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                         gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.forum, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
+                          const Icon(Icons.forum, color: Colors.white, size: 40),
+                          const SizedBox(height: 8),
                           Text(
-                            'مهارات التواصل لرائد الأعمال',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            tr('ent_comm_header_title'),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'تعلم كيفاش تهضر مع الزبناء، تفاوض، وتقنع',
+                            tr('ent_comm_header_subtitle'),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70, fontSize: 13),
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         ],
                       ),
@@ -155,13 +154,12 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                         ),
                         child: _submitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('حفظ التقدم', style: TextStyle(fontSize: 16)),
+                            : Text(tr('ent_comm_save_progress_btn'), style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
-      ),
     );
   }
 
@@ -217,7 +215,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Tips
-                  Text('نصائح عملية:', style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14)),
+                  Text(tr('ent_comm_tips_title'), style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14)),
                   const SizedBox(height: 8),
                   ...m.tips.map((tip) => Padding(
                     padding: const EdgeInsets.only(bottom: 6),
@@ -233,7 +231,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                   const SizedBox(height: 12),
 
                   // Self-rating
-                  Text('قيّم مستواك:', style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14)),
+                  Text(tr('ent_comm_rate_level_title'), style: TextStyle(fontWeight: FontWeight.bold, color: color, fontSize: 14)),
                   const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -275,7 +273,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                         });
                       },
                       icon: Icon(isCompleted ? Icons.check_circle : Icons.circle_outlined, size: 18),
-                      label: Text(isCompleted ? 'مكتمل ✅' : 'حدد كمكتمل'),
+                      label: Text(isCompleted ? tr('ent_comm_completed') : tr('ent_comm_mark_completed')),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: color,
                         side: BorderSide(color: color),

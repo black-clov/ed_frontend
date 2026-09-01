@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/needs_model.dart';
 import '../services/needs_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class NeedsScreen extends StatefulWidget {
   const NeedsScreen({super.key});
@@ -41,7 +42,7 @@ class _NeedsScreenState extends State<NeedsScreen> {
   Future<void> _submit() async {
     if (_selected.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختر على الأقل حاجة واحدة')),
+        SnackBar(content: Text(tr('emp1_needs_select_at_least_one'))),
       );
       return;
     }
@@ -51,95 +52,92 @@ class _NeedsScreenState extends State<NeedsScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ احتياجاتك بنجاح ✅')),
+      SnackBar(content: Text(tr('emp1_needs_save_success'))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('تقييم الاحتياجات'),
-          centerTitle: true,
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFC62828), Color(0xFFC62828)],
-                        ),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: const Column(
-                        children: [
-                          Icon(Icons.assignment, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
-                          Text(
-                            'شنو اللي محتاج(ة)؟',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            'اختر الحاجات اللي بغيتي الدعم فيها',
-                            style: TextStyle(color: Colors.white70, fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Options grid
-                    ..._options.map((opt) => _buildOptionTile(opt)),
-
-                    const SizedBox(height: 20),
-
-                    // Submit
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _submitting ? null : _submit,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFC62828),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: _submitting
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Text(
-                                'حفظ الاحتياجات',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp1_needs_title')),
+        centerTitle: true,
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFC62828), Color(0xFFC62828)],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.assignment, color: Colors.white, size: 40),
+                        const SizedBox(height: 8),
+                        Text(
+                          tr('emp1_needs_header_title'),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          tr('emp1_needs_header_subtitle'),
+                          style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Options grid
+                  ..._options.map((opt) => _buildOptionTile(opt)),
+
+                  const SizedBox(height: 20),
+
+                  // Submit
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _submitting ? null : _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFC62828),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: _submitting
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              tr('emp1_needs_save_btn'),
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 

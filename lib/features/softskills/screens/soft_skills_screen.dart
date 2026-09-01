@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/soft_skill_model.dart';
 import '../services/soft_skills_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class SoftSkillsScreen extends StatefulWidget {
   const SoftSkillsScreen({super.key});
@@ -40,7 +41,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
     final q = _questions![_currentIndex];
     if (_service.getAnswer(q.id) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختار جواب من فضلك')),
+        SnackBar(content: Text(tr('emp1_softskills_select_answer'))),
       );
       return;
     }
@@ -67,17 +68,14 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('تقييم المهارات الشخصية'),
-          centerTitle: true,
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : _buildContent(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp1_softskills_title')),
+        centerTitle: true,
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _buildContent(),
     );
   }
 
@@ -102,10 +100,10 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
               children: [
                 Icon(Icons.psychology, color: Color(0xFFB71C1C), size: 28),
                 const SizedBox(width: 8),
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'الصاوير - تقييم السلوك المهني',
-                    style: TextStyle(
+                    tr('emp1_softskills_header'),
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFC62828),
@@ -121,7 +119,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
           Row(
             children: [
               Text(
-                'السؤال ${_currentIndex + 1}/${_questions!.length}',
+                '${tr('emp1_softskills_question_label')} ${_currentIndex + 1}/${_questions!.length}',
                 style: const TextStyle(
                     fontSize: 14, fontWeight: FontWeight.w500),
               ),
@@ -237,7 +235,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                   child: OutlinedButton.icon(
                     onPressed: _prev,
                     icon: const Icon(Icons.arrow_forward),
-                    label: const Text('السابق'),
+                    label: Text(tr('emp1_softskills_prev')),
                   ),
                 ),
               if (_currentIndex > 0) const SizedBox(width: 12),
@@ -246,7 +244,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                   child: ElevatedButton.icon(
                     onPressed: _next,
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text('التالي'),
+                    label: Text(tr('emp1_softskills_next')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFC62828),
                       foregroundColor: Colors.white,
@@ -258,7 +256,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                   child: ElevatedButton.icon(
                     onPressed: selectedAnswer != null ? () {} : null,
                     icon: const Icon(Icons.check_circle),
-                    label: const Text('إنهاء التقييم'),
+                    label: Text(tr('emp1_softskills_finish')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,
                       foregroundColor: Colors.white,

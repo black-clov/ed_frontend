@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/opportunity_model.dart';
 import '../services/opportunities_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class OpportunitiesScreen extends StatefulWidget {
   const OpportunitiesScreen({super.key});
@@ -46,11 +47,11 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
   String _typeLabel(String type) {
     switch (type) {
       case 'job':
-        return 'عرض عمل';
+        return tr('emp2_opp_type_job');
       case 'internship':
-        return 'تدريب';
+        return tr('emp2_opp_type_internship');
       case 'training':
-        return 'تكوين';
+        return tr('emp2_opp_type_training');
       default:
         return type;
     }
@@ -71,43 +72,40 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('الفرص المتاحة'),
-          centerTitle: true,
-          actions: [
-            TextButton.icon(
-              onPressed: () {
-                setState(() => _showMatched = !_showMatched);
-                _load();
-              },
-              icon: Icon(
-                _showMatched ? Icons.auto_awesome : Icons.list,
-                color: Colors.white,
-                size: 18,
-              ),
-              label: Text(
-                _showMatched ? 'الكل' : 'المطابقة',
-                style: const TextStyle(color: Colors.white, fontSize: 13),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp2_opportunities_title')),
+        centerTitle: true,
+        actions: [
+          TextButton.icon(
+            onPressed: () {
+              setState(() => _showMatched = !_showMatched);
+              _load();
+            },
+            icon: Icon(
+              _showMatched ? Icons.auto_awesome : Icons.list,
+              color: Colors.white,
+              size: 18,
             ),
-          ],
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : _opportunities.isEmpty
-                ? const Center(child: Text('لا توجد فرص حالياً'))
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: _opportunities.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) return _buildHeader();
-                      return _buildOpportunityCard(_opportunities[index - 1]);
-                    },
-                  ),
+            label: Text(
+              _showMatched ? tr('emp2_all') : tr('emp2_matched'),
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
+          ),
+        ],
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _opportunities.isEmpty
+              ? Center(child: Text(tr('emp2_no_opportunities_now')))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _opportunities.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) return _buildHeader();
+                    return _buildOpportunityCard(_opportunities[index - 1]);
+                  },
+                ),
     );
   }
 
@@ -122,26 +120,26 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
         ),
         borderRadius: BorderRadius.circular(14),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.auto_awesome, color: Colors.white, size: 30),
-          SizedBox(width: 12),
+          const Icon(Icons.auto_awesome, color: Colors.white, size: 30),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'فرص مطابقة لملفك الشخصي',
-                  style: TextStyle(
+                  tr('emp2_matched_header_title'),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  'مرتبة حسب نسبة التوافق مع مهاراتك واحتياجاتك',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  tr('emp2_matched_header_subtitle'),
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
               ],
             ),

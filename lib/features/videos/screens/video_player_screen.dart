@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:chewie/chewie.dart';
 import 'package:video_player/video_player.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 /// Detects YouTube URLs and extracts the video ID.
 String? _extractYoutubeId(String url) {
@@ -87,7 +88,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       } catch (e) {
         setState(() {
           _loading = false;
-          _error = 'تعذر تشغيل الفيديو';
+          _error = tr('emp2_video_play_error');
         });
       }
     }
@@ -192,7 +193,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 fontWeight: FontWeight.w500,
                 shadows: [Shadow(blurRadius: 8, color: Colors.black87)],
               ),
-              textDirection: TextDirection.rtl,
+              textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

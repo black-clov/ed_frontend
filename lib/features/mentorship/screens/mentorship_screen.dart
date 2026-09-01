@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/mentor_model.dart';
 import '../services/mentorship_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class MentorshipScreen extends StatelessWidget {
   const MentorshipScreen({super.key});
@@ -9,7 +10,7 @@ class MentorshipScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الإرشاد والبرامج')),
+      appBar: AppBar(title: Text(tr('emp2_mentorship_title'))),
       body: FutureBuilder<List<MentorModel>>(
         future: MentorshipService().getMentors(),
         builder: (context, snapshot) {
@@ -26,11 +27,11 @@ class MentorshipScreen extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
-                  title: Text(mentor.name, textDirection: TextDirection.rtl),
-                  subtitle: Text('${mentor.focusArea} - ${mentor.location}', textDirection: TextDirection.rtl),
+                  title: Text(mentor.name, textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr),
+                  subtitle: Text('${mentor.focusArea} - ${mentor.location}', textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr),
                   trailing: TextButton(
                     onPressed: () {},
-                    child: const Text('تواصل', textDirection: TextDirection.rtl),
+                    child: Text(tr('emp2_contact'), textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr),
                   ),
                 ),
               );

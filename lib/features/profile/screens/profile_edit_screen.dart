@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/profile_service.dart';
 import '../../auth/auth_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -73,7 +74,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ في تحميل البيانات: ${e.toString()}')),
+        SnackBar(content: Text('${tr('emp1_edit_load_error')}: ${e.toString()}')),
       );
     }
     if (mounted) setState(() => _isLoading = false);
@@ -94,13 +95,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم تحديث الملف الشخصي بنجاح')),
+        SnackBar(content: Text(tr('emp1_edit_update_success'))),
       );
       Navigator.pop(context, true); // Return true to signal updated
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ في الحفظ: ${e.toString()}')),
+        SnackBar(content: Text('${tr('emp1_edit_save_error')}: ${e.toString()}')),
       );
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -110,7 +111,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   Future<void> _changePassword() async {
     if (_currentPasswordCtrl.text.isEmpty || _newPasswordCtrl.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل')),
+        SnackBar(content: Text(tr('emp1_edit_password_min_length'))),
       );
       return;
     }
@@ -123,20 +124,20 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       if (!mounted) return;
       if (resp.data != null && resp.data['ok'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم تغيير كلمة المرور بنجاح')),
+          SnackBar(content: Text(tr('emp1_edit_password_change_success'))),
         );
         _currentPasswordCtrl.clear();
         _newPasswordCtrl.clear();
         setState(() => _showPasswordSection = false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('فشل في تغيير كلمة المرور')),
+          SnackBar(content: Text(tr('emp1_edit_password_change_failed'))),
         );
       }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ: ${e.toString()}')),
+        SnackBar(content: Text('${tr('emp1_edit_generic_error_prefix')}: ${e.toString()}')),
       );
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -145,93 +146,90 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('تعديل الملف الشخصي'),
-          backgroundColor: Color(0xFFB71C1C),
-          foregroundColor: Colors.white,
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      _buildField(_firstNameCtrl, 'الاسم الأول', Icons.person),
-                      _buildField(_lastNameCtrl, 'اسم العائلة', Icons.person_outline),
-                      _buildField(_ageCtrl, 'العمر', Icons.cake, keyboard: TextInputType.number),
-                      _buildField(_villeCtrl, 'المدينة', Icons.location_city),
-                      _buildField(_niveauCtrl, 'المستوى الدراسي', Icons.school),
-                      _buildField(_telephoneCtrl, 'رقم الهاتف', Icons.phone, keyboard: TextInputType.phone),
-                      _buildField(_emailCtrl, 'البريد الإلكتروني', Icons.email, keyboard: TextInputType.emailAddress),
-                      const SizedBox(height: 24),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp1_profile_edit_tooltip')),
+        backgroundColor: const Color(0xFFB71C1C),
+        foregroundColor: Colors.white,
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    _buildField(_firstNameCtrl, tr('emp1_field_first_name'), Icons.person),
+                    _buildField(_lastNameCtrl, tr('emp1_field_last_name'), Icons.person_outline),
+                    _buildField(_ageCtrl, tr('emp1_profile_age'), Icons.cake, keyboard: TextInputType.number),
+                    _buildField(_villeCtrl, tr('emp1_profile_city'), Icons.location_city),
+                    _buildField(_niveauCtrl, tr('emp1_profile_education_level'), Icons.school),
+                    _buildField(_telephoneCtrl, tr('emp1_profile_phone'), Icons.phone, keyboard: TextInputType.phone),
+                    _buildField(_emailCtrl, tr('emp1_profile_email'), Icons.email, keyboard: TextInputType.emailAddress),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFB71C1C),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: _isSaving ? null : _saveProfile,
+                        icon: const Icon(Icons.save, color: Colors.white),
+                        label: _isSaving
+                            ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                            : Text(tr('emp1_edit_save_changes_btn'), style: const TextStyle(fontSize: 16, color: Colors.white)),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    const Divider(),
+                    ListTile(
+                      leading: const Icon(Icons.lock),
+                      title: Text(tr('emp1_edit_change_password_title')),
+                      trailing: Icon(_showPasswordSection ? Icons.expand_less : Icons.expand_more),
+                      onTap: () => setState(() => _showPasswordSection = !_showPasswordSection),
+                    ),
+                    if (_showPasswordSection) ...[
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _currentPasswordCtrl,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: tr('emp1_edit_current_password'),
+                          prefixIcon: const Icon(Icons.lock_open),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: _newPasswordCtrl,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: tr('emp1_edit_new_password'),
+                          prefixIcon: const Icon(Icons.lock),
+                          border: const OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton.icon(
+                        height: 44,
+                        child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFB71C1C),
+                            backgroundColor: const Color(0xFFB71C1C),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                          onPressed: _isSaving ? null : _saveProfile,
-                          icon: const Icon(Icons.save, color: Colors.white),
-                          label: _isSaving
-                              ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                              : const Text('حفظ التعديلات', style: TextStyle(fontSize: 16, color: Colors.white)),
+                          onPressed: _isSaving ? null : _changePassword,
+                          child: Text(tr('emp1_edit_change_password_title'), style: const TextStyle(fontSize: 15, color: Colors.white)),
                         ),
                       ),
-                      const SizedBox(height: 32),
-                      const Divider(),
-                      ListTile(
-                        leading: const Icon(Icons.lock),
-                        title: const Text('تغيير كلمة المرور'),
-                        trailing: Icon(_showPasswordSection ? Icons.expand_less : Icons.expand_more),
-                        onTap: () => setState(() => _showPasswordSection = !_showPasswordSection),
-                      ),
-                      if (_showPasswordSection) ...[
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: _currentPasswordCtrl,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'كلمة المرور الحالية',
-                            prefixIcon: Icon(Icons.lock_open),
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: _newPasswordCtrl,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            labelText: 'كلمة المرور الجديدة',
-                            prefixIcon: Icon(Icons.lock),
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 44,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFB71C1C),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                            ),
-                            onPressed: _isSaving ? null : _changePassword,
-                            child: const Text('تغيير كلمة المرور', style: TextStyle(fontSize: 15, color: Colors.white)),
-                          ),
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
               ),
-      ),
+            ),
     );
   }
 
@@ -246,7 +244,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           prefixIcon: Icon(icon),
           border: const OutlineInputBorder(),
         ),
-        validator: (v) => (v == null || v.trim().isEmpty) ? 'مطلوب' : null,
+        validator: (v) => (v == null || v.trim().isEmpty) ? tr('emp1_field_required') : null,
       ),
     );
   }

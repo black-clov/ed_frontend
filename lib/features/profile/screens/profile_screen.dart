@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/profile_service.dart';
 import '../../../core/config/env.dart';
+import '../../../core/i18n/app_i18n.dart';
 import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -43,28 +44,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5F5),
-        body: _userDataFuture == null
-            ? const Center(child: CircularProgressIndicator())
-            : FutureBuilder<Map<String, dynamic>>(
-                future: _userDataFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('حدث خطأ أثناء جلب البيانات', style: TextStyle(color: Colors.red, fontSize: 16)),
-                    );
-                  }
-                  final data = snapshot.data ?? {};
-                  return _buildProfile(data);
-                },
-              ),
-      ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
+      body: _userDataFuture == null
+          ? const Center(child: CircularProgressIndicator())
+          : FutureBuilder<Map<String, dynamic>>(
+              future: _userDataFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text(tr('emp1_profile_fetch_error'), style: const TextStyle(color: Colors.red, fontSize: 16)),
+                  );
+                }
+                final data = snapshot.data ?? {};
+                return _buildProfile(data);
+              },
+            ),
     );
   }
 
@@ -89,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           actions: [
             IconButton(
               icon: const Icon(Icons.edit),
-              tooltip: 'تعديل الملف الشخصي',
+              tooltip: tr('emp1_profile_edit_tooltip'),
               onPressed: _openEdit,
             ),
           ],
@@ -121,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      fullName.isNotEmpty ? fullName : 'مستخدم إدماج',
+                      fullName.isNotEmpty ? fullName : tr('emp1_profile_default_user'),
                       style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     if (email.isNotEmpty) ...[
@@ -141,26 +139,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 // Personal info card
                 _buildCard(
-                  title: 'المعلومات الشخصية',
+                  title: tr('emp1_profile_personal_info'),
                   icon: Icons.person,
                   color: const Color(0xFFC62828),
                   children: [
-                    if (fullName.isNotEmpty) _infoTile(Icons.badge, 'الاسم الكامل', fullName),
-                    if (age.isNotEmpty) _infoTile(Icons.cake, 'العمر', '$age سنة'),
-                    if (city.isNotEmpty) _infoTile(Icons.location_city, 'المدينة', city),
-                    if (education.isNotEmpty) _infoTile(Icons.school, 'المستوى الدراسي', education),
+                    if (fullName.isNotEmpty) _infoTile(Icons.badge, tr('emp1_profile_full_name'), fullName),
+                    if (age.isNotEmpty) _infoTile(Icons.cake, tr('emp1_profile_age'), '$age ${tr('emp1_profile_years_suffix')}'),
+                    if (city.isNotEmpty) _infoTile(Icons.location_city, tr('emp1_profile_city'), city),
+                    if (education.isNotEmpty) _infoTile(Icons.school, tr('emp1_profile_education_level'), education),
                   ],
                 ),
                 const SizedBox(height: 12),
 
                 // Contact card
                 _buildCard(
-                  title: 'معلومات الاتصال',
+                  title: tr('emp1_profile_contact_info'),
                   icon: Icons.contact_phone,
                   color: const Color(0xFFC62828),
                   children: [
-                    if (email.isNotEmpty) _infoTile(Icons.email, 'البريد الإلكتروني', email),
-                    if (phone.isNotEmpty) _infoTile(Icons.phone, 'رقم الهاتف', phone),
+                    if (email.isNotEmpty) _infoTile(Icons.email, tr('emp1_profile_email'), email),
+                    if (phone.isNotEmpty) _infoTile(Icons.phone, tr('emp1_profile_phone'), phone),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -178,15 +176,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
-                        'نصيحة',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFFC62828)),
+                      Text(
+                        tr('emp1_profile_tip_title'),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFFC62828)),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'أكمل ملفك الشخصي لتحصل على توصيات أفضل وسيرة ذاتية غنية بالمعلومات!',
+                      Text(
+                        tr('emp1_profile_tip_body'),
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 13, color: Color(0xFF5D4037)),
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF5D4037)),
                       ),
                       const SizedBox(height: 12),
                       SizedBox(
@@ -194,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _openEdit,
                           icon: const Icon(Icons.edit, size: 18),
-                          label: const Text('تعديل الملف الشخصي'),
+                          label: Text(tr('emp1_profile_edit_tooltip')),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: const Color(0xFFC62828),
                             side: const BorderSide(color: Color(0xFFC62828)),
@@ -211,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextButton.icon(
                     onPressed: _openPrivacyPolicy,
                     icon: const Icon(Icons.privacy_tip_outlined, size: 18),
-                    label: const Text('سياسة الخصوصية'),
+                    label: Text(tr('emp1_profile_privacy_policy')),
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFF5D4037),
                     ),
@@ -224,7 +222,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextButton.icon(
                     onPressed: _confirmDeleteAccount,
                     icon: const Icon(Icons.delete_forever, size: 20),
-                    label: const Text('حذف الحساب نهائياً'),
+                    label: Text(tr('emp1_profile_delete_account_btn')),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.red.shade700,
                     ),
@@ -244,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تعذر فتح سياسة الخصوصية')),
+        SnackBar(content: Text(tr('emp1_profile_privacy_open_failed'))),
       );
     }
   }
@@ -252,42 +250,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _confirmDeleteAccount() async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Row(
-            children: [
-              Icon(Icons.warning_amber_rounded,
-                  color: Colors.red.shade700, size: 26),
-              const SizedBox(width: 8),
-              const Text('حذف الحساب',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-          content: const Text(
-            'واش بصح باغي تمسح الحساب ديالك؟ غادي يتمسحو جميع معطياتك (الملف، المهارات، السيرة الذاتية، المشاريع...) بشكل نهائي وما يمكنش ترجعهم.',
-            style: TextStyle(height: 1.5),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('لا، بقى',
-                  style: TextStyle(color: Colors.grey, fontSize: 15)),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade700,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-              ),
-              child: const Text('أيه، امسح',
-                  style: TextStyle(color: Colors.white, fontSize: 15)),
-            ),
+      builder: (ctx) => AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            Icon(Icons.warning_amber_rounded,
+                color: Colors.red.shade700, size: 26),
+            const SizedBox(width: 8),
+            Text(tr('emp1_profile_delete_account_title'),
+                style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
+        content: Text(
+          tr('emp1_profile_delete_confirm_msg'),
+          style: const TextStyle(height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(tr('emp1_profile_delete_cancel'),
+                style: const TextStyle(color: Colors.grey, fontSize: 15)),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            child: Text(tr('emp1_profile_delete_confirm'),
+                style: const TextStyle(color: Colors.white, fontSize: 15)),
+          ),
+        ],
       ),
     );
 
@@ -312,7 +307,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Navigator.of(context).pop(); // close progress
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('تعذر حذف الحساب، حاول مرة أخرى'),
+          content: Text(tr('emp1_profile_delete_failed')),
           backgroundColor: Colors.red.shade700,
         ),
       );

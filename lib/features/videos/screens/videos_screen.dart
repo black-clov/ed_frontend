@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/video_model.dart';
 import '../services/videos_service.dart';
 import 'video_player_screen.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class VideosScreen extends StatefulWidget {
   const VideosScreen({super.key});
@@ -39,7 +40,7 @@ class _VideosScreenState extends State<VideosScreen> {
     } catch (e) {
       setState(() {
         _loading = false;
-        _error = 'تعذر تحميل الفيديوهات. تحقق من الاتصال وأعد المحاولة.';
+        _error = tr('emp2_videos_load_error');
       });
     }
   }
@@ -59,7 +60,7 @@ class _VideosScreenState extends State<VideosScreen> {
     } catch (e) {
       setState(() {
         _loading = false;
-        _error = 'تعذر تحميل الفيديوهات. أعد المحاولة.';
+        _error = tr('emp2_videos_load_error_retry');
       });
     }
   }
@@ -104,98 +105,95 @@ class _VideosScreenState extends State<VideosScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('فيديوهات تعليمية'),
-          centerTitle: true,
-        ),
-        body: Column(
-          children: [
-            // Category filter chips
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              height: 56,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                children: [
-                  Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp2_videos_title')),
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          // Category filter chips
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            height: 56,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: FilterChip(
+                    label: Text(tr('emp2_all')),
+                    selected: _selectedCategory == null,
+                    onSelected: (_) => _filterByCategory(null),
+                  ),
+                ),
+                ..._categories.map(
+                  (cat) => Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: FilterChip(
-                      label: const Text('الكل'),
-                      selected: _selectedCategory == null,
-                      onSelected: (_) => _filterByCategory(null),
-                    ),
-                  ),
-                  ..._categories.map(
-                    (cat) => Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: FilterChip(
-                        avatar: Icon(
-                          _iconForCategory(cat.id),
-                          size: 18,
-                          color: _selectedCategory == cat.id
-                              ? Colors.white
-                              : _colorForCategory(cat.id),
-                        ),
-                        label: Text(cat.label),
-                        selected: _selectedCategory == cat.id,
-                        selectedColor: _colorForCategory(cat.id),
-                        onSelected: (_) => _filterByCategory(
-                          _selectedCategory == cat.id ? null : cat.id,
-                        ),
+                      avatar: Icon(
+                        _iconForCategory(cat.id),
+                        size: 18,
+                        color: _selectedCategory == cat.id
+                            ? Colors.white
+                            : _colorForCategory(cat.id),
+                      ),
+                      label: Text(cat.label),
+                      selected: _selectedCategory == cat.id,
+                      selectedColor: _colorForCategory(cat.id),
+                      onSelected: (_) => _filterByCategory(
+                        _selectedCategory == cat.id ? null : cat.id,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
 
-            // Video list
-            Expanded(
-              child: _loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _error != null
-                      ? Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
-                              const SizedBox(height: 12),
-                              Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
-                              const SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: _loadData,
-                                icon: const Icon(Icons.refresh),
-                                label: const Text('إعادة المحاولة'),
-                              ),
-                            ],
-                          ),
-                        )
-                      : _videos.isEmpty
-                      ? const Center(
-                          child: Text(
-                            'ما كاين حتى فيديو فهاد القسم',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(12),
-                          itemCount: _videos.length,
-                          itemBuilder: (context, index) {
-                            final video = _videos[index];
-                            return _VideoCard(
-                              video: video,
-                              color: _colorForCategory(video.category),
-                              icon: _iconForCategory(video.category),
-                            );
-                          },
+          // Video list
+          Expanded(
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
+                            const SizedBox(height: 12),
+                            Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
+                            const SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: _loadData,
+                              icon: const Icon(Icons.refresh),
+                              label: Text(tr('emp2_retry')),
+                            ),
+                          ],
                         ),
-            ),
-          ],
-        ),
+                      )
+                    : _videos.isEmpty
+                    ? Center(
+                        child: Text(
+                          tr('emp2_no_videos_in_category'),
+                          style: const TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: _videos.length,
+                        itemBuilder: (context, index) {
+                          final video = _videos[index];
+                          return _VideoCard(
+                            video: video,
+                            color: _colorForCategory(video.category),
+                            icon: _iconForCategory(video.category),
+                          );
+                        },
+                      ),
+          ),
+        ],
       ),
     );
   }
@@ -336,91 +334,88 @@ class _VideoCard extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Icon(icon, color: color, size: 28),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      video.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                video.description,
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.grey.shade700,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Icon(Icons.timer, size: 18, color: Colors.grey.shade600),
-                  const SizedBox(width: 4),
-                  Text(
-                    'المدة: ${video.formattedDuration}',
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => VideoPlayerScreen(
-                          videoUrl: video.videoUrl,
-                          title: video.title,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('شاهد الفيديو', style: TextStyle(fontSize: 16)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: color,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Icon(icon, color: color, size: 28),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    video.title,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              video.description,
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.grey.shade700,
+                height: 1.5,
               ),
-              const SizedBox(height: 12),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Icon(Icons.timer, size: 18, color: Colors.grey.shade600),
+                const SizedBox(width: 4),
+                Text(
+                  '${tr('emp2_duration_label')} ${video.formattedDuration}',
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => VideoPlayerScreen(
+                        videoUrl: video.videoUrl,
+                        title: video.title,
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.play_arrow),
+                label: Text(tr('emp2_watch_video'), style: const TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: color,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
         ),
       ),
     );

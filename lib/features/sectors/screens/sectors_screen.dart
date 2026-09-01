@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/sector_model.dart';
 import '../services/sectors_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class SectorsScreen extends StatefulWidget {
   const SectorsScreen({super.key});
@@ -40,7 +41,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
   Future<void> _submit() async {
     if (_selected.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختر على الأقل قطاع واحد')),
+        SnackBar(content: Text(tr('ent_sectors_select_at_least_one'))),
       );
       return;
     }
@@ -50,7 +51,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ القطاعات بنجاح ✅')),
+      SnackBar(content: Text(tr('ent_sectors_saved_success'))),
     );
   }
 
@@ -65,11 +66,9 @@ class _SectorsScreenState extends State<SectorsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('اختيار القطاع المهني'),
+          title: Text(tr('ent_sectors_title')),
           centerTitle: true,
         ),
         body: _loading
@@ -88,18 +87,18 @@ class _SectorsScreenState extends State<SectorsScreen> {
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.business_center, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
+                          const Icon(Icons.business_center, color: Colors.white, size: 40),
+                          const SizedBox(height: 8),
                           Text(
-                            'فين بغيتي تخدم؟',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                            tr('ent_sectors_header_title'),
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'اختر القطاعات اللي كتهمك',
-                            style: TextStyle(color: Colors.white70, fontSize: 14),
+                            tr('ent_sectors_header_subtitle'),
+                            style: const TextStyle(color: Colors.white70, fontSize: 14),
                           ),
                         ],
                       ),
@@ -132,13 +131,12 @@ class _SectorsScreenState extends State<SectorsScreen> {
                         ),
                         child: _submitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('حفظ الاختيار', style: TextStyle(fontSize: 16)),
+                            : Text(tr('ent_sectors_save_btn'), style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
-      ),
     );
   }
 

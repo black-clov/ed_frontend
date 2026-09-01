@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/entrepreneurship_model.dart';
 import '../services/entrepreneurship_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class EntrepreneurshipScreen extends StatefulWidget {
   const EntrepreneurshipScreen({super.key});
@@ -49,7 +50,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
     final rated = _ratings.entries.where((e) => e.value > 0).toList();
     if (rated.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('قيّم على الأقل مهارة واحدة')),
+        SnackBar(content: Text(tr('ent_skills_select_at_least_one'))),
       );
       return;
     }
@@ -63,18 +64,18 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ مهاراتك في ريادة الأعمال ✅')),
+      SnackBar(content: Text(tr('ent_skills_saved_success'))),
     );
   }
 
   String _ratingLabel(int value) {
     switch (value) {
-      case 1: return 'مبتدئ';
-      case 2: return 'أساسي';
-      case 3: return 'متوسط';
-      case 4: return 'جيد';
-      case 5: return 'متمكن';
-      default: return 'غير محدد';
+      case 1: return tr('ent_rating_beginner');
+      case 2: return tr('ent_rating_basic');
+      case 3: return tr('ent_rating_intermediate');
+      case 4: return tr('ent_rating_good');
+      case 5: return tr('ent_rating_proficient');
+      default: return tr('ent_rating_undefined');
     }
   }
 
@@ -91,11 +92,9 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('مهارات ريادة الأعمال'),
+          title: Text(tr('ent_skills_title')),
           centerTitle: true,
         ),
         body: _loading
@@ -114,18 +113,18 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.rocket_launch, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
+                          const Icon(Icons.rocket_launch, color: Colors.white, size: 40),
+                          const SizedBox(height: 8),
                           Text(
-                            'قيّم مهاراتك في ريادة الأعمال',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            tr('ent_skills_header_title'),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'حدد مستواك فكل مهارة من 1 حتى 5',
-                            style: TextStyle(color: Colors.white70, fontSize: 13),
+                            tr('ent_skills_header_subtitle'),
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         ],
                       ),
@@ -150,13 +149,12 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
                         ),
                         child: _submitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('حفظ التقييم', style: TextStyle(fontSize: 16)),
+                            : Text(tr('ent_skills_save_btn'), style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
-      ),
     );
   }
 

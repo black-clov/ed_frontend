@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/businessplan_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class BusinessPlanScreen extends StatefulWidget {
   const BusinessPlanScreen({super.key});
@@ -27,13 +28,13 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
   final _costsCtrl = TextEditingController();
   final _stepsCtrl = TextEditingController();
 
-  static const _sectors = [
-    {'key': 'innovation', 'label': 'الابتكار والتكنولوجيا', 'icon': '💡'},
-    {'key': 'sales', 'label': 'المبيعات والتجارة', 'icon': '🛒'},
-    {'key': 'marketing', 'label': 'التسويق والإعلان', 'icon': '📢'},
-    {'key': 'manual_services', 'label': 'الخدمات اليدوية', 'icon': '🔧'},
-    {'key': 'management', 'label': 'الإدارة والتنظيم', 'icon': '📊'},
-    {'key': 'people', 'label': 'العمل مع الناس', 'icon': '🤝'},
+  List<Map<String, String>> get _sectors => [
+    {'key': 'innovation', 'label': tr('ent_sector_innovation_tech'), 'icon': '💡'},
+    {'key': 'sales', 'label': tr('ent_sector_sales_trade'), 'icon': '🛒'},
+    {'key': 'marketing', 'label': tr('ent_sector_marketing_ads'), 'icon': '📢'},
+    {'key': 'manual_services', 'label': tr('ent_sector_manual_services'), 'icon': '🔧'},
+    {'key': 'management', 'label': tr('ent_sector_management_org'), 'icon': '📊'},
+    {'key': 'people', 'label': tr('ent_sector_people_work'), 'icon': '🤝'},
   ];
 
   @override
@@ -74,7 +75,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('أدخل اسم المشروع')),
+        SnackBar(content: Text(tr('ent_enter_project_name'))),
       );
       return;
     }
@@ -115,17 +116,15 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
     setState(() => _saving = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ خطة العمل بنجاح ✅')),
+      SnackBar(content: Text(tr('ent_bp_saved_success'))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('خطة العمل'),
+          title: Text(tr('ent_bp_title')),
           centerTitle: true,
           actions: [
             if (_plan != null)
@@ -134,7 +133,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                 icon: _saving
                     ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : const Icon(Icons.save),
-                tooltip: 'حفظ',
+                tooltip: tr('ent_save_btn'),
               ),
           ],
         ),
@@ -153,19 +152,19 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                   ),
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
-                    Icon(Icons.lightbulb, color: Colors.white, size: 40),
-                    SizedBox(height: 8),
+                    const Icon(Icons.lightbulb, color: Colors.white, size: 40),
+                    const SizedBox(height: 8),
                     Text(
-                      'أنشئ خطة عمل لمشروعك',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      tr('ent_bp_header_title'),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'أدخل اسم المشروع واختر القطاع وغادي نولدو ليك خطة عمل بسيطة',
+                      tr('ent_bp_header_subtitle'),
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white70, fontSize: 13),
+                      style: const TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
                 ),
@@ -175,10 +174,10 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
               // Project name
               TextField(
                 controller: _nameCtrl,
-                textDirection: TextDirection.rtl,
+                textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                 decoration: InputDecoration(
-                  labelText: 'اسم المشروع',
-                  hintText: 'مثال: مخبزة الحي',
+                  labelText: tr('ent_project_name_label'),
+                  hintText: tr('ent_bp_project_name_hint'),
                   prefixIcon: const Icon(Icons.edit),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -186,7 +185,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
               const SizedBox(height: 14),
 
               // Sector dropdown
-              const Text('القطاع:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+              Text(tr('ent_sector_label'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
               const SizedBox(height: 6),
               Wrap(
                 spacing: 8,
@@ -214,7 +213,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                       ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                       : const Icon(Icons.auto_awesome),
                   label: Text(
-                    _generating ? 'جاري التوليد...' : _plan == null ? 'توليد خطة العمل' : 'إعادة التوليد',
+                    _generating ? tr('ent_generating_ellipsis') : _plan == null ? tr('ent_bp_generate_btn') : tr('ent_bp_regenerate_btn'),
                     style: const TextStyle(fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -231,31 +230,31 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                 const SizedBox(height: 24),
                 _buildPlanSection(
                   icon: Icons.description,
-                  title: 'وصف المشروع',
+                  title: tr('ent_bp_section_description'),
                   color: const Color(0xFF2E7D32),
                   controller: _descCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.diamond,
-                  title: 'القيمة المضافة',
+                  title: tr('ent_bp_section_value'),
                   color: const Color(0xFF2E7D32),
                   controller: _valueCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.people,
-                  title: 'الزبناء المستهدفون',
+                  title: tr('ent_bp_section_customers'),
                   color: const Color(0xFF2E7D32),
                   controller: _customersCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.account_balance_wallet,
-                  title: 'التكاليف المتوقعة',
+                  title: tr('ent_bp_section_costs'),
                   color: const Color(0xFFC62828),
                   controller: _costsCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.flag,
-                  title: 'الخطوات الأولى',
+                  title: tr('ent_bp_section_steps'),
                   color: const Color(0xFF2E7D32),
                   controller: _stepsCtrl,
                 ),
@@ -269,7 +268,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                         ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                         : const Icon(Icons.save),
                     label: Text(
-                      _saving ? 'جاري الحفظ...' : 'حفظ خطة العمل',
+                      _saving ? tr('ent_saving_ellipsis') : tr('ent_bp_save_plan_btn'),
                       style: const TextStyle(fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -284,7 +283,6 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 
@@ -312,7 +310,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
             const SizedBox(height: 8),
             TextField(
               controller: controller,
-              textDirection: TextDirection.rtl,
+              textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
               maxLines: null,
               minLines: 3,
               decoration: InputDecoration(

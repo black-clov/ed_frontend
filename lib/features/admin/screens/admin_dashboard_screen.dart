@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 import '../services/admin_service.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -17,10 +18,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   List<dynamic>? _videos;
   bool _loading = true;
   String? _error;
-
-  static const _categories = [
-    'cv', 'interview', 'skills', 'softskills', 'opportunities', 'entrepreneurship',
-  ];
 
   @override
   void initState() {
@@ -62,10 +59,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   @override
   Widget build(BuildContext context) {
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('لوحة الإدارة'),
+          title: Text(tr('adm_title')),
           backgroundColor: Color(0xFFB71C1C),
           foregroundColor: Colors.white,
           bottom: TabBar(
@@ -73,10 +70,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white60,
             indicatorColor: Colors.white,
-            tabs: const [
-              Tab(icon: Icon(Icons.dashboard), text: 'الإحصائيات'),
-              Tab(icon: Icon(Icons.people), text: 'المستخدمين'),
-              Tab(icon: Icon(Icons.video_library), text: 'الفيديوهات'),
+            tabs: [
+              Tab(icon: const Icon(Icons.dashboard), text: tr('adm_tab_stats')),
+              Tab(icon: const Icon(Icons.people), text: tr('adm_tab_users')),
+              Tab(icon: const Icon(Icons.video_library), text: tr('adm_tab_videos')),
             ],
           ),
         ),
@@ -86,9 +83,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                 ? Center(child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('خطأ: $_error', style: const TextStyle(color: Colors.red)),
+                      Text('${tr('adm_error_prefix')}$_error', style: const TextStyle(color: Colors.red)),
                       const SizedBox(height: 16),
-                      ElevatedButton(onPressed: _loadData, child: const Text('إعادة المحاولة')),
+                      ElevatedButton(onPressed: _loadData, child: Text(tr('adm_retry'))),
                     ],
                   ))
                 : TabBarView(
@@ -118,15 +115,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             // Key metrics row
             Row(
               children: [
-                _buildMetricCard('إجمالي المستخدمين', '${_stats!['totalUsers'] ?? 0}', Icons.people, Color(0xFFC62828)),
+                _buildMetricCard(tr('adm_metric_total_users'), '${_stats!['totalUsers'] ?? 0}', Icons.people, Color(0xFFC62828)),
                 const SizedBox(width: 12),
-                _buildMetricCard('نشطون (7 أيام)', '${_stats!['activeUsers7d'] ?? 0}', Icons.trending_up, Colors.green),
+                _buildMetricCard(tr('adm_metric_active_7d'), '${_stats!['activeUsers7d'] ?? 0}', Icons.trending_up, Colors.green),
               ],
             ),
             const SizedBox(height: 20),
 
             // Features usage
-            const Text('استخدام الميزات', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(tr('adm_features_usage'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             ...features.entries.map((e) => _buildFeatureRow(e.key, e.value)),
           ],
@@ -159,11 +156,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
 
   Widget _buildFeatureRow(String name, dynamic count) {
     final labels = {
-      'questionnaires': 'الاستبيانات',
-      'cvs': 'السير الذاتية',
-      'interviews': 'المقابلات',
-      'businessPlans': 'خطط الأعمال',
-      'pitches': 'العروض التقديمية',
+      'questionnaires': tr('adm_feat_questionnaires'),
+      'cvs': tr('adm_feat_cvs'),
+      'interviews': tr('adm_feat_interviews'),
+      'businessPlans': tr('adm_feat_businessPlans'),
+      'pitches': tr('adm_feat_pitches'),
     };
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -185,7 +182,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
 
   Widget _buildUsersTab() {
     if (_users == null || _users!.isEmpty) {
-      return const Center(child: Text('لا يوجد مستخدمين'));
+      return Center(child: Text(tr('adm_no_users')));
     }
     return RefreshIndicator(
       onRefresh: _loadData,
@@ -210,7 +207,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                   // View details
                   IconButton(
                     icon: const Icon(Icons.info_outline, size: 20),
-                    tooltip: 'تفاصيل',
+                    tooltip: tr('adm_tooltip_details'),
                     onPressed: uid.isEmpty ? null : () => _showUserDetails(uid),
                   ),
                   // Role badge + menu
@@ -223,12 +220,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                       }
                     },
                     itemBuilder: (_) => [
-                      const PopupMenuItem(value: 'user', child: Text('مستخدم عادي')),
-                      const PopupMenuItem(value: 'admin', child: Text('مدير')),
+                      PopupMenuItem(value: 'user', child: Text(tr('adm_role_regular_user_full'))),
+                      PopupMenuItem(value: 'admin', child: Text(tr('adm_role_admin'))),
                       const PopupMenuDivider(),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: '_delete',
-                        child: Text('حذف المستخدم', style: TextStyle(color: Colors.red)),
+                        child: Text(tr('adm_delete_user_action'), style: const TextStyle(color: Colors.red)),
                       ),
                     ],
                     child: Container(
@@ -238,7 +235,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        isAdmin ? 'مدير' : 'مستخدم',
+                        isAdmin ? tr('adm_role_admin') : tr('adm_role_user'),
                         style: TextStyle(
                           color: isAdmin ? Color(0xFFB71C1C) : Colors.grey[700],
                           fontWeight: FontWeight.bold,
@@ -269,14 +266,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
               color: Color(0xFFC62828).withAlpha(25),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
-              'لإضافة فيديو جديد، استعمل لوحة التحكم على الويب (الصق رابط يوتيوب).',
-              style: TextStyle(fontSize: 13),
+            child: Text(
+              tr('adm_video_hint'),
+              style: const TextStyle(fontSize: 13),
             ),
           ),
           Expanded(
             child: (_videos == null || _videos!.isEmpty)
-                ? const Center(child: Text('لا توجد فيديوهات'))
+                ? Center(child: Text(tr('adm_no_videos')))
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     itemCount: _videos!.length,
@@ -315,16 +312,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
-          title: const Text('حذف الفيديو'),
-          content: Text('هل تريد حذف "$title"؟'),
+          title: Text(tr('adm_delete_video_title')),
+          content: Text('${tr('adm_delete_video_confirm_q')} "$title"؟'),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('إلغاء')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('adm_cancel'))),
             ElevatedButton(
               onPressed: () => Navigator.pop(ctx, true),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              child: const Text('حذف', style: TextStyle(color: Colors.white)),
+              child: Text(tr('adm_delete'), style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -337,7 +334,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     } catch (_) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تعذر حذف الفيديو')),
+        SnackBar(content: Text(tr('adm_delete_video_failed'))),
       );
     }
   }
@@ -346,9 +343,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const Directionality(
-        textDirection: TextDirection.rtl,
-        child: Center(child: CircularProgressIndicator()),
+      builder: (_) => Directionality(
+        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
+        child: const Center(child: CircularProgressIndicator()),
       ),
     );
 
@@ -363,7 +360,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       showDialog(
         context: context,
         builder: (ctx) => Directionality(
-          textDirection: TextDirection.rtl,
+          textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
           child: Dialog(
             insetPadding: const EdgeInsets.all(16),
             child: ConstrainedBox(
@@ -401,39 +398,39 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _detailRow('الدور', user['role'] == 'admin' ? 'مدير' : 'مستخدم'),
-                          if (user['ville'] != null) _detailRow('المدينة', user['ville']),
-                          if (user['age'] != null) _detailRow('العمر', '${user['age']}'),
-                          if (user['niveau_scolaire'] != null) _detailRow('المستوى الدراسي', user['niveau_scolaire']),
-                          if (user['telephone'] != null) _detailRow('الهاتف', user['telephone']),
+                          _detailRow(tr('adm_detail_role'), user['role'] == 'admin' ? tr('adm_role_admin') : tr('adm_role_user')),
+                          if (user['ville'] != null) _detailRow(tr('adm_detail_city'), user['ville']),
+                          if (user['age'] != null) _detailRow(tr('adm_detail_age'), '${user['age']}'),
+                          if (user['niveau_scolaire'] != null) _detailRow(tr('adm_detail_education'), user['niveau_scolaire']),
+                          if (user['telephone'] != null) _detailRow(tr('adm_detail_phone'), user['telephone']),
                           const Divider(height: 24),
-                          _sectionHeader('الاستبيان'),
+                          _sectionHeader(tr('adm_section_questionnaire')),
                           _sectionContent(sections['questionnaire']),
-                          _sectionHeader('السيرة الذاتية'),
+                          _sectionHeader(tr('adm_section_cv')),
                           _sectionContent(sections['cv']),
-                          _sectionHeader('المقابلات'),
+                          _sectionHeader(tr('adm_section_interviews')),
                           _sectionList(sections['interviews']),
-                          _sectionHeader('خطة العمل'),
+                          _sectionHeader(tr('adm_section_business_plan')),
                           _sectionContent(sections['businessPlan']),
-                          _sectionHeader('العرض التقديمي'),
+                          _sectionHeader(tr('adm_section_pitch')),
                           _sectionContent(sections['pitch']),
-                          _sectionHeader('العوائق'),
+                          _sectionHeader(tr('adm_section_barriers')),
                           _sectionChips(sections['barriers']),
-                          _sectionHeader('عوائق المقاولة'),
+                          _sectionHeader(tr('adm_section_ent_barriers')),
                           _sectionChips(sections['entBarriers']),
-                          _sectionHeader('الاحتياجات'),
+                          _sectionHeader(tr('adm_section_needs')),
                           _sectionChips(sections['needs']),
-                          _sectionHeader('القطاعات'),
+                          _sectionHeader(tr('adm_section_sectors')),
                           _sectionChips(sections['sectors']),
-                          _sectionHeader('المهارات'),
+                          _sectionHeader(tr('adm_section_skills')),
                           _sectionChips(sections['skills']),
-                          _sectionHeader('التدريب على التواصل'),
+                          _sectionHeader(tr('adm_section_comm_training')),
                           _sectionContent(sections['commTraining']),
-                          _sectionHeader('مهارات المقاولة'),
+                          _sectionHeader(tr('adm_section_ent_skills')),
                           _sectionContent(sections['entSkills']),
-                          _sectionHeader('الدعم'),
+                          _sectionHeader(tr('adm_section_support')),
                           _sectionContent(sections['support']),
-                          _sectionHeader('التوصيات'),
+                          _sectionHeader(tr('adm_section_recommendation')),
                           _sectionContent(sections['recommendation']),
                         ],
                       ),
@@ -446,7 +443,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () => Navigator.pop(ctx),
-                        child: const Text('إغلاق'),
+                        child: Text(tr('adm_close')),
                       ),
                     ),
                   ),
@@ -460,7 +457,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       if (!mounted) return;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ في تحميل التفاصيل: ${e.toString()}')),
+        SnackBar(content: Text('${tr('adm_error_load_details_prefix')}${e.toString()}')),
       );
     }
   }
@@ -485,10 +482,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   }
 
   Widget _sectionContent(dynamic data) {
-    if (data == null) return const Text('لا توجد بيانات', style: TextStyle(color: Colors.grey, fontSize: 12));
+    if (data == null) return Text(tr('adm_no_data'), style: const TextStyle(color: Colors.grey, fontSize: 12));
     if (data is Map) {
       final entries = data.entries.where((e) => e.key != 'id' && e.key != 'userId' && e.key != 'user_id').toList();
-      if (entries.isEmpty) return const Text('لا توجد بيانات', style: TextStyle(color: Colors.grey, fontSize: 12));
+      if (entries.isEmpty) return Text(tr('adm_no_data'), style: const TextStyle(color: Colors.grey, fontSize: 12));
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(10),
@@ -501,7 +498,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           crossAxisAlignment: CrossAxisAlignment.start,
           children: entries.map((e) {
             final val = e.value;
-            final display = val is List ? val.join('، ') : val?.toString() ?? '';
+            final display = val is List ? val.join(tr('adm_list_sep')) : val?.toString() ?? '';
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text('${_translateKey(e.key)}: $display', style: const TextStyle(fontSize: 12)),
@@ -515,7 +512,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
 
   Widget _sectionList(dynamic data) {
     if (data == null || (data is List && data.isEmpty)) {
-      return const Text('لا توجد بيانات', style: TextStyle(color: Colors.grey, fontSize: 12));
+      return Text(tr('adm_no_data'), style: const TextStyle(color: Colors.grey, fontSize: 12));
     }
     if (data is List) {
       return Column(
@@ -527,7 +524,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
 
   Widget _sectionChips(dynamic data) {
     if (data == null || (data is List && data.isEmpty)) {
-      return const Text('لا توجد بيانات', style: TextStyle(color: Colors.grey, fontSize: 12));
+      return Text(tr('adm_no_data'), style: const TextStyle(color: Colors.grey, fontSize: 12));
     }
     if (data is List) {
       return Wrap(
@@ -545,56 +542,56 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   }
 
   String _translateKey(String key) {
-    const map = {
-      'interests': 'الاهتمامات',
-      'interestCategories': 'فئات الاهتمام',
-      'personalityAnswers': 'إجابات الشخصية',
-      'softSkillsAnswers': 'المهارات الناعمة',
-      'workPreferences': 'تفضيلات العمل',
-      'payload': 'البيانات',
-      'targetRole': 'الدور المستهدف',
-      'answers': 'الإجابات',
-      'feedback': 'الملاحظات',
-      'score': 'النتيجة',
-      'status': 'الحالة',
-      'createdAt': 'تاريخ الإنشاء',
-      'projectName': 'اسم المشروع',
-      'description': 'الوصف',
-      'valueProposition': 'عرض القيمة',
-      'targetCustomers': 'العملاء المستهدفون',
-      'costs': 'التكاليف',
-      'firstSteps': 'الخطوات الأولى',
-      'sector': 'القطاع',
-      'pitchText': 'نص العرض',
-      'barriers': 'العوائق',
-      'needs': 'الاحتياجات',
-      'sectors': 'القطاعات',
-      'skills': 'المهارات',
-      'ratings': 'التقييمات',
-      'completedModules': 'الوحدات المكتملة',
-      'preferences': 'التفضيلات',
-      'details': 'التفاصيل',
-      'suggestedTraining': 'التكوين المقترح',
-      'suggestedJobs': 'الوظائف المقترحة',
-      'suggestedInternships': 'التدريبات المقترحة',
-      'notes': 'ملاحظات',
-      'scheduledAt': 'الموعد',
-      'interest_categories': 'فئات الاهتمام',
-      'personality_answers': 'إجابات الشخصية',
-      'soft_skills_answers': 'المهارات الناعمة',
-      'work_preferences': 'تفضيلات العمل',
-      'target_role': 'الدور المستهدف',
-      'project_name': 'اسم المشروع',
-      'value_proposition': 'عرض القيمة',
-      'target_customers': 'العملاء المستهدفون',
-      'first_steps': 'الخطوات الأولى',
-      'pitch_text': 'نص العرض',
-      'created_at': 'تاريخ الإنشاء',
-      'scheduled_at': 'الموعد',
-      'completed_modules': 'الوحدات المكتملة',
-      'suggested_training': 'التكوين المقترح',
-      'suggested_jobs': 'الوظائف المقترحة',
-      'suggested_internships': 'التدريبات المقترحة',
+    final map = {
+      'interests': tr('adm_field_interests'),
+      'interestCategories': tr('adm_field_interest_categories'),
+      'personalityAnswers': tr('adm_field_personality_answers'),
+      'softSkillsAnswers': tr('adm_field_soft_skills_answers'),
+      'workPreferences': tr('adm_field_work_preferences'),
+      'payload': tr('adm_field_payload'),
+      'targetRole': tr('adm_field_target_role'),
+      'answers': tr('adm_field_answers'),
+      'feedback': tr('adm_field_feedback'),
+      'score': tr('adm_field_score'),
+      'status': tr('adm_field_status'),
+      'createdAt': tr('adm_field_created_at'),
+      'projectName': tr('adm_field_project_name'),
+      'description': tr('adm_field_description'),
+      'valueProposition': tr('adm_field_value_proposition'),
+      'targetCustomers': tr('adm_field_target_customers'),
+      'costs': tr('adm_field_costs'),
+      'firstSteps': tr('adm_field_first_steps'),
+      'sector': tr('adm_field_sector'),
+      'pitchText': tr('adm_field_pitch_text'),
+      'barriers': tr('adm_field_barriers'),
+      'needs': tr('adm_field_needs'),
+      'sectors': tr('adm_field_sectors'),
+      'skills': tr('adm_field_skills'),
+      'ratings': tr('adm_field_ratings'),
+      'completedModules': tr('adm_field_completed_modules'),
+      'preferences': tr('adm_field_preferences'),
+      'details': tr('adm_field_details'),
+      'suggestedTraining': tr('adm_field_suggested_training'),
+      'suggestedJobs': tr('adm_field_suggested_jobs'),
+      'suggestedInternships': tr('adm_field_suggested_internships'),
+      'notes': tr('adm_field_notes'),
+      'scheduledAt': tr('adm_field_scheduled_at'),
+      'interest_categories': tr('adm_field_interest_categories'),
+      'personality_answers': tr('adm_field_personality_answers'),
+      'soft_skills_answers': tr('adm_field_soft_skills_answers'),
+      'work_preferences': tr('adm_field_work_preferences'),
+      'target_role': tr('adm_field_target_role'),
+      'project_name': tr('adm_field_project_name'),
+      'value_proposition': tr('adm_field_value_proposition'),
+      'target_customers': tr('adm_field_target_customers'),
+      'first_steps': tr('adm_field_first_steps'),
+      'pitch_text': tr('adm_field_pitch_text'),
+      'created_at': tr('adm_field_created_at'),
+      'scheduled_at': tr('adm_field_scheduled_at'),
+      'completed_modules': tr('adm_field_completed_modules'),
+      'suggested_training': tr('adm_field_suggested_training'),
+      'suggested_jobs': tr('adm_field_suggested_jobs'),
+      'suggested_internships': tr('adm_field_suggested_internships'),
     };
     return map[key] ?? key;
   }
@@ -604,15 +601,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
-          title: const Text('حذف المستخدم'),
-          content: Text('هل أنت متأكد من حذف $email ؟\nسيتم حذف جميع بياناته نهائياً.'),
+          title: Text(tr('adm_delete_user_action')),
+          content: Text('${tr('adm_delete_user_confirm_prefix')}$email ؟\n${tr('adm_delete_user_confirm_suffix')}'),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('إلغاء')),
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(tr('adm_cancel'))),
             TextButton(
               onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('حذف', style: TextStyle(color: Colors.red)),
+              child: Text(tr('adm_delete'), style: const TextStyle(color: Colors.red)),
             ),
           ],
         ),
@@ -625,12 +622,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       await _loadData();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم حذف المستخدم بنجاح')),
+        SnackBar(content: Text(tr('adm_delete_user_success'))),
       );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('خطأ في الحذف: ${e.toString()}')),
+        SnackBar(content: Text('${tr('adm_delete_user_error_prefix')}${e.toString()}')),
       );
     }
   }
@@ -641,7 +638,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       await _loadData();
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('تم تحديث الدور بنجاح')),
+        SnackBar(content: Text(tr('adm_role_update_success'))),
       );
     } catch (e) {
       // Retry once on failure (handles Render cold starts)
@@ -651,12 +648,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
         await _loadData();
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم تحديث الدور بنجاح')),
+          SnackBar(content: Text(tr('adm_role_update_success'))),
         );
       } catch (e2) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطأ في تغيير الدور: ${e2.toString()}')),
+          SnackBar(content: Text('${tr('adm_role_update_error_prefix')}${e2.toString()}')),
         );
       }
     }

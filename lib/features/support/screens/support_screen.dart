@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/support_model.dart';
 import '../services/support_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
@@ -58,7 +59,7 @@ class _SupportScreenState extends State<SupportScreen> {
   Future<void> _submit() async {
     if (_selections.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختر على الأقل تفضيل واحد')),
+        SnackBar(content: Text(tr('ent_support_select_at_least_one'))),
       );
       return;
     }
@@ -72,17 +73,15 @@ class _SupportScreenState extends State<SupportScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ تفضيلات الدعم ✅')),
+      SnackBar(content: Text(tr('ent_support_saved_success'))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('تفضيلات الدعم'),
+          title: Text(tr('ent_support_title')),
           centerTitle: true,
         ),
         body: _loading
@@ -99,19 +98,19 @@ class _SupportScreenState extends State<SupportScreen> {
                         gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.support_agent, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
+                          const Icon(Icons.support_agent, color: Colors.white, size: 40),
+                          const SizedBox(height: 8),
                           Text(
-                            'شنو نوع الدعم اللي بغيتي؟',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            tr('ent_support_header_title'),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'اختر التفضيلات ديالك باش نوجهوك للدعم المناسب',
+                            tr('ent_support_header_subtitle'),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70, fontSize: 13),
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         ],
                       ),
@@ -136,13 +135,12 @@ class _SupportScreenState extends State<SupportScreen> {
                         ),
                         child: _submitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('حفظ التفضيلات', style: TextStyle(fontSize: 16)),
+                            : Text(tr('ent_support_save_btn'), style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
-      ),
     );
   }
 

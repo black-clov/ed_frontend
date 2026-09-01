@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/interest_category_model.dart';
 import '../services/interests_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class InterestsScreen extends StatefulWidget {
   const InterestsScreen({super.key});
@@ -57,17 +58,14 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('اكتشف اهتماماتك'),
-          centerTitle: true,
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : _buildContent(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp1_interests_title')),
+        centerTitle: true,
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _buildContent(),
     );
   }
 
@@ -84,7 +82,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'اختار المجالات اللي كتهمك ($totalSelected مختار)',
+                  '${tr('emp1_interests_header')} ($totalSelected ${tr('emp1_interests_selected_count')})',
                   style: const TextStyle(fontSize: 15, color: Color(0xFFC62828)),
                 ),
               ),

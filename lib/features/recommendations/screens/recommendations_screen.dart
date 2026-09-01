@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/recommendation_model.dart';
 import '../services/recommendations_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class RecommendationsScreen extends StatelessWidget {
   const RecommendationsScreen({super.key});
@@ -9,7 +10,7 @@ class RecommendationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('التوصيات')),
+      appBar: AppBar(title: Text(tr('emp2_recommendations_title'))),
       body: FutureBuilder<List<RecommendationModel>>(
         future: RecommendationsService().getRecommendations(),
         builder: (context, snapshot) {
@@ -19,7 +20,7 @@ class RecommendationsScreen extends StatelessWidget {
 
           final recommendations = snapshot.data ?? const [];
           if (recommendations.isEmpty) {
-            return const Center(child: Text('لا توجد توصيات متاحة.'));
+            return Center(child: Text(tr('emp2_no_recommendations')));
           }
 
           return ListView.builder(
@@ -39,7 +40,7 @@ class RecommendationsScreen extends StatelessWidget {
                       Text(item.description),
                       const SizedBox(height: 8),
                       Align(
-                        alignment: Alignment.centerRight,
+                        alignment: AlignmentDirectional.centerEnd,
                         child: TextButton(
                           onPressed: () {},
                           child: Text(item.actionLabel),

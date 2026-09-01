@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/content_model.dart';
 import '../services/content_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class ContentScreen extends StatefulWidget {
   const ContentScreen({super.key});
@@ -18,11 +19,11 @@ class _ContentScreenState extends State<ContentScreen> {
   String? _error;
   String _selectedType = 'all';
 
-  final _types = [
-    {'id': 'all', 'label': 'الكل'},
-    {'id': 'article', 'label': 'مقالات'},
-    {'id': 'document', 'label': 'مستندات'},
-    {'id': 'guide', 'label': 'أدلة'},
+  List<Map<String, String>> get _types => [
+    {'id': 'all', 'label': tr('emp2_all')},
+    {'id': 'article', 'label': tr('emp2_content_type_article')},
+    {'id': 'document', 'label': tr('emp2_content_type_document')},
+    {'id': 'guide', 'label': tr('emp2_content_type_guide')},
   ];
 
   @override
@@ -38,91 +39,88 @@ class _ContentScreenState extends State<ContentScreen> {
         type: _selectedType == 'all' ? null : _selectedType,
       );
     } catch (_) {
-      _error = 'تعذر تحميل المحتوى. تحقق من الاتصال وأعد المحاولة.';
+      _error = tr('emp2_content_load_error');
     }
     setState(() => _loading = false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('المحتوى والمقالات'),
-          backgroundColor: const Color(0xFFC62828),
-          foregroundColor: Colors.white,
-        ),
-        body: Column(
-          children: [
-            // Type filter
-            Container(
-              height: 52,
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                itemCount: _types.length,
-                itemBuilder: (_, i) {
-                  final t = _types[i];
-                  final selected = t['id'] == _selectedType;
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: ChoiceChip(
-                      label: Text(t['label']!),
-                      selected: selected,
-                      selectedColor: const Color(0xFFC62828),
-                      labelStyle: TextStyle(
-                        color: selected ? Colors.white : Colors.black87,
-                      ),
-                      onSelected: (_) {
-                        _selectedType = t['id']!;
-                        _load();
-                      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp2_content_title')),
+        backgroundColor: const Color(0xFFC62828),
+        foregroundColor: Colors.white,
+      ),
+      body: Column(
+        children: [
+          // Type filter
+          Container(
+            height: 52,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              itemCount: _types.length,
+              itemBuilder: (_, i) {
+                final t = _types[i];
+                final selected = t['id'] == _selectedType;
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ChoiceChip(
+                    label: Text(t['label']!),
+                    selected: selected,
+                    selectedColor: const Color(0xFFC62828),
+                    labelStyle: TextStyle(
+                      color: selected ? Colors.white : Colors.black87,
                     ),
-                  );
-                },
-              ),
+                    onSelected: (_) {
+                      _selectedType = t['id']!;
+                      _load();
+                    },
+                  ),
+                );
+              },
             ),
-            // List
-            Expanded(
-              child: _loading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _error != null
-                      ? Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
-                              const SizedBox(height: 12),
-                              Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
-                              const SizedBox(height: 16),
-                              ElevatedButton.icon(
-                                onPressed: _load,
-                                icon: const Icon(Icons.refresh),
-                                label: const Text('إعادة المحاولة'),
-                              ),
-                            ],
-                          ),
-                        )
-                      : _items.isEmpty
-                      ? const Center(
-                          child: Text('لا يوجد محتوى حالياً',
-                              style: TextStyle(color: Colors.grey)))
-                      : RefreshIndicator(
-                          onRefresh: _load,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.all(12),
-                            itemCount: _items.length,
-                            itemBuilder: (_, i) => _ContentCard(
-                              item: _items[i],
-                              onTap: () => _openDetail(_items[i]),
+          ),
+          // List
+          Expanded(
+            child: _loading
+                ? const Center(child: CircularProgressIndicator())
+                : _error != null
+                    ? Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.cloud_off, size: 48, color: Colors.grey),
+                            const SizedBox(height: 12),
+                            Text(_error!, style: const TextStyle(fontSize: 15, color: Colors.grey), textAlign: TextAlign.center),
+                            const SizedBox(height: 16),
+                            ElevatedButton.icon(
+                              onPressed: _load,
+                              icon: const Icon(Icons.refresh),
+                              label: Text(tr('emp2_retry')),
                             ),
+                          ],
+                        ),
+                      )
+                    : _items.isEmpty
+                    ? Center(
+                        child: Text(tr('emp2_no_content'),
+                            style: const TextStyle(color: Colors.grey)))
+                    : RefreshIndicator(
+                        onRefresh: _load,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(12),
+                          itemCount: _items.length,
+                          itemBuilder: (_, i) => _ContentCard(
+                            item: _items[i],
+                            onTap: () => _openDetail(_items[i]),
                           ),
                         ),
-            ),
-          ],
-        ),
+                      ),
+          ),
+        ],
       ),
     );
   }
@@ -251,77 +249,74 @@ class _DetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        maxChildSize: 0.95,
-        minChildSize: 0.4,
-        expand: false,
-        builder: (_, controller) => ListView(
-          controller: controller,
-          padding: const EdgeInsets.all(20),
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(2),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      maxChildSize: 0.95,
+      minChildSize: 0.4,
+      expand: false,
+      builder: (_, controller) => ListView(
+        controller: controller,
+        padding: const EdgeInsets.all(20),
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          if (item.imageUrl != null && item.imageUrl!.isNotEmpty)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                imageUrl: item.imageUrl!,
+                height: 180,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorWidget: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
+          const SizedBox(height: 16),
+          Text(item.title,
+              style:
+                  const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Row(children: [
+            _Chip(
+                label: item.typeLabel,
+                color: const Color(0xFFC62828)),
+            if (item.category != null) ...[
+              const SizedBox(width: 6),
+              _Chip(label: item.category!, color: Colors.grey.shade600),
+            ],
+          ]),
+          const SizedBox(height: 16),
+          if (item.body != null && item.body!.isNotEmpty)
+            Text(item.body!,
+                style: const TextStyle(fontSize: 15, height: 1.7)),
+          if (item.fileUrl != null && item.fileUrl!.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _openUrl(item.fileUrl!),
+                icon: const Icon(Icons.open_in_new),
+                label: Text(tr('emp2_open_file')),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFC62828),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
             ),
-            if (item.imageUrl != null && item.imageUrl!.isNotEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  imageUrl: item.imageUrl!,
-                  height: 180,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorWidget: (_, _, _) => const SizedBox.shrink(),
-                ),
-              ),
-            const SizedBox(height: 16),
-            Text(item.title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Row(children: [
-              _Chip(
-                  label: item.typeLabel,
-                  color: const Color(0xFFC62828)),
-              if (item.category != null) ...[
-                const SizedBox(width: 6),
-                _Chip(label: item.category!, color: Colors.grey.shade600),
-              ],
-            ]),
-            const SizedBox(height: 16),
-            if (item.body != null && item.body!.isNotEmpty)
-              Text(item.body!,
-                  style: const TextStyle(fontSize: 15, height: 1.7)),
-            if (item.fileUrl != null && item.fileUrl!.isNotEmpty) ...[
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () => _openUrl(item.fileUrl!),
-                  icon: const Icon(Icons.open_in_new),
-                  label: const Text('فتح الملف'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC62828),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-              ),
-            ],
           ],
-        ),
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../services/interview_service.dart';
+import 'package:flutter_application_1/core/i18n/app_i18n.dart';
 
 class MockInterviewScreen extends StatefulWidget {
   const MockInterviewScreen({super.key});
@@ -50,7 +51,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
     final q = _questions![_currentIndex];
     if ((_controllers[q.id]?.text ?? '').trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('كتب الجواب ديالك من فضلك')),
+        SnackBar(content: Text(tr('emp2_answer_required'))),
       );
       return;
     }
@@ -69,7 +70,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
     final q = _questions![_currentIndex];
     if ((_controllers[q.id]?.text ?? '').trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('كتب الجواب ديالك من فضلك')),
+        SnackBar(content: Text(tr('emp2_answer_required'))),
       );
       return;
     }
@@ -105,19 +106,16 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('محاكاة المقابلة'),
-          centerTitle: true,
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : _result != null
-                ? _buildResults()
-                : _buildQuestionView(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(tr('emp2_mock_interview_title')),
+        centerTitle: true,
       ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _result != null
+              ? _buildResults()
+              : _buildQuestionView(),
     );
   }
 
@@ -134,7 +132,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
           Row(
             children: [
               Text(
-                'السؤال ${_currentIndex + 1}/${_questions!.length}',
+                '${tr('emp2_question_label')} ${_currentIndex + 1}/${_questions!.length}',
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               const Spacer(),
@@ -169,8 +167,8 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                     children: [
                       const Icon(Icons.record_voice_over, color: Color(0xFFC62828)),
                       const SizedBox(width: 8),
-                      const Text('المحاور يسأل:',
-                          style: TextStyle(
+                      Text(tr('emp2_interviewer_asks'),
+                          style: const TextStyle(
                               color: Color(0xFFC62828),
                               fontWeight: FontWeight.bold)),
                     ],
@@ -218,7 +216,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
               expands: true,
               textAlignVertical: TextAlignVertical.top,
               decoration: InputDecoration(
-                hintText: 'أكتب جوابك هنا...',
+                hintText: tr('emp2_answer_hint'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -237,7 +235,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                   child: OutlinedButton.icon(
                     onPressed: _prev,
                     icon: const Icon(Icons.arrow_forward),
-                    label: const Text('السابق'),
+                    label: Text(tr('emp2_previous')),
                   ),
                 ),
               if (_currentIndex > 0) const SizedBox(width: 12),
@@ -246,7 +244,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                   child: ElevatedButton.icon(
                     onPressed: _next,
                     icon: const Icon(Icons.arrow_back),
-                    label: const Text('التالي'),
+                    label: Text(tr('emp2_next')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFC62828),
                       foregroundColor: Colors.white,
@@ -264,7 +262,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                             child:
                                 CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                         : const Icon(Icons.check_circle),
-                    label: Text(_submitting ? 'جاري التقييم...' : 'إرسال الأجوبة'),
+                    label: Text(_submitting ? tr('emp2_evaluating') : tr('emp2_submit_answers')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,
                       foregroundColor: Colors.white,
@@ -350,8 +348,8 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
         ),
         const SizedBox(height: 20),
 
-        const Text('تفاصيل التقييم',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(tr('emp2_evaluation_details'),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
         const SizedBox(height: 10),
 
         // Per-question feedback
@@ -377,7 +375,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                   Row(
                     children: [
                       Text(
-                        'السؤال ${idx + 1}',
+                        '${tr('emp2_question_label')} ${idx + 1}',
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
@@ -429,7 +427,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
               });
             },
             icon: const Icon(Icons.refresh),
-            label: const Text('إعادة المحاكاة'),
+            label: Text(tr('emp2_restart_simulation')),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFC62828),
               foregroundColor: Colors.white,

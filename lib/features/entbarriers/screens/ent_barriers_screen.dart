@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/ent_barrier_model.dart';
 import '../services/ent_barriers_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class EntBarriersScreen extends StatefulWidget {
   const EntBarriersScreen({super.key});
@@ -50,7 +51,7 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
   Future<void> _submit() async {
     if (_selected.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('اختر على الأقل عائق واحد')),
+        SnackBar(content: Text(tr('ent_barriers_select_at_least_one'))),
       );
       return;
     }
@@ -64,17 +65,15 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
     setState(() => _submitting = false);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('تم حفظ العوائق ✅')),
+      SnackBar(content: Text(tr('ent_barriers_saved_success'))),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: const Text('عوائق ريادة الأعمال'),
+          title: Text(tr('ent_barriers_title')),
           centerTitle: true,
         ),
         body: _loading
@@ -91,19 +90,19 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
                         gradient: const LinearGradient(colors: [Color(0xFFC62828), Color(0xFFEF5350)]),
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: const Column(
+                      child: Column(
                         children: [
-                          Icon(Icons.block, color: Colors.white, size: 40),
-                          SizedBox(height: 8),
+                          const Icon(Icons.block, color: Colors.white, size: 40),
+                          const SizedBox(height: 8),
                           Text(
-                            'شنو اللي كيوقفك تبدأ مشروعك؟',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                            tr('ent_barriers_header_title'),
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Text(
-                            'اختر العوائق اللي كتحس بيها باش نساعدوك تتجاوزها',
+                            tr('ent_barriers_header_subtitle'),
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white70, fontSize: 13),
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
                           ),
                         ],
                       ),
@@ -165,11 +164,11 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
                     // Notes
                     TextField(
                       controller: _notesCtrl,
-                      textDirection: TextDirection.rtl,
+                      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
                       maxLines: 3,
                       decoration: InputDecoration(
-                        labelText: 'ملاحظات إضافية (اختياري)',
-                        hintText: 'اكتب أي عائق آخر...',
+                        labelText: tr('ent_barriers_notes_label'),
+                        hintText: tr('ent_barriers_notes_hint'),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                       ),
                     ),
@@ -188,13 +187,12 @@ class _EntBarriersScreenState extends State<EntBarriersScreen> {
                         ),
                         child: _submitting
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                            : const Text('حفظ', style: TextStyle(fontSize: 16)),
+                            : Text(tr('ent_save_btn'), style: const TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
                 ),
               ),
-      ),
     );
   }
 }

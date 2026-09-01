@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/skills_service.dart';
+import '../../../core/i18n/app_i18n.dart';
 
 class SkillsScreen extends StatefulWidget {
   const SkillsScreen({super.key});
@@ -32,7 +33,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
       setState(() => _saving = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(ok ? 'تم حفظ المهارات بنجاح ✅' : 'فشل الحفظ، حاول مجدداً'),
+          content: Text(ok ? tr('emp1_skills_save_success') : tr('emp1_skills_save_failed')),
           backgroundColor: ok ? const Color(0xFF2E7D32) : Colors.red,
         ),
       );
@@ -42,48 +43,46 @@ class _SkillsScreenState extends State<SkillsScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedSkills = _skillsService.getCurrentSelection().selectedSkills;
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFAF6F0),
-        appBar: AppBar(
-          title: const Text('المهارات'),
-          centerTitle: true,
-          backgroundColor: const Color(0xFFC62828),
-          foregroundColor: Colors.white,
-        ),
-        body: _loading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFC62828), Color(0xFFC62828)],
-                        ),
-                        borderRadius: BorderRadius.circular(14),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF6F0),
+      appBar: AppBar(
+        title: Text(tr('emp1_skills_title')),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFC62828),
+        foregroundColor: Colors.white,
+      ),
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFC62828), Color(0xFFC62828)],
                       ),
-                      child: Column(
-                        children: [
-                          const Icon(Icons.psychology, color: Colors.white, size: 40),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'اختر أهم مهاراتك',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'اختر حتى ${SkillsService.maxSkills} مهارات تميزك',
-                            style: const TextStyle(color: Colors.white70, fontSize: 14),
-                          ),
-                        ],
-                      ),
+                      borderRadius: BorderRadius.circular(14),
                     ),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.psychology, color: Colors.white, size: 40),
+                        const SizedBox(height: 8),
+                        Text(
+                          tr('emp1_skills_header_title'),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${tr('emp1_skills_header_subtitle_prefix')} ${SkillsService.maxSkills} ${tr('emp1_skills_header_subtitle_suffix')}',
+                          style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
                     const SizedBox(height: 20),
                     ...(_skillsService.skillsCatalog.map((skill) {
                       final isSelected = selectedSkills.contains(skill);
@@ -103,7 +102,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                             final changed = _skillsService.toggleSkill(skill);
                             if (!changed) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('يمكنك اختيار حتى 3 مهارات فقط.')),
+                                SnackBar(content: Text(tr('emp1_skills_max_reached'))),
                               );
                               return;
                             }
@@ -170,7 +169,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                             ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                             : const Icon(Icons.save, color: Colors.white),
                         label: Text(
-                          _saving ? 'جاري الحفظ...' : 'حفظ المهارات',
+                          _saving ? tr('emp1_skills_saving') : tr('emp1_skills_save_btn'),
                           style: const TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
@@ -182,7 +181,6 @@ class _SkillsScreenState extends State<SkillsScreen> {
                   ],
                 ),
               ),
-      ),
     );
   }
 }
