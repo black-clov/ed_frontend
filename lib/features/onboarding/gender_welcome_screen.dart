@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/i18n/app_i18n.dart';
 
 class GenderWelcomeScreen extends StatelessWidget {
   final String gender;
@@ -7,9 +8,7 @@ class GenderWelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBoy = gender == 'boy';
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: const Color(0xFFFAF6F0),
         body: SafeArea(
           child: Column(
@@ -43,7 +42,7 @@ class GenderWelcomeScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Text(
-                      isBoy ? 'يلا مستعد؟' : 'يلا مستعدة؟',
+                      isBoy ? tr('onb_gw_ready_boy') : tr('onb_gw_ready_girl'),
                       style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -63,7 +62,7 @@ class GenderWelcomeScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
                     child: Text(
-                      isBoy ? 'اهو ماشي مستعد ؟' : 'اهو ماشي مستعدة؟',
+                      isBoy ? tr('onb_gw_not_ready_boy') : tr('onb_gw_not_ready_girl'),
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
@@ -79,7 +78,6 @@ class GenderWelcomeScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

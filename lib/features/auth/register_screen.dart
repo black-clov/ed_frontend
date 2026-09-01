@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../../core/config/env.dart';
+import '../../core/i18n/app_i18n.dart';
 
 class RegisterScreen extends StatefulWidget {
 	const RegisterScreen({super.key});
@@ -45,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 		if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
 			if (!mounted) return;
 			ScaffoldMessenger.of(context).showSnackBar(
-				const SnackBar(content: Text('تعذر فتح سياسة الخصوصية')),
+				SnackBar(content: Text(tr('auth_privacy_open_error'))),
 			);
 		}
 	}
@@ -84,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 			}
 		} catch (e) {
 			if (!mounted) return;
-			_showErrorPopup('فشل التسجيل بـ Google. حاول مرة أخرى.');
+			_showErrorPopup(tr('auth_google_register_failed'));
 		}
 		if (mounted) setState(() => _googleLoading = false);
 	}
@@ -108,18 +109,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 			context: context,
 			builder: (_) => AlertDialog(
 				shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-				title: const Row(
+				title: Row(
 					children: [
-						Icon(Icons.error_outline, color: Color(0xFFC62828)),
-						SizedBox(width: 8),
-						Text('خطأ', style: TextStyle(color: Color(0xFFC62828))),
+						const Icon(Icons.error_outline, color: Color(0xFFC62828)),
+						const SizedBox(width: 8),
+						Text(tr('error'), style: const TextStyle(color: Color(0xFFC62828))),
 					],
 				),
 				content: Text(msg, style: const TextStyle(fontSize: 15)),
 				actions: [
 					TextButton(
 						onPressed: () => Navigator.pop(context),
-						child: const Text('حسنا', style: TextStyle(color: Color(0xFFC62828))),
+						child: Text(tr('ok'), style: const TextStyle(color: Color(0xFFC62828))),
 					),
 				],
 			),
@@ -171,262 +172,259 @@ class _RegisterScreenState extends State<RegisterScreen> {
 				}
 				if (!mounted) return;
 				ScaffoldMessenger.of(context).showSnackBar(
-					const SnackBar(content: Text('تم التسجيل بنجاح!')),
+					SnackBar(content: Text(tr('register_success'))),
 				);
 				// Go to onboarding flow
 				Navigator.pushReplacementNamed(context, '/onboarding');
 			} else {
-				_showErrorPopup('فشل التسجيل. تحقق من بياناتك وحاول مرة أخرى.');
+				_showErrorPopup(tr('register_error'));
 			}
 		} on DioException catch (_) {
 			setState(() => _loading = false);
-			_showErrorPopup('فشل التسجيل. تحقق من البيانات وحاول مرة أخرى.');
+			_showErrorPopup(tr('register_error'));
 		} catch (_) {
 			setState(() => _loading = false);
-			_showErrorPopup('حدث خطأ. حاول مرة أخرى.');
+			_showErrorPopup(tr('register_error'));
 		}
 	}
 
 	@override
 	Widget build(BuildContext context) {
-		return Directionality(
-			textDirection: TextDirection.rtl,
-			child: Scaffold(
-				backgroundColor: const Color(0xFFFAF6F0),
-				body: Center(
-					child: SingleChildScrollView(
-						child: Padding(
-							padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-							child: Column(
-								mainAxisAlignment: MainAxisAlignment.center,
-								children: [
-									Image.asset(
-										'assets/images/logo_eidmaj.png',
-										height: 70,
+		return Scaffold(
+			backgroundColor: const Color(0xFFFAF6F0),
+			body: Center(
+				child: SingleChildScrollView(
+					child: Padding(
+						padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+						child: Column(
+							mainAxisAlignment: MainAxisAlignment.center,
+							children: [
+								Image.asset(
+									'assets/images/logo_eidmaj.png',
+									height: 70,
+								),
+								const SizedBox(height: 12),
+								Text(
+									tr('register_title'),
+									style: TextStyle(
+										fontSize: 28,
+										fontWeight: FontWeight.bold,
+										color: const Color(0xFFC62828),
 									),
-									const SizedBox(height: 12),
-									Text(
-										'إنشاء حساب',
-										style: TextStyle(
-											fontSize: 28,
-											fontWeight: FontWeight.bold,
-											color: const Color(0xFFC62828),
-										),
-									),
-									const SizedBox(height: 8),
-									Text(
-										'سجّل بياناتك للانضمام إلى منصة إدماج',
-										style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-									),
-									const SizedBox(height: 16),
-									Image.asset(
-										_gender == 'boy' ? 'assets/images/mascott_garcon.png' : 'assets/images/mascott_fille.png',
-										height: 120,
-									),
-									const SizedBox(height: 16),
-									Card(
-										elevation: 8,
-										shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-										child: Padding(
-											padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-											child: Form(
-												key: _formKey,
-												child: Column(
-													children: [
-														TextFormField(
-															controller: _firstNameController,
-															decoration: InputDecoration(
-																labelText: 'الاسم الأول',
-																prefixIcon: Icon(Icons.person, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال الاسم الأول' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _lastNameController,
-															decoration: InputDecoration(
-																labelText: 'اسم العائلة',
-																prefixIcon: Icon(Icons.person_outline, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال اسم العائلة' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _ageController,
-															decoration: InputDecoration(
-																labelText: 'العمر',
-																prefixIcon: Icon(Icons.cake, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															keyboardType: TextInputType.number,
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال العمر' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _villeController,
-															decoration: InputDecoration(
-																labelText: 'المدينة',
-																prefixIcon: Icon(Icons.location_city, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال المدينة' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _niveauScolaireController,
-															decoration: InputDecoration(
-																labelText: 'المستوى الدراسي',
-																prefixIcon: Icon(Icons.school, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال المستوى الدراسي' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _telephoneController,
-															decoration: InputDecoration(
-																labelText: 'رقم الهاتف',
-																prefixIcon: Icon(Icons.phone, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															keyboardType: TextInputType.phone,
-															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال رقم الهاتف' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _emailController,
-															decoration: InputDecoration(
-																labelText: 'البريد الإلكتروني',
-																prefixIcon: Icon(Icons.email, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															keyboardType: TextInputType.emailAddress,
-															validator: (v) => v == null || !v.contains('@') ? 'يرجى إدخال بريد إلكتروني صحيح' : null,
-														),
-														const SizedBox(height: 16),
-														TextFormField(
-															controller: _passwordController,
-															decoration: InputDecoration(
-																labelText: 'كلمة المرور',
-																prefixIcon: Icon(Icons.lock, color: const Color(0xFFC62828)),
-																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-																focusedBorder: OutlineInputBorder(
-																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
-																),
-															),
-															obscureText: true,
-															validator: (v) => v == null || v.length < 6 ? 'يجب أن تكون 6 أحرف على الأقل' : null,
-														),
-														const SizedBox(height: 28),
-														SizedBox(
-															width: double.infinity,
-															height: 48,
-															child: ElevatedButton(
-																style: ElevatedButton.styleFrom(
-																	backgroundColor: const Color(0xFFC62828),
-																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-																),
-																onPressed: _loading ? null : _register,
-																child: _loading
-																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-																		: const Text('تسجيل', style: TextStyle(fontSize: 18, color:Colors.white)),
+								),
+								const SizedBox(height: 8),
+								Text(
+									tr('auth_register_subtitle'),
+									style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+								),
+								const SizedBox(height: 16),
+								Image.asset(
+									_gender == 'boy' ? 'assets/images/mascott_garcon.png' : 'assets/images/mascott_fille.png',
+									height: 120,
+								),
+								const SizedBox(height: 16),
+								Card(
+									elevation: 8,
+									shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+									child: Padding(
+										padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+										child: Form(
+											key: _formKey,
+											child: Column(
+												children: [
+													TextFormField(
+														controller: _firstNameController,
+														decoration: InputDecoration(
+															labelText: tr('first_name'),
+															prefixIcon: Icon(Icons.person, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 															),
 														),
-														const SizedBox(height: 12),
-														// Google Sign-In Button
-														SizedBox(
-															width: double.infinity,
-															height: 48,
-															child: OutlinedButton.icon(
-																style: OutlinedButton.styleFrom(
-																	side: const BorderSide(color: Color(0xFFC62828), width: 1.5),
-																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-																),
-																onPressed: _googleLoading ? null : _handleGoogleSignIn,
-																icon: _googleLoading
-																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFC62828)))
-																		: const Icon(Icons.g_mobiledata, color: Color(0xFFC62828), size: 28),
-																label: Text(
-																	"التسجيل بـ Google",
-																	style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFC62828)),
-																),
-															),
-														),
-													],
-												),
-											),
-										),
-									),
-									const SizedBox(height: 18),
-									Row(
-										mainAxisAlignment: MainAxisAlignment.center,
-										children: [
-											const Text("لديك حساب بالفعل؟ ", style: TextStyle(fontSize: 15)),
-											GestureDetector(
-												onTap: () {
-													Navigator.pushReplacement(
-														context,
-														MaterialPageRoute(builder: (_) => const LoginScreen()),
-													);
-												},
-												child: Text(
-													"تسجيل الدخول",
-													style: TextStyle(
-														color: const Color(0xFF2E7D32),
-														fontWeight: FontWeight.bold,
-														fontSize: 15,
-														decoration: TextDecoration.underline,
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
 													),
-												),
-											),
-										],
-									),
-									const SizedBox(height: 16),
-									GestureDetector(
-										onTap: _openPrivacyPolicy,
-										child: Text(
-											"بالتسجيل، أنت توافق على سياسة الخصوصية",
-											textAlign: TextAlign.center,
-											style: TextStyle(
-												color: Colors.grey.shade600,
-												fontSize: 12.5,
-												decoration: TextDecoration.underline,
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _lastNameController,
+														decoration: InputDecoration(
+															labelText: tr('last_name'),
+															prefixIcon: Icon(Icons.person_outline, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _ageController,
+														decoration: InputDecoration(
+															labelText: tr('age'),
+															prefixIcon: Icon(Icons.cake, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														keyboardType: TextInputType.number,
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _villeController,
+														decoration: InputDecoration(
+															labelText: tr('city'),
+															prefixIcon: Icon(Icons.location_city, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _niveauScolaireController,
+														decoration: InputDecoration(
+															labelText: tr('education_level'),
+															prefixIcon: Icon(Icons.school, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _telephoneController,
+														decoration: InputDecoration(
+															labelText: tr('phone'),
+															prefixIcon: Icon(Icons.phone, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														keyboardType: TextInputType.phone,
+														validator: (v) => v == null || v.isEmpty ? tr('field_required') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _emailController,
+														decoration: InputDecoration(
+															labelText: tr('email'),
+															prefixIcon: Icon(Icons.email, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														keyboardType: TextInputType.emailAddress,
+														validator: (v) => v == null || !v.contains('@') ? tr('auth_invalid_email') : null,
+													),
+													const SizedBox(height: 16),
+													TextFormField(
+														controller: _passwordController,
+														decoration: InputDecoration(
+															labelText: tr('password'),
+															prefixIcon: Icon(Icons.lock, color: const Color(0xFFC62828)),
+															border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+															focusedBorder: OutlineInputBorder(
+																borderRadius: BorderRadius.circular(12),
+																borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
+															),
+														),
+														obscureText: true,
+														validator: (v) => v == null || v.length < 6 ? tr('auth_password_min_length') : null,
+													),
+													const SizedBox(height: 28),
+													SizedBox(
+														width: double.infinity,
+														height: 48,
+														child: ElevatedButton(
+															style: ElevatedButton.styleFrom(
+																backgroundColor: const Color(0xFFC62828),
+																shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+															),
+															onPressed: _loading ? null : _register,
+															child: _loading
+																	? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+																	: Text(tr('register_btn'), style: const TextStyle(fontSize: 18, color:Colors.white)),
+														),
+													),
+													const SizedBox(height: 12),
+													// Google Sign-In Button
+													SizedBox(
+														width: double.infinity,
+														height: 48,
+														child: OutlinedButton.icon(
+															style: OutlinedButton.styleFrom(
+																side: const BorderSide(color: Color(0xFFC62828), width: 1.5),
+																shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+															),
+															onPressed: _googleLoading ? null : _handleGoogleSignIn,
+															icon: _googleLoading
+																	? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFC62828)))
+																	: const Icon(Icons.g_mobiledata, color: Color(0xFFC62828), size: 28),
+															label: Text(
+																tr('google_login'),
+																style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFC62828)),
+															),
+														),
+													),
+												],
 											),
 										),
 									),
-								],
-							),
+								),
+								const SizedBox(height: 18),
+								Row(
+									mainAxisAlignment: MainAxisAlignment.center,
+									children: [
+										Text(tr('have_account'), style: const TextStyle(fontSize: 15)),
+										GestureDetector(
+											onTap: () {
+												Navigator.pushReplacement(
+													context,
+													MaterialPageRoute(builder: (_) => const LoginScreen()),
+												);
+											},
+											child: Text(
+												tr('login'),
+												style: TextStyle(
+													color: const Color(0xFF2E7D32),
+													fontWeight: FontWeight.bold,
+													fontSize: 15,
+													decoration: TextDecoration.underline,
+												),
+											),
+										),
+									],
+								),
+								const SizedBox(height: 16),
+								GestureDetector(
+									onTap: _openPrivacyPolicy,
+									child: Text(
+										tr('privacy_consent'),
+										textAlign: TextAlign.center,
+										style: TextStyle(
+											color: Colors.grey.shade600,
+											fontSize: 12.5,
+											decoration: TextDecoration.underline,
+										),
+									),
+								),
+							],
 						),
 					),
 				),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../../core/i18n/app_i18n.dart';
 
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
@@ -126,41 +127,38 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: _bgColor,
-        body: _step == 0
-            ? SafeArea(child: _buildCurrentStep())
-            : Stack(
-                children: [
-                  // FULL-SCREEN BACKGROUND IMAGE (centered and covering)
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(_bgImage),
-                          fit: BoxFit.cover, // fills whole screen
-                          alignment: Alignment.center, // centered on phone
-                        ),
+    return Scaffold(
+      backgroundColor: _bgColor,
+      body: _step == 0
+          ? SafeArea(child: _buildCurrentStep())
+          : Stack(
+              children: [
+                // FULL-SCREEN BACKGROUND IMAGE (centered and covering)
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(_bgImage),
+                        fit: BoxFit.cover, // fills whole screen
+                        alignment: Alignment.center, // centered on phone
                       ),
                     ),
                   ),
-                  // Foreground content
-                  SafeArea(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: Colors.black.withValues(
-                        alpha: (_step == 1 || _step == 6) ? 0.0 : 0.15,
-                      ), // optional slight dim on text steps
-                      child: _buildCurrentStep(),
-                    ),
+                ),
+                // Foreground content
+                SafeArea(
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.black.withValues(
+                      alpha: (_step == 1 || _step == 6) ? 0.0 : 0.15,
+                    ), // optional slight dim on text steps
+                    child: _buildCurrentStep(),
                   ),
-                ],
-              ),
-        bottomNavigationBar: _step == 0 ? null : _buildNavBar(),
-      ),
+                ),
+              ],
+            ),
+      bottomNavigationBar: _step == 0 ? null : _buildNavBar(),
     );
   }
 
@@ -193,7 +191,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                     borderRadius: BorderRadius.circular(10)),
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: Text('رجوع',
+              child: Text(tr('onb_back'),
                   style: TextStyle(color: color, fontSize: 16)),
             ),
           ),
@@ -208,7 +206,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
-                _step == _totalSteps - 1 ? 'إنهاء' : 'التالي',
+                _step == _totalSteps - 1 ? tr('onb_finish') : tr('onb_next'),
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -264,9 +262,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             color: const Color(0xFFC62828),
             borderRadius: BorderRadius.circular(30),
           ),
-          child: const Text(
-            'آشكيد نتعارفو',
-            style: TextStyle(
+          child: Text(
+            tr('onb_intro_greeting'),
+            style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
@@ -293,8 +291,8 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('يلا نبداو',
-                  style: TextStyle(
+              child: Text(tr('onb_intro_start'),
+                  style: const TextStyle(
                       fontSize: 18,
                       color: Colors.white,
                       fontWeight: FontWeight.bold)),
@@ -334,15 +332,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEmpKey1() {
     return _buildKeyStep(
       isEmployment: true,
-      keyTitle: 'شكون أنا',
-      bannerTitle: 'عرف راسك مزيان',
-      subtitle:
-          'قبل ما تقلب على خدمة ولا تكوين،\nخاصك تعرف شكون نتا:',
+      keyTitle: tr('onb_who_am_i'),
+      bannerTitle: tr('onb_know_yourself'),
+      subtitle: tr('onb_emp1_subtitle'),
       content: Column(children: [
-        _buildField('شنو كتحب تدير؟', _empLikes, const Color(0xFFC62828)),
-        _buildField('شنو كتعرف تدير؟', _empKnows, const Color(0xFFC62828)),
-        _buildField('نقاط القوة ديالك', _empStrengths, const Color(0xFFC62828)),
-        _buildField('اختبار توجيه بسيط', _empQuiz, const Color(0xFFC62828)),
+        _buildField(tr('onb_emp1_f_likes'), _empLikes, const Color(0xFFC62828)),
+        _buildField(tr('onb_f_knows'), _empKnows, const Color(0xFFC62828)),
+        _buildField(tr('onb_f_strengths'), _empStrengths, const Color(0xFFC62828)),
+        _buildField(tr('onb_f_quiz'), _empQuiz, const Color(0xFFC62828)),
       ]),
       footerText: '',
     );
@@ -351,16 +348,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEmpKey2() {
     return _buildKeyStep(
       isEmployment: true,
-      keyTitle: 'آش خاصني؟',
-      bannerTitle: 'آش خاصني؟',
-      subtitle:
-          'دابا ملي عرفتي شكون نتا\nجا الوقت تحدد بالضبط آش خاصك تطوّر.',
+      keyTitle: tr('onb_what_do_i_need'),
+      bannerTitle: tr('onb_what_do_i_need'),
+      subtitle: tr('onb_emp2_subtitle'),
       content: Column(children: [
-        _buildField('شنو المهارات اللي خاصك تطورها؟', _empSkillsDev,
+        _buildField(tr('onb_emp2_f_skills'), _empSkillsDev,
             const Color(0xFFC62828)),
-        _buildField('شنو اللي واقف قدامك؟', _empBarriers,
+        _buildField(tr('onb_emp2_f_barriers'), _empBarriers,
             const Color(0xFFC62828)),
-        _buildField('فين خاصك تزيد تخدم على راسك؟', _empImprove,
+        _buildField(tr('onb_emp2_f_improve'), _empImprove,
             const Color(0xFFC62828)),
       ]),
       footerText: '',
@@ -370,16 +366,16 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEmpKey3() {
     return _buildKeyStep(
       isEmployment: true,
-      keyTitle: 'طريق النجاح',
-      bannerTitle: 'طريق النجاح',
+      keyTitle: tr('onb_success_path'),
+      bannerTitle: tr('onb_success_path'),
       subtitle: '',
       content: _buildStepTimeline(
         items: [
-          'تدريب مصغر',
-          'مقطع فيديو قصير',
-          'اختبار تفاعلي',
-          'جزّب مقابلة حقيقية',
-          'صايب CV ديالك',
+          tr('onb_item_mini_training'),
+          tr('onb_item_video'),
+          tr('onb_item_quiz_interactive'),
+          tr('onb_emp3_item_interview'),
+          tr('onb_emp3_item_cv'),
         ],
         color: const Color(0xFFC62828),
       ),
@@ -390,15 +386,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEmpKey4() {
     return _buildKeyStep(
       isEmployment: true,
-      keyTitle: 'كاين معامن',
-      bannerTitle: 'كاين معامن',
+      keyTitle: tr('onb_opportunities'),
+      bannerTitle: tr('onb_opportunities'),
       subtitle: '',
       content: _buildStepTimeline(
         items: [
-          'اكتشف الفرص اللي قريبة ليك',
-          'برامج التكوين',
-          'مواكبة على أرض الواقع',
-          'تواصل',
+          tr('onb_emp4_item_discover'),
+          tr('onb_emp4_item_programs'),
+          tr('onb_emp4_item_support'),
+          tr('onb_emp4_item_contact'),
         ],
         color: const Color(0xFFC62828),
       ),
@@ -410,14 +406,14 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEntKey1() {
     return _buildKeyStep(
       isEmployment: false,
-      keyTitle: 'شكون أنا',
-      bannerTitle: 'عرف راسك مزيان',
-      subtitle: 'باش تولي مقاول، خاصك\nقبل كلشي تعرف:',
+      keyTitle: tr('onb_who_am_i'),
+      bannerTitle: tr('onb_know_yourself'),
+      subtitle: tr('onb_ent1_subtitle'),
       content: Column(children: [
-        _buildField('شنو كتحب فالمقاولة؟', _entLikes, const Color(0xFF2E7D32)),
-        _buildField('شنو كتعرف تدير؟', _entKnows, const Color(0xFF2E7D32)),
-        _buildField('نقاط القوة ديالك', _entStrengths, const Color(0xFF2E7D32)),
-        _buildField('اختبار توجيه بسيط', _entQuiz, const Color(0xFF2E7D32)),
+        _buildField(tr('onb_ent1_f_likes'), _entLikes, const Color(0xFF2E7D32)),
+        _buildField(tr('onb_f_knows'), _entKnows, const Color(0xFF2E7D32)),
+        _buildField(tr('onb_f_strengths'), _entStrengths, const Color(0xFF2E7D32)),
+        _buildField(tr('onb_f_quiz'), _entQuiz, const Color(0xFF2E7D32)),
       ]),
       footerText: '',
     );
@@ -426,15 +422,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEntKey2() {
     return _buildKeyStep(
       isEmployment: false,
-      keyTitle: 'آش خاصني؟',
-      bannerTitle: 'آش خاصني؟',
-      subtitle: 'شنو ناقصك باش تزير القدّام\nفالمقاولة؟',
+      keyTitle: tr('onb_what_do_i_need'),
+      bannerTitle: tr('onb_what_do_i_need'),
+      subtitle: tr('onb_ent2_subtitle'),
       content: Column(children: [
-        _buildField('شنو خاصك تطوّر دابا؟', _entDevelop,
+        _buildField(tr('onb_ent2_f_develop'), _entDevelop,
             const Color(0xFF2E7D32)),
-        _buildField('شنو العوائق اللي كتواجهك؟', _entObstacles,
+        _buildField(tr('onb_ent2_f_obstacles'), _entObstacles,
             const Color(0xFF2E7D32)),
-        _buildField('فين خاصك الدعم أكثر؟', _entSupport,
+        _buildField(tr('onb_ent2_f_support'), _entSupport,
             const Color(0xFF2E7D32))
       ]),
       footerText: '',
@@ -444,15 +440,15 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEntKey3() {
     return _buildKeyStep(
       isEmployment: false,
-      keyTitle: 'طريق النجاح',
-      bannerTitle: 'طريق النجاح',
+      keyTitle: tr('onb_success_path'),
+      bannerTitle: tr('onb_success_path'),
       subtitle: '',
       content: _buildStepTimeline(
         items: [
-          'تدريب مصغر',
-          'مقطع فيديو قصير',
-          'اختبار تفاعلي',
-          'توليد خطة عمل مصغرة',
+          tr('onb_item_mini_training'),
+          tr('onb_item_video'),
+          tr('onb_item_quiz_interactive'),
+          tr('onb_ent3_item_business_plan'),
         ],
         color: const Color(0xFF2E7D32),
       ),
@@ -463,18 +459,17 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Widget _buildEntKey4() {
     return _buildKeyStep(
       isEmployment: false,
-      keyTitle: 'كاين معامن',
-      bannerTitle: 'كاين معامن',
-      subtitle:
-          'دابا اللي خاصك هو الربط مع\nالفرص الحقيقية والناس اللي يقدرو يعاونوك.',
+      keyTitle: tr('onb_opportunities'),
+      bannerTitle: tr('onb_opportunities'),
+      subtitle: tr('onb_ent4_subtitle'),
       content: Column(children: [
-        _buildField('شنو باغي تلقى دابا؟', _entWhatNeed,
+        _buildField(tr('onb_ent4_f_what_need'), _entWhatNeed,
             const Color(0xFF2E7D32)),
-        _buildField('شنو نوع التكوين اللي كيناسبك؟', _entTrainingType,
+        _buildField(tr('onb_ent4_f_training_type'), _entTrainingType,
             const Color(0xFF2E7D32)),
-        _buildField('التمويل: فين وصلتي؟', _entFunding,
+        _buildField(tr('onb_ent4_f_funding'), _entFunding,
             const Color(0xFF2E7D32)),
-        _buildField('شكون باغي تتواصل معاه؟', _entContact,
+        _buildField(tr('onb_ent4_f_contact'), _entContact,
             const Color(0xFF2E7D32)),
       ]),
       footerText: '',
@@ -494,7 +489,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         isEmployment ? const Color(0xFFC62828) : const Color(0xFF2E7D32);
     final darkColor =
         isEmployment ? const Color(0xFFC62828) : const Color(0xFF1B5E20);
-    final doorLabel = isEmployment ? 'باب الخدمة' : 'باب المقاولة';
+    final doorLabel = isEmployment ? tr('onb_door_emp') : tr('onb_door_ent');
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../core/i18n/app_i18n.dart';
+import '../../core/i18n/language_toggle.dart';
 import '../../services/api_service.dart';
 import '../cv/screens/cv_preview_screen.dart';
 import '../interview/screens/interview_prep_screen.dart';
@@ -39,53 +41,142 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   final _storage = const FlutterSecureStorage();
 
-  final List<_DashboardSection> _employmentSections = [
-    _DashboardSection('الملف الشخصي', Icons.person_outline_rounded,
-        Color(0xFFC62828), ProfileScreen(), 'معلوماتك الشخصية'),
-    _DashboardSection('المهارات', Icons.psychology_rounded,
-        Color(0xFFC62828), SkillsScreen(), 'اكتشف مهاراتك'),
-    _DashboardSection('الفرص المطابقة', Icons.work_outline_rounded,
-        Color(0xFFC62828), OpportunitiesScreen(), 'فرص تناسبك'),
-    _DashboardSection('السيرة الذاتية', Icons.article_outlined,
-        Color(0xFFC62828), CvPreviewScreen(), 'صايب CV ديالك'),
-    _DashboardSection('تحضير المقابلات', Icons.record_voice_over_rounded,
-        Color(0xFFC62828), InterviewPrepScreen(), 'جهز راسك'),
-    _DashboardSection('كبسولات فيديو', Icons.play_circle_outline_rounded,
-        Color(0xFFC62828), VideosScreen(), 'تعلم بالفيديو'),
-    _DashboardSection('التوصيات', Icons.thumb_up_alt_outlined,
-        Color(0xFFC62828), RecommendationsScreen(), 'نصائح مخصصة'),
-    _DashboardSection('الاحتياجات', Icons.checklist_rounded,
-        Color(0xFFC62828), NeedsScreen(), 'شنو خاصك'),
-    _DashboardSection('الإرشاد والمواكبة', Icons.groups_outlined,
-        Color(0xFFC62828), MentorshipScreen(), 'كاين معامن'),
-    _DashboardSection('المحتوى والمقالات', Icons.library_books_outlined,
-        Color(0xFFC62828), ContentScreen(), 'مقالات ودلائل'),
+  List<_DashboardSection> get _employmentSections => [
+    _DashboardSection(
+      tr('dash_sec_profile_title'),
+      Icons.person_outline_rounded,
+      Color(0xFFC62828),
+      ProfileScreen(),
+      tr('dash_sec_profile_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_skills_title'),
+      Icons.psychology_rounded,
+      Color(0xFFC62828),
+      SkillsScreen(),
+      tr('dash_sec_skills_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_opportunities_title'),
+      Icons.work_outline_rounded,
+      Color(0xFFC62828),
+      OpportunitiesScreen(),
+      tr('dash_sec_opportunities_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_cv_title'),
+      Icons.article_outlined,
+      Color(0xFFC62828),
+      CvPreviewScreen(),
+      tr('dash_sec_cv_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_interview_title'),
+      Icons.record_voice_over_rounded,
+      Color(0xFFC62828),
+      InterviewPrepScreen(),
+      tr('dash_sec_interview_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_videos_title'),
+      Icons.play_circle_outline_rounded,
+      Color(0xFFC62828),
+      VideosScreen(),
+      tr('dash_sec_videos_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_recommendations_title'),
+      Icons.thumb_up_alt_outlined,
+      Color(0xFFC62828),
+      RecommendationsScreen(),
+      tr('dash_sec_recommendations_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_needs_title'),
+      Icons.checklist_rounded,
+      Color(0xFFC62828),
+      NeedsScreen(),
+      tr('dash_sec_needs_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_mentorship_title'),
+      Icons.groups_outlined,
+      Color(0xFFC62828),
+      MentorshipScreen(),
+      tr('dash_sec_mentorship_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_content_title'),
+      Icons.library_books_outlined,
+      Color(0xFFC62828),
+      ContentScreen(),
+      tr('dash_sec_content_subtitle'),
+    ),
   ];
 
-  final List<_DashboardSection> _entrepreneurshipSections = [
-    _DashboardSection('القطاعات', Icons.category_outlined,
-        Color(0xFF2E7D32), SectorsScreen(), 'اختر القطاع ديالك'),
-    _DashboardSection('ريادة الأعمال', Icons.rocket_launch_outlined,
-        Color(0xFF388E3C), EntrepreneurshipScreen(), 'روح المقاولة'),
-    _DashboardSection('خطة العمل', Icons.lightbulb_outline_rounded,
-        Color(0xFF43A047), BusinessPlanScreen(), 'بني المشروع'),
-    _DashboardSection('تحضير Pitch', Icons.campaign_outlined,
-        Color(0xFF2E7D32), PitchScreen(), 'قدم مشروعك'),
-    _DashboardSection('العوائق', Icons.shield_outlined,
-        Color(0xFF388E3C), EntBarriersScreen(), 'تغلب على العقبات'),
-    _DashboardSection('الدعم', Icons.handshake_outlined,
-        Color(0xFF43A047), SupportScreen(), 'شكون يعاونك'),
-    _DashboardSection('تدريب التواصل', Icons.forum_outlined,
-        Color(0xFF2E7D32), CommTrainingScreen(), 'طور التواصل'),
+  List<_DashboardSection> get _entrepreneurshipSections => [
+    _DashboardSection(
+      tr('dash_sec_sectors_title'),
+      Icons.category_outlined,
+      Color(0xFF2E7D32),
+      SectorsScreen(),
+      tr('dash_sec_sectors_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_entrepreneurship_title'),
+      Icons.rocket_launch_outlined,
+      Color(0xFF388E3C),
+      EntrepreneurshipScreen(),
+      tr('dash_sec_entrepreneurship_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_businessplan_title'),
+      Icons.lightbulb_outline_rounded,
+      Color(0xFF43A047),
+      BusinessPlanScreen(),
+      tr('dash_sec_businessplan_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_pitch_title'),
+      Icons.campaign_outlined,
+      Color(0xFF2E7D32),
+      PitchScreen(),
+      tr('dash_sec_pitch_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_barriers_title'),
+      Icons.shield_outlined,
+      Color(0xFF388E3C),
+      EntBarriersScreen(),
+      tr('dash_sec_barriers_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_support_title'),
+      Icons.handshake_outlined,
+      Color(0xFF43A047),
+      SupportScreen(),
+      tr('dash_sec_support_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_commtraining_title'),
+      Icons.forum_outlined,
+      Color(0xFF2E7D32),
+      CommTrainingScreen(),
+      tr('dash_sec_commtraining_subtitle'),
+    ),
   ];
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
-    _fadeAnimation =
-        CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
     _loadUserData().then((_) => _controller.forward());
   }
 
@@ -130,24 +221,29 @@ class _DashboardScreenState extends State<DashboardScreen>
     showDialog(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           title: Row(
             children: [
               Icon(Icons.logout, color: Colors.red.shade400, size: 24),
               const SizedBox(width: 8),
-              const Text('تسجيل الخروج',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                tr('dash_logout_dialog_title'),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ],
           ),
-          content: const Text('واش بصح باغي تخرج؟'),
+          content: Text(tr('dash_logout_confirm')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('لا، بقى',
-                  style: TextStyle(color: Colors.grey, fontSize: 15)),
+              child: Text(
+                tr('dash_logout_cancel'),
+                style: const TextStyle(color: Colors.grey, fontSize: 15),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -157,10 +253,13 @@ class _DashboardScreenState extends State<DashboardScreen>
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade400,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              child: const Text('أيه، خرج',
-                  style: TextStyle(color: Colors.white, fontSize: 15)),
+              child: Text(
+                tr('dash_logout_confirm_btn'),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+              ),
             ),
           ],
         ),
@@ -182,15 +281,16 @@ class _DashboardScreenState extends State<DashboardScreen>
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            section.screen,
+        pageBuilder: (context, animation, secondaryAnimation) => section.screen,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0.0, 0.08),
-              end: Offset.zero,
-            ).animate(
-                CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+            position:
+                Tween<Offset>(
+                  begin: const Offset(0.0, 0.08),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                ),
             child: FadeTransition(opacity: animation, child: child),
           );
         },
@@ -204,229 +304,233 @@ class _DashboardScreenState extends State<DashboardScreen>
     final screenWidth = MediaQuery.of(context).size.width;
     final crossAxisCount = screenWidth > 600 ? 4 : 3;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF5F0E8),
-        body: FadeTransition(
-          opacity: _fadeAnimation,
-          child: CustomScrollView(
-            slivers: [
-              // Collapsible App Bar
-              SliverAppBar(
-                expandedHeight: 230,
-                floating: false,
-                pinned: true,
-                backgroundColor: const Color(0xFFC62828),
-                automaticallyImplyLeading: false,
-                title: null,
-                actions: [
-                  // Back to onboarding
-                  _buildAppBarButton(
-                    icon: Icons.tune_rounded,
-                    tooltip: 'تعديل خطوات الإعداد',
-                    onPressed: _goToOnboarding,
-                  ),
-                  // Logout
-                  _buildAppBarButton(
-                    icon: Icons.logout_rounded,
-                    tooltip: 'تسجيل الخروج',
-                    onPressed: () => _showLogoutDialog(context),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFC62828),
-                          Color(0xFFC62828),
-                          Color(0xFFC62828)
-                        ],
-                      ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F0E8),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: CustomScrollView(
+          slivers: [
+            // Collapsible App Bar
+            SliverAppBar(
+              expandedHeight: 230,
+              floating: false,
+              pinned: true,
+              backgroundColor: const Color(0xFFC62828),
+              automaticallyImplyLeading: false,
+              title: null,
+              actions: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 6),
+                  child: LanguageToggle(),
+                ),
+                // Back to onboarding
+                _buildAppBarButton(
+                  icon: Icons.tune_rounded,
+                  tooltip: tr('dash_edit_steps_tooltip'),
+                  onPressed: _goToOnboarding,
+                ),
+                // Logout
+                _buildAppBarButton(
+                  icon: Icons.logout_rounded,
+                  tooltip: tr('dash_logout_tooltip'),
+                  onPressed: () => _showLogoutDialog(context),
+                ),
+                const SizedBox(width: 4),
+              ],
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color(0xFFC62828),
+                        Color(0xFFC62828),
+                        Color(0xFFC62828),
+                      ],
                     ),
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Row(
-                              children: [
-                                // Mascot avatar
-                                Container(
-                                  width: 76,
-                                  height: 76,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withAlpha(40),
-                                    border: Border.all(
-                                        color: Colors.white.withAlpha(80),
-                                        width: 2),
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.asset(
-                                      _gender == 'boy'
-                                          ? 'assets/images/mascott_garcon.png'
-                                          : 'assets/images/mascott_fille.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _userName.isNotEmpty
-                                            ? 'مرحبا $_userName!'
-                                            : 'مرحبا بك!',
-                                        style: const TextStyle(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        _userVille.isNotEmpty
-                                            ? 'من $_userVille - اختر مسارك المهني'
-                                            : 'اختر مسارك المهني وابدأ الرحلة',
-                                        style: TextStyle(
-                                          color: Colors.white.withAlpha(200),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 14),
-                            // Quick action: edit onboarding
-                            InkWell(
-                              onTap: _goToOnboarding,
-                              borderRadius: BorderRadius.circular(12),
-                              child: Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 10),
+                  ),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Row(
+                            children: [
+                              // Mascot avatar
+                              Container(
+                                width: 76,
+                                height: 76,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withAlpha(30),
-                                  borderRadius: BorderRadius.circular(12),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withAlpha(40),
                                   border: Border.all(
-                                      color: Colors.white.withAlpha(60)),
+                                    color: Colors.white.withAlpha(80),
+                                    width: 2,
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                child: ClipOval(
+                                  child: Image.asset(
+                                    _gender == 'boy'
+                                        ? 'assets/images/mascott_garcon.png'
+                                        : 'assets/images/mascott_fille.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.edit_note_rounded,
-                                        color: Colors.white.withAlpha(220),
-                                        size: 20),
-                                    const SizedBox(width: 8),
                                     Text(
-                                      'عدّل خطوات الإعداد',
+                                      _userName.isNotEmpty
+                                          ? '${tr('dash_hello')} $_userName!'
+                                          : tr('dash_welcome'),
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      _userVille.isNotEmpty
+                                          ? '${tr('dash_from_prefix')} $_userVille ${tr('dash_choose_path_suffix')}'
+                                          : tr('dash_choose_path_start'),
                                       style: TextStyle(
-                                        color: Colors.white.withAlpha(220),
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white.withAlpha(200),
+                                        fontSize: 14,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          // Quick action: edit onboarding
+                          InkWell(
+                            onTap: _goToOnboarding,
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(30),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Colors.white.withAlpha(60),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.edit_note_rounded,
+                                    color: Colors.white.withAlpha(220),
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    tr('dash_edit_steps_btn'),
+                                    style: TextStyle(
+                                      color: Colors.white.withAlpha(220),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
+            ),
 
-              // Body Content
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ══════ EMPLOYMENT PATH ══════
-                      _buildPathHeader(
-                        icon: Icons.business_center_rounded,
-                        title: 'باب الخدمة',
-                        subtitle: 'مسار التوظيف والتكوين المهني',
-                        gradientColors: const [
-                          Color(0xFFC62828),
-                          Color(0xFFC62828)
-                        ],
-                        imagePath: 'assets/images/porte_emploi.png',
-                      ),
-                      const SizedBox(height: 14),
-                      GridView.builder(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          childAspectRatio: 0.82,
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _employmentSections.length,
-                        itemBuilder: (context, index) => _buildSectionCard(
-                            _employmentSections[index], index),
-                      ),
-
-                      const SizedBox(height: 28),
-
-                      // ══════ ENTREPRENEURSHIP PATH ══════
-                      _buildPathHeader(
-                        icon: Icons.rocket_launch_rounded,
-                        title: 'باب المقاولة',
-                        subtitle: 'مسار ريادة الأعمال والمشاريع',
-                        gradientColors: const [
-                          Color(0xFF2E7D32),
-                          Color(0xFF43A047)
-                        ],
-                        imagePath:
-                            'assets/images/porte_entreprenariat.png',
-                      ),
-                      const SizedBox(height: 14),
-                      GridView.builder(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisSpacing: 12,
-                          crossAxisSpacing: 12,
-                          childAspectRatio: 0.82,
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _entrepreneurshipSections.length,
-                        itemBuilder: (context, index) =>
-                            _buildSectionCard(
-                                _entrepreneurshipSections[index], index),
-                      ),
-
-                      // Admin
-                      if (_isAdmin) ...[
-                        const SizedBox(height: 28),
-                        _buildAdminCard(),
+            // Body Content
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ══════ EMPLOYMENT PATH ══════
+                    _buildPathHeader(
+                      icon: Icons.business_center_rounded,
+                      title: tr('dash_employment_path_title'),
+                      subtitle: tr('dash_employment_path_subtitle'),
+                      gradientColors: const [
+                        Color(0xFFC62828),
+                        Color(0xFFC62828),
                       ],
+                      imagePath: 'assets/images/porte_emploi.png',
+                    ),
+                    const SizedBox(height: 14),
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.82,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _employmentSections.length,
+                      itemBuilder: (context, index) =>
+                          _buildSectionCard(_employmentSections[index], index),
+                    ),
 
-                      const SizedBox(height: 24),
+                    const SizedBox(height: 28),
+
+                    // ══════ ENTREPRENEURSHIP PATH ══════
+                    _buildPathHeader(
+                      icon: Icons.rocket_launch_rounded,
+                      title: tr('dash_entrepreneurship_path_title'),
+                      subtitle: tr('dash_entrepreneurship_path_subtitle'),
+                      gradientColors: const [
+                        Color(0xFF2E7D32),
+                        Color(0xFF43A047),
+                      ],
+                      imagePath: 'assets/images/porte_entreprenariat.png',
+                    ),
+                    const SizedBox(height: 14),
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.82,
+                      ),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _entrepreneurshipSections.length,
+                      itemBuilder: (context, index) => _buildSectionCard(
+                        _entrepreneurshipSections[index],
+                        index,
+                      ),
+                    ),
+
+                    // Admin
+                    if (_isAdmin) ...[
+                      const SizedBox(height: 28),
+                      _buildAdminCard(),
                     ],
-                  ),
+
+                    const SizedBox(height: 24),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -465,8 +569,8 @@ class _DashboardScreenState extends State<DashboardScreen>
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.centerRight,
-          end: Alignment.centerLeft,
+          begin: AlignmentDirectional.centerStart,
+          end: AlignmentDirectional.centerEnd,
           colors: gradientColors,
         ),
         borderRadius: BorderRadius.circular(16),
@@ -572,11 +676,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                       ],
                     ),
                     shape: BoxShape.circle,
-                    border:
-                        Border.all(color: section.color.withAlpha(40)),
+                    border: Border.all(color: section.color.withAlpha(40)),
                   ),
-                  child:
-                      Icon(section.icon, color: section.color, size: 26),
+                  child: Icon(section.icon, color: section.color, size: 26),
                 ),
                 const SizedBox(height: 10),
                 Padding(
@@ -602,10 +704,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 9,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
                   ),
                 ),
               ],
@@ -621,8 +720,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (_) => const AdminDashboardScreen()),
+          MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
         );
       },
       borderRadius: BorderRadius.circular(16),
@@ -650,33 +748,38 @@ class _DashboardScreenState extends State<DashboardScreen>
                 color: Colors.white.withAlpha(25),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.admin_panel_settings_rounded,
-                  color: Colors.white, size: 28),
+              child: const Icon(
+                Icons.admin_panel_settings_rounded,
+                color: Colors.white,
+                size: 28,
+              ),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'لوحة الإدارة',
-                    style: TextStyle(
+                    tr('dash_admin_title'),
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
-                    'إدارة المستخدمين والمحتوى',
-                    style:
-                        TextStyle(color: Colors.white70, fontSize: 12),
+                    tr('dash_admin_subtitle'),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded,
-                color: Colors.white54, size: 18),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.white54,
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -691,5 +794,10 @@ class _DashboardSection {
   final Widget screen;
   final String subtitle;
   const _DashboardSection(
-      this.title, this.icon, this.color, this.screen, this.subtitle);
+    this.title,
+    this.icon,
+    this.color,
+    this.screen,
+    this.subtitle,
+  );
 }

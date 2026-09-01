@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
+import '../../core/i18n/app_i18n.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -29,7 +30,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _requestReset() async {
     if (_emailController.text.trim().isEmpty) {
-      _showSnack('يرجى إدخال البريد الإلكتروني');
+      _showSnack(tr('auth_email_required'));
       return;
     }
     setState(() => _isLoading = true);
@@ -37,12 +38,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       final resp = await _authService.requestPasswordReset(_emailController.text.trim());
       if (resp.data != null && resp.data['ok'] == true) {
         setState(() => _resetRequested = true);
-        _showSnack('إذا كان البريد مسجلاً، ستصلك رسالة بها رمز إعادة التعيين');
+        _showSnack(tr('auth_reset_link_sent'));
       } else {
-        _showSnack('حدث خطأ، حاول مرة أخرى');
+        _showSnack(tr('auth_reset_request_error'));
       }
     } catch (e) {
-      _showSnack('حدث خطأ في الاتصال. حاول مرة أخرى.');
+      _showSnack(tr('auth_connection_error'));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -50,15 +51,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _resetPassword() async {
     if (_tokenController.text.trim().isEmpty) {
-      _showSnack('يرجى إدخال رمز إعادة التعيين');
+      _showSnack(tr('auth_token_required'));
       return;
     }
     if (_newPasswordController.text.length < 6) {
-      _showSnack('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+      _showSnack(tr('auth_new_password_min_length'));
       return;
     }
     if (_newPasswordController.text != _confirmPasswordController.text) {
-      _showSnack('كلمات المرور غير متطابقة');
+      _showSnack(tr('auth_passwords_mismatch'));
       return;
     }
     setState(() => _isLoading = true);
@@ -70,14 +71,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (resp.data != null && resp.data['ok'] == true) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تم تغيير كلمة المرور بنجاح')),
+          SnackBar(content: Text(tr('auth_password_changed_success'))),
         );
         Navigator.pushReplacementNamed(context, '/login');
       } else {
-        _showSnack('رمز إعادة التعيين غير صالح أو منتهي الصلاحية');
+        _showSnack(tr('auth_invalid_or_expired_token'));
       }
     } catch (e) {
-      _showSnack('حدث خطأ. حاول مرة أخرى.');
+      _showSnack(tr('auth_generic_error'));
     } finally {
       setState(() => _isLoading = false);
     }
@@ -90,25 +91,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFAF6F0),
-        appBar: AppBar(
-          title: const Text('استعادة كلمة المرور'),
-          backgroundColor: const Color(0xFFC62828),
-          foregroundColor: Colors.white,
-        ),
-        body: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-            child: Card(
-              elevation: 8,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-                child: _resetRequested ? _buildResetForm() : _buildEmailForm(),
-              ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF6F0),
+      appBar: AppBar(
+        title: Text(tr('auth_forgot_password_title')),
+        backgroundColor: const Color(0xFFC62828),
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Card(
+            elevation: 8,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+              child: _resetRequested ? _buildResetForm() : _buildEmailForm(),
             ),
           ),
         ),
@@ -122,19 +120,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       children: [
         Icon(Icons.lock_reset, size: 64, color: const Color(0xFFC62828)),
         const SizedBox(height: 16),
-        const Text(
-          'أدخل بريدك الإلكتروني لاستعادة كلمة المرور',
-          style: TextStyle(fontSize: 16),
+        Text(
+          tr('auth_enter_email_instruction'),
+          style: const TextStyle(fontSize: 16),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
         TextField(
           controller: _emailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            labelText: 'البريد الإلكتروني',
-            prefixIcon: Icon(Icons.email),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: tr('email'),
+            prefixIcon: const Icon(Icons.email),
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 24),
@@ -149,13 +147,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             onPressed: _isLoading ? null : _requestReset,
             child: _isLoading
                 ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : const Text('إرسال رمز إعادة التعيين', style: TextStyle(fontSize: 16, color: Colors.white)),
+                : Text(tr('auth_send_reset_code'), style: const TextStyle(fontSize: 16, color: Colors.white)),
           ),
         ),
         const SizedBox(height: 16),
         TextButton(
           onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-          child: Text('العودة لتسجيل الدخول', style: TextStyle(color: const Color(0xFF2E7D32))),
+          child: Text(tr('auth_back_to_login'), style: TextStyle(color: const Color(0xFF2E7D32))),
         ),
       ],
     );
@@ -167,38 +165,38 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       children: [
         Icon(Icons.vpn_key, size: 64, color: const Color(0xFFC62828)),
         const SizedBox(height: 16),
-        const Text(
-          'أدخل الرمز الذي وصلك على بريدك الإلكتروني وكلمة المرور الجديدة',
-          style: TextStyle(fontSize: 16),
+        Text(
+          tr('auth_enter_token_instruction'),
+          style: const TextStyle(fontSize: 16),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
         TextField(
           controller: _tokenController,
-          decoration: const InputDecoration(
-            labelText: 'رمز إعادة التعيين',
-            prefixIcon: Icon(Icons.code),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: tr('auth_reset_code_label'),
+            prefixIcon: const Icon(Icons.code),
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 16),
         TextField(
           controller: _newPasswordController,
           obscureText: true,
-          decoration: const InputDecoration(
-            labelText: 'كلمة المرور الجديدة',
-            prefixIcon: Icon(Icons.lock),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: tr('auth_new_password_label'),
+            prefixIcon: const Icon(Icons.lock),
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 16),
         TextField(
           controller: _confirmPasswordController,
           obscureText: true,
-          decoration: const InputDecoration(
-            labelText: 'تأكيد كلمة المرور',
-            prefixIcon: Icon(Icons.lock_outline),
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: tr('auth_confirm_password_label'),
+            prefixIcon: const Icon(Icons.lock_outline),
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 24),
@@ -213,13 +211,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             onPressed: _isLoading ? null : _resetPassword,
             child: _isLoading
                 ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                : const Text('تغيير كلمة المرور', style: TextStyle(fontSize: 16, color: Colors.white)),
+                : Text(tr('auth_change_password_btn'), style: const TextStyle(fontSize: 16, color: Colors.white)),
           ),
         ),
         const SizedBox(height: 16),
         TextButton(
           onPressed: () => setState(() => _resetRequested = false),
-          child: Text('العودة', style: TextStyle(color: const Color(0xFF2E7D32))),
+          child: Text(tr('auth_back'), style: TextStyle(color: const Color(0xFF2E7D32))),
         ),
       ],
     );
