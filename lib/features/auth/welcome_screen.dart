@@ -164,7 +164,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _login,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFE65100),
+                      backgroundColor: const Color(0xFFC62828),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     ),
                     child: _isLoading
@@ -189,7 +189,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFFE65100),
+                    color: Color(0xFFC62828),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -261,12 +261,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _sectionDivider(String text) {
     return Row(
       children: [
-        Expanded(child: Divider(color: const Color(0xFFE65100), thickness: 1.5)),
+        Expanded(child: Divider(color: const Color(0xFFC62828), thickness: 1.5)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Text(text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFE65100))),
+          child: Text(text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFC62828))),
         ),
-        Expanded(child: Divider(color: const Color(0xFFE65100), thickness: 1.5)),
+        Expanded(child: Divider(color: const Color(0xFFC62828), thickness: 1.5)),
       ],
     );
   }

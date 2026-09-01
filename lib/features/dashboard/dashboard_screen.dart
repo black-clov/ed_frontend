@@ -41,25 +41,25 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   final List<_DashboardSection> _employmentSections = [
     _DashboardSection('الملف الشخصي', Icons.person_outline_rounded,
-        Color(0xFFE65100), ProfileScreen(), 'معلوماتك الشخصية'),
+        Color(0xFFC62828), ProfileScreen(), 'معلوماتك الشخصية'),
     _DashboardSection('المهارات', Icons.psychology_rounded,
-        Color(0xFFEF6C00), SkillsScreen(), 'اكتشف مهاراتك'),
+        Color(0xFFC62828), SkillsScreen(), 'اكتشف مهاراتك'),
     _DashboardSection('الفرص المطابقة', Icons.work_outline_rounded,
-        Color(0xFFF57C00), OpportunitiesScreen(), 'فرص تناسبك'),
+        Color(0xFFC62828), OpportunitiesScreen(), 'فرص تناسبك'),
     _DashboardSection('السيرة الذاتية', Icons.article_outlined,
-        Color(0xFFFF8F00), CvPreviewScreen(), 'صايب CV ديالك'),
+        Color(0xFFC62828), CvPreviewScreen(), 'صايب CV ديالك'),
     _DashboardSection('تحضير المقابلات', Icons.record_voice_over_rounded,
-        Color(0xFFE65100), InterviewPrepScreen(), 'جهز راسك'),
+        Color(0xFFC62828), InterviewPrepScreen(), 'جهز راسك'),
     _DashboardSection('كبسولات فيديو', Icons.play_circle_outline_rounded,
-        Color(0xFFEF6C00), VideosScreen(), 'تعلم بالفيديو'),
+        Color(0xFFC62828), VideosScreen(), 'تعلم بالفيديو'),
     _DashboardSection('التوصيات', Icons.thumb_up_alt_outlined,
-        Color(0xFFF57C00), RecommendationsScreen(), 'نصائح مخصصة'),
+        Color(0xFFC62828), RecommendationsScreen(), 'نصائح مخصصة'),
     _DashboardSection('الاحتياجات', Icons.checklist_rounded,
-        Color(0xFFFF8F00), NeedsScreen(), 'شنو خاصك'),
+        Color(0xFFC62828), NeedsScreen(), 'شنو خاصك'),
     _DashboardSection('الإرشاد والمواكبة', Icons.groups_outlined,
-        Color(0xFFE65100), MentorshipScreen(), 'كاين معامن'),
+        Color(0xFFC62828), MentorshipScreen(), 'كاين معامن'),
     _DashboardSection('المحتوى والمقالات', Icons.library_books_outlined,
-        Color(0xFF1565C0), ContentScreen(), 'مقالات ودلائل'),
+        Color(0xFFC62828), ContentScreen(), 'مقالات ودلائل'),
   ];
 
   final List<_DashboardSection> _entrepreneurshipSections = [
@@ -217,7 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 expandedHeight: 230,
                 floating: false,
                 pinned: true,
-                backgroundColor: const Color(0xFFE65100),
+                backgroundColor: const Color(0xFFC62828),
                 automaticallyImplyLeading: false,
                 title: null,
                 actions: [
@@ -242,9 +242,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Color(0xFFE65100),
-                          Color(0xFFF4511E),
-                          Color(0xFFFF6E40)
+                          Color(0xFFC62828),
+                          Color(0xFFC62828),
+                          Color(0xFFC62828)
                         ],
                       ),
                     ),
@@ -362,8 +362,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                         title: 'باب الخدمة',
                         subtitle: 'مسار التوظيف والتكوين المهني',
                         gradientColors: const [
-                          Color(0xFFE65100),
-                          Color(0xFFF57C00)
+                          Color(0xFFC62828),
+                          Color(0xFFC62828)
                         ],
                         imagePath: 'assets/images/porte_emploi.png',
                       ),

@@ -110,16 +110,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 				shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
 				title: const Row(
 					children: [
-						Icon(Icons.error_outline, color: Color(0xFFE65100)),
+						Icon(Icons.error_outline, color: Color(0xFFC62828)),
 						SizedBox(width: 8),
-						Text('خطأ', style: TextStyle(color: Color(0xFFE65100))),
+						Text('خطأ', style: TextStyle(color: Color(0xFFC62828))),
 					],
 				),
 				content: Text(msg, style: const TextStyle(fontSize: 15)),
 				actions: [
 					TextButton(
 						onPressed: () => Navigator.pop(context),
-						child: const Text('حسنا', style: TextStyle(color: Color(0xFFE65100))),
+						child: const Text('حسنا', style: TextStyle(color: Color(0xFFC62828))),
 					),
 				],
 			),
@@ -210,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 										style: TextStyle(
 											fontSize: 28,
 											fontWeight: FontWeight.bold,
-											color: const Color(0xFFE65100),
+											color: const Color(0xFFC62828),
 										),
 									),
 									const SizedBox(height: 8),
@@ -237,11 +237,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _firstNameController,
 															decoration: InputDecoration(
 																labelText: 'الاسم الأول',
-																prefixIcon: Icon(Icons.person, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.person, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال الاسم الأول' : null,
@@ -251,11 +251,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _lastNameController,
 															decoration: InputDecoration(
 																labelText: 'اسم العائلة',
-																prefixIcon: Icon(Icons.person_outline, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.person_outline, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال اسم العائلة' : null,
@@ -265,11 +265,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _ageController,
 															decoration: InputDecoration(
 																labelText: 'العمر',
-																prefixIcon: Icon(Icons.cake, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.cake, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															keyboardType: TextInputType.number,
@@ -280,11 +280,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _villeController,
 															decoration: InputDecoration(
 																labelText: 'المدينة',
-																prefixIcon: Icon(Icons.location_city, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.location_city, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال المدينة' : null,
@@ -294,11 +294,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _niveauScolaireController,
 															decoration: InputDecoration(
 																labelText: 'المستوى الدراسي',
-																prefixIcon: Icon(Icons.school, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.school, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															validator: (v) => v == null || v.isEmpty ? 'يرجى إدخال المستوى الدراسي' : null,
@@ -308,11 +308,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _telephoneController,
 															decoration: InputDecoration(
 																labelText: 'رقم الهاتف',
-																prefixIcon: Icon(Icons.phone, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.phone, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															keyboardType: TextInputType.phone,
@@ -323,11 +323,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _emailController,
 															decoration: InputDecoration(
 																labelText: 'البريد الإلكتروني',
-																prefixIcon: Icon(Icons.email, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.email, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															keyboardType: TextInputType.emailAddress,
@@ -338,11 +338,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															controller: _passwordController,
 															decoration: InputDecoration(
 																labelText: 'كلمة المرور',
-																prefixIcon: Icon(Icons.lock, color: const Color(0xFFE65100)),
+																prefixIcon: Icon(Icons.lock, color: const Color(0xFFC62828)),
 																border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
 																focusedBorder: OutlineInputBorder(
 																	borderRadius: BorderRadius.circular(12),
-																	borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+																	borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
 																),
 															),
 															obscureText: true,
@@ -354,7 +354,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															height: 48,
 															child: ElevatedButton(
 																style: ElevatedButton.styleFrom(
-																	backgroundColor: const Color(0xFFE65100),
+																	backgroundColor: const Color(0xFFC62828),
 																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 																),
 																onPressed: _loading ? null : _register,
@@ -370,16 +370,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 															height: 48,
 															child: OutlinedButton.icon(
 																style: OutlinedButton.styleFrom(
-																	side: const BorderSide(color: Color(0xFFDB4437), width: 1.5),
+																	side: const BorderSide(color: Color(0xFFC62828), width: 1.5),
 																	shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
 																),
 																onPressed: _googleLoading ? null : _handleGoogleSignIn,
 																icon: _googleLoading
-																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFDB4437)))
-																		: const Icon(Icons.g_mobiledata, color: Color(0xFFDB4437), size: 28),
+																		? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFC62828)))
+																		: const Icon(Icons.g_mobiledata, color: Color(0xFFC62828), size: 28),
 																label: Text(
 																	"التسجيل بـ Google",
-																	style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFDB4437)),
+																	style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFC62828)),
 																),
 															),
 														),

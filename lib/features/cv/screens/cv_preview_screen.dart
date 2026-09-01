@@ -140,7 +140,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                       SliverAppBar(
                         expandedHeight: 200,
                         pinned: true,
-                        backgroundColor: const Color(0xFF1565C0),
+                        backgroundColor: const Color(0xFFC62828),
                         foregroundColor: Colors.white,
                         flexibleSpace: FlexibleSpaceBar(
                           background: Container(
@@ -148,7 +148,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
-                                colors: [Color(0xFF0D47A1), Color(0xFF1976D2)],
+                                colors: [Color(0xFFC62828), Color(0xFFC62828)],
                               ),
                             ),
                             child: SafeArea(
@@ -163,7 +163,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                       _cv!.fullName.isNotEmpty ? _cv!.fullName[0] : '?',
                                       style: const TextStyle(
                                         fontSize: 32,
-                                        color: Color(0xFF1565C0),
+                                        color: Color(0xFFC62828),
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -215,7 +215,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                 _buildSection(
                                   icon: Icons.person,
                                   title: 'Informations personnelles',
-                                  color: const Color(0xFF1565C0),
+                                  color: const Color(0xFFC62828),
                                   child: Column(
                                     children: [
                                       if (_cv!.email.isNotEmpty) _infoRow(Icons.email, 'Email', _cv!.email),
@@ -232,7 +232,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                 _buildSection(
                                   icon: Icons.star,
                                   title: 'Compétences',
-                                  color: const Color(0xFFE65100),
+                                  color: const Color(0xFFC62828),
                                   child: Wrap(
                                     spacing: 8,
                                     runSpacing: 8,
@@ -241,17 +241,17 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                               decoration: BoxDecoration(
                                                 gradient: const LinearGradient(
-                                                  colors: [Color(0xFFFFE0B2), Color(0xFFFFF3E0)],
+                                                  colors: [Color(0xFFFFEBEE), Color(0xFFFFEBEE)],
                                                 ),
                                                 borderRadius: BorderRadius.circular(20),
-                                                border: Border.all(color: const Color(0xFFEF6C00).withAlpha(80)),
+                                                border: Border.all(color: const Color(0xFFC62828).withAlpha(80)),
                                               ),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  const Icon(Icons.check_circle, size: 16, color: Color(0xFFE65100)),
+                                                  const Icon(Icons.check_circle, size: 16, color: Color(0xFFC62828)),
                                                   const SizedBox(width: 6),
-                                                  Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFFE65100), fontWeight: FontWeight.w600)),
+                                                  Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFFC62828), fontWeight: FontWeight.w600)),
                                                 ],
                                               ),
                                             ))
@@ -264,7 +264,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                 _buildSection(
                                   icon: Icons.favorite,
                                   title: 'Centres d\'intérêt',
-                                  color: const Color(0xFF7B1FA2),
+                                  color: const Color(0xFFC62828),
                                   child: Wrap(
                                     spacing: 8,
                                     runSpacing: 8,
@@ -272,11 +272,11 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                         .map((s) => Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                               decoration: BoxDecoration(
-                                                color: const Color(0xFFF3E5F5),
+                                                color: const Color(0xFFFFEBEE),
                                                 borderRadius: BorderRadius.circular(20),
-                                                border: Border.all(color: const Color(0xFF7B1FA2).withAlpha(60)),
+                                                border: Border.all(color: const Color(0xFFC62828).withAlpha(60)),
                                               ),
-                                              child: Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFF6A1B9A))),
+                                              child: Text(_fr(s), style: const TextStyle(fontSize: 13, color: Color(0xFFC62828))),
                                             ))
                                         .toList(),
                                   ),
@@ -287,7 +287,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                 _buildSection(
                                   icon: Icons.lightbulb,
                                   title: 'Besoins',
-                                  color: const Color(0xFF00838F),
+                                  color: const Color(0xFFC62828),
                                   child: Column(
                                     children: _cv!.needs
                                         .map((n) => Padding(
@@ -298,7 +298,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                                     width: 8,
                                                     height: 8,
                                                     decoration: const BoxDecoration(
-                                                      color: Color(0xFF00838F),
+                                                      color: Color(0xFFC62828),
                                                       shape: BoxShape.circle,
                                                     ),
                                                   ),
@@ -353,7 +353,7 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
                                     style: const TextStyle(fontSize: 16, color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF1565C0),
+                                    backgroundColor: const Color(0xFFC62828),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                                     elevation: 3,
                                   ),
@@ -379,10 +379,10 @@ class _CvPreviewScreenState extends State<CvPreviewScreen> {
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: const Color(0xFF1565C0).withAlpha(25),
+              color: const Color(0xFFC62828).withAlpha(25),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, size: 18, color: const Color(0xFF1565C0)),
+            child: Icon(icon, size: 18, color: const Color(0xFFC62828)),
           ),
           const SizedBox(width: 12),
           Expanded(

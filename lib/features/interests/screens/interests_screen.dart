@@ -47,9 +47,9 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   Color _colorForCategory(int index) {
     const colors = [
-      Color(0xFF1565C0), // Blue - Technology
-      Color(0xFF7B1FA2), // Purple - Creativity
-      Color(0xFFE65100), // Orange - Manual
+      Color(0xFFC62828), // Blue - Technology
+      Color(0xFFC62828), // Purple - Creativity
+      Color(0xFFC62828), // Orange - Manual
       Color(0xFF2E7D32), // Green - People
     ];
     return colors[index % colors.length];

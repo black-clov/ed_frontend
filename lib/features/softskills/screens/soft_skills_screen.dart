@@ -58,8 +58,8 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
   Color _scoreColor(int optionIndex) {
     const colors = [
       Color(0xFF2E7D32), // Excellent - Green
-      Color(0xFF1565C0), // Good - Blue
-      Color(0xFFF9A825), // Average - Yellow
+      Color(0xFFC62828), // Good - Blue
+      Color(0xFFC62828), // Average - Yellow
       Color(0xFFE53935), // Needs work - Red
     ];
     return colors[optionIndex % colors.length];

@@ -92,7 +92,7 @@ class _SplashGateState extends State<_SplashGate> {
           children: [
             Image.asset('assets/images/logo_et_slogan.png', height: 120),
             const SizedBox(height: 32),
-            const CircularProgressIndicator(color: Color(0xFFE65100)),
+            const CircularProgressIndicator(color: Color(0xFFC62828)),
           ],
         ),
       ),

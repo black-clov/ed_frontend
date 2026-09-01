@@ -49,7 +49,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
         appBar: AppBar(
           title: const Text('المهارات'),
           centerTitle: true,
-          backgroundColor: const Color(0xFFEF6C00),
+          backgroundColor: const Color(0xFFC62828),
           foregroundColor: Colors.white,
         ),
         body: _loading
@@ -64,7 +64,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFEF6C00), Color(0xFFF57C00)],
+                          colors: [Color(0xFFC62828), Color(0xFFC62828)],
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -92,11 +92,11 @@ class _SkillsScreenState extends State<SkillsScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                            color: isSelected ? const Color(0xFFEF6C00) : Colors.grey.shade300,
+                            color: isSelected ? const Color(0xFFC62828) : Colors.grey.shade300,
                             width: isSelected ? 2 : 1,
                           ),
                         ),
-                        color: isSelected ? const Color(0xFFFFF3E0) : Colors.white,
+                        color: isSelected ? const Color(0xFFFFEBEE) : Colors.white,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(12),
                           onTap: () {
@@ -115,7 +115,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                               children: [
                                 Icon(
                                   isSelected ? Icons.check_circle : Icons.circle_outlined,
-                                  color: isSelected ? const Color(0xFFEF6C00) : Colors.grey,
+                                  color: isSelected ? const Color(0xFFC62828) : Colors.grey,
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
@@ -124,7 +124,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                      color: isSelected ? const Color(0xFFEF6C00) : Colors.black87,
+                                      color: isSelected ? const Color(0xFFC62828) : Colors.black87,
                                     ),
                                   ),
                                 ),
@@ -140,17 +140,17 @@ class _SkillsScreenState extends State<SkillsScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFFF3E0),
+                          color: const Color(0xFFFFEBEE),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFEF6C00).withAlpha(60)),
+                          border: Border.all(color: const Color(0xFFC62828).withAlpha(60)),
                         ),
                         child: Wrap(
                           spacing: 8,
                           runSpacing: 8,
                           children: selectedSkills.map((s) => Chip(
-                            label: Text(s, style: const TextStyle(color: Color(0xFFE65100), fontSize: 13)),
+                            label: Text(s, style: const TextStyle(color: Color(0xFFC62828), fontSize: 13)),
                             backgroundColor: Colors.white,
-                            side: const BorderSide(color: Color(0xFFEF6C00)),
+                            side: const BorderSide(color: Color(0xFFC62828)),
                             deleteIcon: const Icon(Icons.close, size: 16),
                             onDeleted: () {
                               _skillsService.toggleSkill(s);
@@ -174,7 +174,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                           style: const TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFEF6C00),
+                          backgroundColor: const Color(0xFFC62828),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
                       ),

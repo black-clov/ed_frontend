@@ -149,7 +149,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF00695C), Color(0xFF00897B)],
+                    colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)],
                   ),
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -196,7 +196,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                   return ChoiceChip(
                     label: Text('${s['icon']} ${s['label']}'),
                     selected: isSelected,
-                    selectedColor: const Color(0xFF00897B).withAlpha(40),
+                    selectedColor: const Color(0xFF2E7D32).withAlpha(40),
                     onSelected: (val) {
                       setState(() => _selectedSector = val ? s['key'] as String : null);
                     },
@@ -218,7 +218,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                     style: const TextStyle(fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00695C),
+                    backgroundColor: const Color(0xFF2E7D32),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -232,19 +232,19 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                 _buildPlanSection(
                   icon: Icons.description,
                   title: 'وصف المشروع',
-                  color: const Color(0xFF1565C0),
+                  color: const Color(0xFF2E7D32),
                   controller: _descCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.diamond,
                   title: 'القيمة المضافة',
-                  color: const Color(0xFF7B1FA2),
+                  color: const Color(0xFF2E7D32),
                   controller: _valueCtrl,
                 ),
                 _buildPlanSection(
                   icon: Icons.people,
                   title: 'الزبناء المستهدفون',
-                  color: const Color(0xFFE65100),
+                  color: const Color(0xFF2E7D32),
                   controller: _customersCtrl,
                 ),
                 _buildPlanSection(
@@ -273,7 +273,7 @@ class _BusinessPlanScreenState extends State<BusinessPlanScreen> {
                       style: const TextStyle(fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1565C0),
+                      backgroundColor: const Color(0xFF2E7D32),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

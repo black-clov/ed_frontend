@@ -84,7 +84,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
       case 2: return Colors.orange;
       case 3: return Colors.amber.shade700;
       case 4: return const Color(0xFF2E7D32);
-      case 5: return const Color(0xFF1565C0);
+      case 5: return const Color(0xFF2E7D32);
       default: return Colors.grey;
     }
   }
@@ -110,7 +110,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFE65100), Color(0xFFFF8F00)],
+                          colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)],
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -143,7 +143,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
                       child: ElevatedButton(
                         onPressed: _submitting ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE65100),
+                          backgroundColor: const Color(0xFF2E7D32),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -215,7 +215,7 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Icon(
                       starValue <= rating ? Icons.star : Icons.star_border,
-                      color: starValue <= rating ? const Color(0xFFE65100) : Colors.grey.shade400,
+                      color: starValue <= rating ? const Color(0xFF2E7D32) : Colors.grey.shade400,
                       size: 32,
                     ),
                   ),

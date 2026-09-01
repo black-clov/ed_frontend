@@ -77,7 +77,7 @@ class _NeedsScreenState extends State<NeedsScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF00897B), Color(0xFF26A69A)],
+                          colors: [Color(0xFFC62828), Color(0xFFC62828)],
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -114,7 +114,7 @@ class _NeedsScreenState extends State<NeedsScreen> {
                       child: ElevatedButton(
                         onPressed: _submitting ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00897B),
+                          backgroundColor: const Color(0xFFC62828),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
@@ -150,11 +150,11 @@ class _NeedsScreenState extends State<NeedsScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isSelected ? const Color(0xFF00897B) : Colors.grey.shade300,
+          color: isSelected ? const Color(0xFFC62828) : Colors.grey.shade300,
           width: isSelected ? 2 : 1,
         ),
       ),
-      color: isSelected ? const Color(0xFFE0F2F1) : Colors.white,
+      color: isSelected ? const Color(0xFFFFEBEE) : Colors.white,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
@@ -178,13 +178,13 @@ class _NeedsScreenState extends State<NeedsScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? const Color(0xFF00897B) : Colors.black87,
+                    color: isSelected ? const Color(0xFFC62828) : Colors.black87,
                   ),
                 ),
               ),
               Icon(
                 isSelected ? Icons.check_circle : Icons.circle_outlined,
-                color: isSelected ? const Color(0xFF00897B) : Colors.grey,
+                color: isSelected ? const Color(0xFFC62828) : Colors.grey,
               ),
             ],
           ),

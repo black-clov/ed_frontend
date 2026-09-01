@@ -39,7 +39,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
 
   Color _scoreColor(int score) {
     if (score >= 70) return const Color(0xFF2E7D32);
-    if (score >= 40) return const Color(0xFFE65100);
+    if (score >= 40) return const Color(0xFFC62828);
     return Colors.grey;
   }
 
@@ -59,11 +59,11 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
   Color _typeColor(String type) {
     switch (type) {
       case 'job':
-        return const Color(0xFF1565C0);
+        return const Color(0xFFC62828);
       case 'internship':
-        return const Color(0xFF7B1FA2);
+        return const Color(0xFFC62828);
       case 'training':
-        return const Color(0xFF00897B);
+        return const Color(0xFFC62828);
       default:
         return Colors.grey;
     }
@@ -118,7 +118,7 @@ class _OpportunitiesScreenState extends State<OpportunitiesScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF1565C0), Color(0xFF42A5F5)],
+          colors: [Color(0xFFC62828), Color(0xFFC62828)],
         ),
         borderRadius: BorderRadius.circular(14),
       ),

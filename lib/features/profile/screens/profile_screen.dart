@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SliverAppBar(
           expandedHeight: 220,
           pinned: true,
-          backgroundColor: const Color(0xFFEF6C00),
+          backgroundColor: const Color(0xFFC62828),
           foregroundColor: Colors.white,
           actions: [
             IconButton(
@@ -99,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFFE65100), Color(0xFFF57C00)],
+                  colors: [Color(0xFFC62828), Color(0xFFC62828)],
                 ),
               ),
               child: SafeArea(
@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         initials,
                         style: const TextStyle(
                           fontSize: 36,
-                          color: Color(0xFFEF6C00),
+                          color: Color(0xFFC62828),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -143,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildCard(
                   title: 'المعلومات الشخصية',
                   icon: Icons.person,
-                  color: const Color(0xFFEF6C00),
+                  color: const Color(0xFFC62828),
                   children: [
                     if (fullName.isNotEmpty) _infoTile(Icons.badge, 'الاسم الكامل', fullName),
                     if (age.isNotEmpty) _infoTile(Icons.cake, 'العمر', '$age سنة'),
@@ -157,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildCard(
                   title: 'معلومات الاتصال',
                   icon: Icons.contact_phone,
-                  color: const Color(0xFF1565C0),
+                  color: const Color(0xFFC62828),
                   children: [
                     if (email.isNotEmpty) _infoTile(Icons.email, 'البريد الإلكتروني', email),
                     if (phone.isNotEmpty) _infoTile(Icons.phone, 'رقم الهاتف', phone),
@@ -171,16 +171,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
+                      colors: [Color(0xFFFFEBEE), Color(0xFFFFEBEE)],
                     ),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFEF6C00).withAlpha(50)),
+                    border: Border.all(color: const Color(0xFFC62828).withAlpha(50)),
                   ),
                   child: Column(
                     children: [
                       const Text(
                         'نصيحة',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFFE65100)),
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color(0xFFC62828)),
                       ),
                       const SizedBox(height: 8),
                       const Text(
@@ -196,8 +196,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           icon: const Icon(Icons.edit, size: 18),
                           label: const Text('تعديل الملف الشخصي'),
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFFE65100),
-                            side: const BorderSide(color: Color(0xFFEF6C00)),
+                            foregroundColor: const Color(0xFFC62828),
+                            side: const BorderSide(color: Color(0xFFC62828)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                         ),

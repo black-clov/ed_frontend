@@ -96,7 +96,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         backgroundColor: const Color(0xFFFAF6F0),
         appBar: AppBar(
           title: const Text('استعادة كلمة المرور'),
-          backgroundColor: const Color(0xFFE65100),
+          backgroundColor: const Color(0xFFC62828),
           foregroundColor: Colors.white,
         ),
         body: Center(
@@ -120,7 +120,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.lock_reset, size: 64, color: const Color(0xFFE65100)),
+        Icon(Icons.lock_reset, size: 64, color: const Color(0xFFC62828)),
         const SizedBox(height: 16),
         const Text(
           'أدخل بريدك الإلكتروني لاستعادة كلمة المرور',
@@ -143,7 +143,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           height: 48,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE65100),
+              backgroundColor: const Color(0xFFC62828),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: _isLoading ? null : _requestReset,
@@ -165,7 +165,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.vpn_key, size: 64, color: const Color(0xFFE65100)),
+        Icon(Icons.vpn_key, size: 64, color: const Color(0xFFC62828)),
         const SizedBox(height: 16),
         const Text(
           'أدخل الرمز الذي وصلك على بريدك الإلكتروني وكلمة المرور الجديدة',
@@ -207,7 +207,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           height: 48,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE65100),
+              backgroundColor: const Color(0xFFC62828),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: _isLoading ? null : _resetPassword,

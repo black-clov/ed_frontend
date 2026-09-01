@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFFE65100),
+                      color: const Color(0xFFC62828),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -210,11 +210,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: emailController,
                             decoration: InputDecoration(
                               labelText: "البريد الإلكتروني",
-                              prefixIcon: Icon(Icons.email, color: const Color(0xFFE65100)),
+                              prefixIcon: Icon(Icons.email, color: const Color(0xFFC62828)),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+                                borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
                               ),
                             ),
                           ),
@@ -224,11 +224,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: "كلمة المرور",
-                              prefixIcon: Icon(Icons.lock, color: const Color(0xFFE65100)),
+                              prefixIcon: Icon(Icons.lock, color: const Color(0xFFC62828)),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: Color(0xFFE65100), width: 2),
+                                borderSide: const BorderSide(color: Color(0xFFC62828), width: 2),
                               ),
                             ),
                           ),
@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 48,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFE65100),
+                                backgroundColor: const Color(0xFFC62828),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                               onPressed: login,
@@ -252,16 +252,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 48,
                             child: OutlinedButton.icon(
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: Color(0xFFDB4437), width: 1.5),
+                                side: const BorderSide(color: Color(0xFFC62828), width: 1.5),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                               onPressed: _googleLoading ? null : _handleGoogleSignIn,
                               icon: _googleLoading
-                                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFDB4437)))
-                                  : const Icon(Icons.g_mobiledata, color: Color(0xFFDB4437), size: 28),
+                                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFC62828)))
+                                  : const Icon(Icons.g_mobiledata, color: Color(0xFFC62828), size: 28),
                               label: Text(
                                 "تسجيل الدخول بـ Google",
-                                style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFDB4437)),
+                                style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFC62828)),
                               ),
                             ),
                           ),

@@ -131,7 +131,7 @@ class _PitchScreenState extends State<PitchScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(colors: [Color(0xFF4A148C), Color(0xFF7B1FA2)]),
+                  gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: const Column(
@@ -176,7 +176,7 @@ class _PitchScreenState extends State<PitchScreen> {
                   return ChoiceChip(
                     label: Text('${s['icon']} ${s['label']}'),
                     selected: selected,
-                    selectedColor: const Color(0xFF7B1FA2).withAlpha(40),
+                    selectedColor: const Color(0xFF2E7D32).withAlpha(40),
                     onSelected: (val) => setState(() => _selectedSector = val ? s['key'] as String : null),
                   );
                 }).toList(),
@@ -193,7 +193,7 @@ class _PitchScreenState extends State<PitchScreen> {
                       : const Icon(Icons.auto_awesome),
                   label: Text(_generating ? 'جاري التوليد...' : 'توليد Pitch', style: const TextStyle(fontSize: 16)),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4A148C),
+                    backgroundColor: const Color(0xFF2E7D32),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -207,11 +207,11 @@ class _PitchScreenState extends State<PitchScreen> {
                 // Word count + time estimate
                 Row(
                   children: [
-                    const Icon(Icons.timer, size: 18, color: Color(0xFF4A148C)),
+                    const Icon(Icons.timer, size: 18, color: Color(0xFF2E7D32)),
                     const SizedBox(width: 6),
                     Text(
                       '$_wordCount كلمة ≈ ${(_wordCount / 130).toStringAsFixed(1)} دقيقة',
-                      style: const TextStyle(fontSize: 13, color: Color(0xFF4A148C), fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontSize: 13, color: Color(0xFF2E7D32), fontWeight: FontWeight.w600),
                     ),
                     const Spacer(),
                     if (_wordCount > 160)
@@ -256,7 +256,7 @@ class _PitchScreenState extends State<PitchScreen> {
                         : const Icon(Icons.save),
                     label: Text(_saving ? 'جاري الحفظ...' : 'حفظ', style: const TextStyle(fontSize: 16)),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1565C0),
+                      backgroundColor: const Color(0xFF2E7D32),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

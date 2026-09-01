@@ -21,9 +21,9 @@ class _SupportScreenState extends State<SupportScreen> {
   bool _submitting = false;
 
   static const _categoryColors = {
-    'incubator': Color(0xFF0D47A1),
-    'mentor_type': Color(0xFF4A148C),
-    'training_type': Color(0xFFE65100),
+    'incubator': Color(0xFF2E7D32),
+    'mentor_type': Color(0xFF2E7D32),
+    'training_type': Color(0xFF2E7D32),
     'funding_stage': Color(0xFF2E7D32),
   };
 
@@ -96,7 +96,7 @@ class _SupportScreenState extends State<SupportScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [Color(0xFF1565C0), Color(0xFF42A5F5)]),
+                        gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: const Column(
@@ -129,7 +129,7 @@ class _SupportScreenState extends State<SupportScreen> {
                       child: ElevatedButton(
                         onPressed: _submitting ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1565C0),
+                          backgroundColor: const Color(0xFF2E7D32),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

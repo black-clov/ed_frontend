@@ -86,15 +86,15 @@ class _VideosScreenState extends State<VideosScreen> {
   Color _colorForCategory(String catId) {
     switch (catId) {
       case 'cv':
-        return const Color(0xFF1565C0);
+        return const Color(0xFFC62828);
       case 'interview':
-        return const Color(0xFF7B1FA2);
+        return const Color(0xFFC62828);
       case 'skills':
-        return const Color(0xFFE65100);
+        return const Color(0xFFC62828);
       case 'softskills':
         return const Color(0xFF2E7D32);
       case 'opportunities':
-        return const Color(0xFF00838F);
+        return const Color(0xFFC62828);
       case 'entrepreneurship':
         return const Color(0xFFC62828);
       default:

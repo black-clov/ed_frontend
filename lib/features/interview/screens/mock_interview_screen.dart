@@ -98,8 +98,8 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
 
   Color _scoreColor(int percentage) {
     if (percentage >= 80) return const Color(0xFF2E7D32);
-    if (percentage >= 60) return const Color(0xFF1565C0);
-    if (percentage >= 40) return const Color(0xFFF9A825);
+    if (percentage >= 60) return const Color(0xFFC62828);
+    if (percentage >= 40) return const Color(0xFFC62828);
     return const Color(0xFFE53935);
   }
 

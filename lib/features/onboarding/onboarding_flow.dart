@@ -174,12 +174,12 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   Color get _bgColor {
     if (_step <= 1) return const Color(0xFFFAF6F0);
     if (_step <= 5) return const Color(0xFFFAF6F0);
-    return const Color(0xFFF0F7F0);
+    return const Color(0xFFFFEBEE);
   }
 
   Widget _buildNavBar() {
     final isEmp = _step <= 5;
-    final color = isEmp ? const Color(0xFFE65100) : const Color(0xFF2E7D32);
+    final color = isEmp ? const Color(0xFFC62828) : const Color(0xFF2E7D32);
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -261,7 +261,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
           decoration: BoxDecoration(
-            color: const Color(0xFFE65100),
+            color: const Color(0xFFC62828),
             borderRadius: BorderRadius.circular(30),
           ),
           child: const Text(
@@ -289,7 +289,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             child: ElevatedButton(
               onPressed: _next,
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE65100),
+                backgroundColor: const Color(0xFFC62828),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
@@ -309,7 +309,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   // ──────────── DOOR SCREENS ────────────
   Widget _buildDoor(bool isEmployment) {
     final color =
-        isEmployment ? const Color(0xFFE65100) : const Color(0xFF2E7D32);
+        isEmployment ? const Color(0xFFC62828) : const Color(0xFF2E7D32);
     return GestureDetector(
       onTap: _next,
       child: Column(
@@ -339,10 +339,10 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
       subtitle:
           'قبل ما تقلب على خدمة ولا تكوين،\nخاصك تعرف شكون نتا:',
       content: Column(children: [
-        _buildField('شنو كتحب تدير؟', _empLikes, const Color(0xFFE65100)),
-        _buildField('شنو كتعرف تدير؟', _empKnows, const Color(0xFFE65100)),
-        _buildField('نقاط القوة ديالك', _empStrengths, const Color(0xFFE65100)),
-        _buildField('اختبار توجيه بسيط', _empQuiz, const Color(0xFFE65100)),
+        _buildField('شنو كتحب تدير؟', _empLikes, const Color(0xFFC62828)),
+        _buildField('شنو كتعرف تدير؟', _empKnows, const Color(0xFFC62828)),
+        _buildField('نقاط القوة ديالك', _empStrengths, const Color(0xFFC62828)),
+        _buildField('اختبار توجيه بسيط', _empQuiz, const Color(0xFFC62828)),
       ]),
       footerText: '',
     );
@@ -357,11 +357,11 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
           'دابا ملي عرفتي شكون نتا\nجا الوقت تحدد بالضبط آش خاصك تطوّر.',
       content: Column(children: [
         _buildField('شنو المهارات اللي خاصك تطورها؟', _empSkillsDev,
-            const Color(0xFFE65100)),
+            const Color(0xFFC62828)),
         _buildField('شنو اللي واقف قدامك؟', _empBarriers,
-            const Color(0xFFE65100)),
+            const Color(0xFFC62828)),
         _buildField('فين خاصك تزيد تخدم على راسك؟', _empImprove,
-            const Color(0xFFE65100)),
+            const Color(0xFFC62828)),
       ]),
       footerText: '',
     );
@@ -381,7 +381,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
           'جزّب مقابلة حقيقية',
           'صايب CV ديالك',
         ],
-        color: const Color(0xFFE65100),
+        color: const Color(0xFFC62828),
       ),
       footerText: '',
     );
@@ -400,7 +400,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
           'مواكبة على أرض الواقع',
           'تواصل',
         ],
-        color: const Color(0xFFE65100),
+        color: const Color(0xFFC62828),
       ),
       footerText: '',
     );
@@ -491,9 +491,9 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     required String footerText,
   }) {
     final color =
-        isEmployment ? const Color(0xFFE65100) : const Color(0xFF2E7D32);
+        isEmployment ? const Color(0xFFC62828) : const Color(0xFF2E7D32);
     final darkColor =
-        isEmployment ? const Color(0xFF1A237E) : const Color(0xFF1B5E20);
+        isEmployment ? const Color(0xFFC62828) : const Color(0xFF1B5E20);
     final doorLabel = isEmployment ? 'باب الخدمة' : 'باب المقاولة';
 
     return SingleChildScrollView(

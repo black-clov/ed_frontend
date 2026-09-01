@@ -77,8 +77,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           allowMuting: true,
           showControls: true,
           materialProgressColors: ChewieProgressColors(
-            playedColor: const Color(0xFF1565C0),
-            handleColor: const Color(0xFF1565C0),
+            playedColor: const Color(0xFFC62828),
+            handleColor: const Color(0xFFC62828),
             bufferedColor: Colors.white38,
             backgroundColor: Colors.white24,
           ),
@@ -132,7 +132,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                             player: YoutubePlayer(
                               controller: _ytController!,
                               showVideoProgressIndicator: true,
-                              progressIndicatorColor: const Color(0xFF1565C0),
+                              progressIndicatorColor: const Color(0xFFC62828),
                             ),
                             builder: (context, player) => player,
                           )

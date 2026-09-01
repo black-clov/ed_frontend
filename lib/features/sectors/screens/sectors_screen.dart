@@ -55,11 +55,11 @@ class _SectorsScreenState extends State<SectorsScreen> {
   }
 
   static const _sectorColors = {
-    'innovation': Color(0xFF1565C0),
-    'sales': Color(0xFFE65100),
-    'marketing': Color(0xFF7B1FA2),
+    'innovation': Color(0xFF2E7D32),
+    'sales': Color(0xFF2E7D32),
+    'marketing': Color(0xFF2E7D32),
     'manual_services': Color(0xFF2E7D32),
-    'management': Color(0xFF00838F),
+    'management': Color(0xFF2E7D32),
     'people': Color(0xFFC62828),
   };
 
@@ -84,7 +84,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [Color(0xFF5C6BC0), Color(0xFF7986CB)],
+                          colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)],
                         ),
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -125,7 +125,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
                       child: ElevatedButton(
                         onPressed: _submitting ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF5C6BC0),
+                          backgroundColor: const Color(0xFF2E7D32),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -144,7 +144,7 @@ class _SectorsScreenState extends State<SectorsScreen> {
 
   Widget _buildSectorCard(SectorOption opt) {
     final isSelected = _selected.contains(opt.key);
-    final color = _sectorColors[opt.key] ?? const Color(0xFF5C6BC0);
+    final color = _sectorColors[opt.key] ?? const Color(0xFF2E7D32);
 
     return InkWell(
       onTap: () {

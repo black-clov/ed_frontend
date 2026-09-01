@@ -50,7 +50,7 @@ class _ContentScreenState extends State<ContentScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('المحتوى والمقالات'),
-          backgroundColor: const Color(0xFF1565C0),
+          backgroundColor: const Color(0xFFC62828),
           foregroundColor: Colors.white,
         ),
         body: Column(
@@ -71,7 +71,7 @@ class _ContentScreenState extends State<ContentScreen> {
                     child: ChoiceChip(
                       label: Text(t['label']!),
                       selected: selected,
-                      selectedColor: const Color(0xFF1565C0),
+                      selectedColor: const Color(0xFFC62828),
                       labelStyle: TextStyle(
                         color: selected ? Colors.white : Colors.black87,
                       ),
@@ -161,13 +161,13 @@ class _ContentCard extends StatelessWidget {
   Color _colorForType(String type) {
     switch (type) {
       case 'article':
-        return const Color(0xFF1565C0);
+        return const Color(0xFFC62828);
       case 'document':
-        return const Color(0xFFE65100);
+        return const Color(0xFFC62828);
       case 'guide':
         return const Color(0xFF2E7D32);
       default:
-        return const Color(0xFF1565C0);
+        return const Color(0xFFC62828);
     }
   }
 
@@ -292,7 +292,7 @@ class _DetailSheet extends StatelessWidget {
             Row(children: [
               _Chip(
                   label: item.typeLabel,
-                  color: const Color(0xFF1565C0)),
+                  color: const Color(0xFFC62828)),
               if (item.category != null) ...[
                 const SizedBox(width: 6),
                 _Chip(label: item.category!, color: Colors.grey.shade600),
@@ -311,7 +311,7 @@ class _DetailSheet extends StatelessWidget {
                   icon: const Icon(Icons.open_in_new),
                   label: const Text('فتح الملف'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1565C0),
+                    backgroundColor: const Color(0xFFC62828),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(

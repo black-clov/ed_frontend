@@ -23,11 +23,11 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
   bool _submitting = false;
 
   static const _moduleColors = {
-    'customer_talk': Color(0xFF1565C0),
+    'customer_talk': Color(0xFF2E7D32),
     'negotiation': Color(0xFF2E7D32),
-    'persuasion': Color(0xFF7B1FA2),
-    'presentation': Color(0xFFE65100),
-    'networking': Color(0xFF00695C),
+    'persuasion': Color(0xFF2E7D32),
+    'presentation': Color(0xFF2E7D32),
+    'networking': Color(0xFF2E7D32),
     'conflict_resolution': Color(0xFF37474F),
   };
 
@@ -112,7 +112,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [Color(0xFF0D47A1), Color(0xFF1976D2)]),
+                        gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF2E7D32)]),
                         borderRadius: BorderRadius.circular(14),
                       ),
                       child: const Column(
@@ -148,7 +148,7 @@ class _CommTrainingScreenState extends State<CommTrainingScreen> {
                       child: ElevatedButton(
                         onPressed: _submitting ? null : _submit,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF0D47A1),
+                          backgroundColor: const Color(0xFF2E7D32),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
