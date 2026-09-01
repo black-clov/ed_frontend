@@ -27,8 +27,12 @@ class ApiService {
           handler.next(response);
         },
         onError: (error, handler) async {
-          // Handle 401 — clear token and redirect to login
-          if (error.response?.statusCode == 401) {
+          // A 401 on an auth endpoint = wrong credentials / bad reset code,
+          // NOT an expired session — let the screen show a proper message
+          // instead of wiping the token and bouncing to /login.
+          final path = error.requestOptions.path;
+          final isAuthEndpoint = path.contains('/auth/');
+          if (error.response?.statusCode == 401 && !isAuthEndpoint) {
             await _storage.delete(key: 'token');
             await _storage.delete(key: 'user_id');
             final nav = navigatorKey.currentState;

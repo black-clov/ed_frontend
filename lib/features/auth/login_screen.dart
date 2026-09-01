@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dashboard/dashboard_screen.dart';
@@ -81,22 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Row(
-          children: [
-            Icon(Icons.error_outline, color: Color(0xFFE65100)),
-            SizedBox(width: 8),
-            Text('خطأ', style: TextStyle(color: Color(0xFFE65100))),
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Row(
+            children: [
+              Icon(Icons.error_outline, color: Color(0xFFC62828)),
+              SizedBox(width: 8),
+              Text('خطأ', style: TextStyle(color: Color(0xFFC62828))),
+            ],
+          ),
+          content: Text(msg, style: const TextStyle(fontSize: 15)),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('حسنا', style: TextStyle(color: Color(0xFFC62828))),
+            ),
           ],
         ),
-        content: Text(msg, style: const TextStyle(fontSize: 15)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('حسنا', style: TextStyle(color: Color(0xFFE65100))),
-          ),
-        ],
       ),
     );
   }
@@ -146,9 +150,16 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) return;
         _showErrorPopup('البريد الإلكتروني أو كلمة المرور غير صحيحة');
       }
+    } on DioException catch (e) {
+      if (!mounted) return;
+      if (e.response?.statusCode == 401) {
+        _showErrorPopup('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+      } else {
+        _showErrorPopup('تعذّر الاتصال بالخادم. تحقّق من الإنترنت وحاول مرة أخرى.');
+      }
     } catch (e) {
       if (!mounted) return;
-      _showErrorPopup('حدث خطأ في الاتصال. حاول مرة أخرى.');
+      _showErrorPopup('حدث خطأ غير متوقع. حاول مرة أخرى.');
     }
   }
   @override
