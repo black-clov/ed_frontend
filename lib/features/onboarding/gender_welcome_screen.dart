@@ -20,11 +20,11 @@ class GenderWelcomeScreen extends StatelessWidget {
               // Avatar circle
               CircleAvatar(
                 radius: 40,
-                backgroundColor: isBoy ? Colors.blue.shade100 : Colors.pink.shade100,
+                backgroundColor: isBoy ? Color(0xFFFFEBEE) : Color(0xFFE8F5E9),
                 child: Icon(
                   Icons.person,
                   size: 45,
-                  color: isBoy ? Colors.blue : Colors.pink,
+                  color: isBoy ? Color(0xFFC62828) : Color(0xFF2E7D32),
                 ),
               ),
               const SizedBox(height: 24),

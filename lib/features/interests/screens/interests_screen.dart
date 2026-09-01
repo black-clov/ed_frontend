@@ -77,15 +77,15 @@ class _InterestsScreenState extends State<InterestsScreen> {
       children: [
         Container(
           padding: const EdgeInsets.all(16),
-          color: Colors.blue.shade50,
+          color: Color(0xFFFFEBEE),
           child: Row(
             children: [
-              const Icon(Icons.info_outline, color: Colors.blue),
+              const Icon(Icons.info_outline, color: Color(0xFFC62828)),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'اختار المجالات اللي كتهمك ($totalSelected مختار)',
-                  style: const TextStyle(fontSize: 15, color: Colors.blue),
+                  style: const TextStyle(fontSize: 15, color: Color(0xFFC62828)),
                 ),
               ),
             ],

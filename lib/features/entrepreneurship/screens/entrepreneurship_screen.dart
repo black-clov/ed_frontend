@@ -81,8 +81,8 @@ class _EntrepreneurshipScreenState extends State<EntrepreneurshipScreen> {
   Color _ratingColor(int value) {
     switch (value) {
       case 1: return Colors.red;
-      case 2: return Colors.orange;
-      case 3: return Colors.amber.shade700;
+      case 2: return Color(0xFF2E7D32);
+      case 3: return Color(0xFF1B5E20);
       case 4: return const Color(0xFF2E7D32);
       case 5: return const Color(0xFF2E7D32);
       default: return Colors.grey;

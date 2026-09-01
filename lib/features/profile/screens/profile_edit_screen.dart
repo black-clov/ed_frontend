@@ -150,7 +150,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('تعديل الملف الشخصي'),
-          backgroundColor: Colors.blue[800],
+          backgroundColor: Color(0xFFB71C1C),
           foregroundColor: Colors.white,
         ),
         body: _isLoading
@@ -174,7 +174,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         height: 48,
                         child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue[800],
+                            backgroundColor: Color(0xFFB71C1C),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                           onPressed: _isSaving ? null : _saveProfile,
@@ -219,7 +219,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           height: 44,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[800],
+                              backgroundColor: Color(0xFFB71C1C),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                             ),
                             onPressed: _isSaving ? null : _changePassword,

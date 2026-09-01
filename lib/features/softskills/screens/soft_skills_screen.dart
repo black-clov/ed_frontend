@@ -95,12 +95,12 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.deepPurple.shade50,
+              color: Color(0xFFFFEBEE),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
               children: [
-                Icon(Icons.psychology, color: Colors.deepPurple.shade700, size: 28),
+                Icon(Icons.psychology, color: Color(0xFFB71C1C), size: 28),
                 const SizedBox(width: 8),
                 const Expanded(
                   child: Text(
@@ -108,7 +108,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple,
+                      color: Color(0xFFC62828),
                     ),
                   ),
                 ),
@@ -130,7 +130,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                 '${(progress * 100).toInt()}%',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.deepPurple.shade700,
+                  color: Color(0xFFB71C1C),
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -143,7 +143,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
               value: progress,
               minHeight: 8,
               backgroundColor: Colors.grey.shade200,
-              valueColor: AlwaysStoppedAnimation(Colors.deepPurple.shade400),
+              valueColor: AlwaysStoppedAnimation(Color(0xFFC62828)),
             ),
           ),
           const SizedBox(height: 24),
@@ -248,7 +248,7 @@ class _SoftSkillsScreenState extends State<SoftSkillsScreen> {
                     icon: const Icon(Icons.arrow_back),
                     label: const Text('التالي'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: Color(0xFFC62828),
                       foregroundColor: Colors.white,
                     ),
                   ),

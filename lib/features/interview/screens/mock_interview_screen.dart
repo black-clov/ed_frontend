@@ -140,7 +140,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
               const Spacer(),
               Text('${(progress * 100).toInt()}%',
                   style: const TextStyle(
-                      color: Colors.indigo, fontWeight: FontWeight.bold)),
+                      color: Color(0xFFC62828), fontWeight: FontWeight.bold)),
             ],
           ),
           const SizedBox(height: 8),
@@ -150,7 +150,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
               value: progress,
               minHeight: 8,
               backgroundColor: Colors.grey.shade200,
-              valueColor: const AlwaysStoppedAnimation(Colors.indigo),
+              valueColor: const AlwaysStoppedAnimation(Color(0xFFC62828)),
             ),
           ),
           const SizedBox(height: 20),
@@ -167,11 +167,11 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                 children: [
                   Row(
                     children: [
-                      const Icon(Icons.record_voice_over, color: Colors.indigo),
+                      const Icon(Icons.record_voice_over, color: Color(0xFFC62828)),
                       const SizedBox(width: 8),
                       const Text('المحاور يسأل:',
                           style: TextStyle(
-                              color: Colors.indigo,
+                              color: Color(0xFFC62828),
                               fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -191,18 +191,18 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.amber.shade50,
+              color: Color(0xFFFFEBEE),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.amber.shade200),
+              border: Border.all(color: Color(0xFFC62828)),
             ),
             child: Row(
               children: [
-                Icon(Icons.lightbulb_outline, color: Colors.amber.shade800, size: 20),
+                Icon(Icons.lightbulb_outline, color: Color(0xFFB71C1C), size: 20),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     question.tips,
-                    style: TextStyle(color: Colors.amber.shade900, fontSize: 13),
+                    style: TextStyle(color: Color(0xFFB71C1C), fontSize: 13),
                   ),
                 ),
               ],
@@ -248,7 +248,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
                     icon: const Icon(Icons.arrow_back),
                     label: const Text('التالي'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo,
+                      backgroundColor: Color(0xFFC62828),
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -431,7 +431,7 @@ class _MockInterviewScreenState extends State<MockInterviewScreen> {
             icon: const Icon(Icons.refresh),
             label: const Text('إعادة المحاكاة'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo,
+              backgroundColor: Color(0xFFC62828),
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),

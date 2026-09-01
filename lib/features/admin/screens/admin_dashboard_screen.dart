@@ -66,7 +66,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
       child: Scaffold(
         appBar: AppBar(
           title: const Text('لوحة الإدارة'),
-          backgroundColor: Colors.indigo[800],
+          backgroundColor: Color(0xFFB71C1C),
           foregroundColor: Colors.white,
           bottom: TabBar(
             controller: _tabController,
@@ -118,7 +118,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             // Key metrics row
             Row(
               children: [
-                _buildMetricCard('إجمالي المستخدمين', '${_stats!['totalUsers'] ?? 0}', Icons.people, Colors.blue),
+                _buildMetricCard('إجمالي المستخدمين', '${_stats!['totalUsers'] ?? 0}', Icons.people, Color(0xFFC62828)),
                 const SizedBox(width: 12),
                 _buildMetricCard('نشطون (7 أيام)', '${_stats!['activeUsers7d'] ?? 0}', Icons.trending_up, Colors.green),
               ],
@@ -173,10 +173,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.indigo.withAlpha(25),
+              color: Color(0xFFC62828).withAlpha(25),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text('$count', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.indigo)),
+            child: Text('$count', style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFFC62828))),
           ),
         ],
       ),
@@ -199,7 +199,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
           return Card(
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: isAdmin ? Colors.orange : Colors.indigo,
+                backgroundColor: isAdmin ? Color(0xFFC62828) : Color(0xFFC62828),
                 child: Icon(isAdmin ? Icons.admin_panel_settings : Icons.person, color: Colors.white, size: 20),
               ),
               title: Text('${user['first_name'] ?? ''} ${user['last_name'] ?? ''}'.trim()),
@@ -234,13 +234,13 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: isAdmin ? Colors.orange.withAlpha(30) : Colors.grey.withAlpha(30),
+                        color: isAdmin ? Color(0xFFC62828).withAlpha(30) : Colors.grey.withAlpha(30),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         isAdmin ? 'مدير' : 'مستخدم',
                         style: TextStyle(
-                          color: isAdmin ? Colors.orange[800] : Colors.grey[700],
+                          color: isAdmin ? Color(0xFFB71C1C) : Colors.grey[700],
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
                         ),
@@ -266,7 +266,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
             margin: const EdgeInsets.all(12),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.blue.withAlpha(25),
+              color: Color(0xFFC62828).withAlpha(25),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Text(
@@ -379,7 +379,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
                     width: double.infinity,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.indigo[800],
+                      color: Color(0xFFB71C1C),
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                     ),
                     child: Column(
@@ -480,7 +480,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   Widget _sectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 4),
-      child: Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.indigo[800])),
+      child: Text(title, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFFB71C1C))),
     );
   }
 

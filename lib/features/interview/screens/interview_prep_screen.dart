@@ -21,7 +21,7 @@ class InterviewPrepScreen extends StatelessWidget {
           children: [
             // Launch simulator button
             Card(
-              color: Colors.indigo.shade50,
+              color: Color(0xFFFFEBEE),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               child: InkWell(
                 borderRadius: BorderRadius.circular(14),
@@ -36,7 +36,7 @@ class InterviewPrepScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.indigo,
+                        backgroundColor: Color(0xFFC62828),
                         radius: 24,
                         child: const Icon(Icons.play_arrow, color: Colors.white, size: 28),
                       ),
@@ -45,13 +45,13 @@ class InterviewPrepScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('محاكاة المقابلة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.indigo)),
+                            const Text('محاكاة المقابلة', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFFC62828))),
                             const SizedBox(height: 4),
                             Text('تدرب على أسئلة حقيقية واحصل على تقييم فوري', style: TextStyle(color: Colors.grey.shade700, fontSize: 13)),
                           ],
                         ),
                       ),
-                      const Icon(Icons.arrow_back_ios, color: Colors.indigo),
+                      const Icon(Icons.arrow_back_ios, color: Color(0xFFC62828)),
                     ],
                   ),
                 ),
@@ -65,7 +65,7 @@ class InterviewPrepScreen extends StatelessWidget {
               (item) => Card(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: const Icon(Icons.lightbulb_outline, color: Colors.amber),
+                  leading: const Icon(Icons.lightbulb_outline, color: Color(0xFFC62828)),
                   title: Text(item.title),
                   subtitle: Text(item.tip),
                 ),
@@ -77,7 +77,7 @@ class InterviewPrepScreen extends StatelessWidget {
             ...questions.map((q) => Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
-                    leading: const Icon(Icons.help_outline, color: Colors.indigo),
+                    leading: const Icon(Icons.help_outline, color: Color(0xFFC62828)),
                     title: Text(q),
                   ),
                 )),
