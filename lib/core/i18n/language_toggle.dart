@@ -10,21 +10,28 @@ class LanguageToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final code = localeNotifier.value.languageCode;
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _red.withAlpha(60)),
-      ),
-      padding: const EdgeInsets.all(2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _seg('FR', code == 'fr', () => setLocale('fr')),
-          _seg('ع', code == 'ar', () => setLocale('ar')),
-        ],
-      ),
+    // Rebuild on language change so the highlighted (chosen) segment is always
+    // correct, even when this widget is used as `const` inside a screen.
+    return ValueListenableBuilder<Locale>(
+      valueListenable: localeNotifier,
+      builder: (context, locale, _) {
+        final code = locale.languageCode;
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: _red.withAlpha(60)),
+          ),
+          padding: const EdgeInsets.all(2),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _seg('FR', code == 'fr', () => setLocale('fr')),
+              _seg('ع', code == 'ar', () => setLocale('ar')),
+            ],
+          ),
+        );
+      },
     );
   }
 
