@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../onboarding/gender_welcome_screen.dart';
 import '../../core/i18n/app_i18n.dart';
+import '../../core/i18n/language_toggle.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -113,17 +114,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Column(
             children: [
               const SizedBox(height: 8),
-              // Language toggle
-              Align(
+              // Language toggle (top)
+              const Align(
                 alignment: AlignmentDirectional.centerEnd,
-                child: TextButton.icon(
-                  onPressed: () => Navigator.pushNamed(context, '/language'),
-                  icon: const Icon(Icons.language, size: 18, color: Color(0xFF2E7D32)),
-                  label: Text(
-                    isRtl ? 'العربية' : 'Français',
-                    style: const TextStyle(color: Color(0xFF2E7D32), fontSize: 13),
-                  ),
-                ),
+                child: LanguageToggle(),
               ),
               Image.asset('assets/images/logo_eidmaj.png', height: 100),
               const SizedBox(height: 8),

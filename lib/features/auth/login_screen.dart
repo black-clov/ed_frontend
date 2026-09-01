@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../../core/i18n/app_i18n.dart';
+import '../../core/i18n/language_toggle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showErrorPopup('فشل تسجيل الدخول بـ Google. حاول مرة أخرى.');
+      _showErrorPopup(tr('google_login_failed'));
     }
     if (mounted) setState(() => _googleLoading = false);
   }
@@ -83,21 +85,21 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (ctx) => Directionality(
-        textDirection: TextDirection.rtl,
+        textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
         child: AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.error_outline, color: Color(0xFFC62828)),
-              SizedBox(width: 8),
-              Text('خطأ', style: TextStyle(color: Color(0xFFC62828))),
+              const Icon(Icons.error_outline, color: Color(0xFFC62828)),
+              const SizedBox(width: 8),
+              Text(tr('error'), style: const TextStyle(color: Color(0xFFC62828))),
             ],
           ),
           content: Text(msg, style: const TextStyle(fontSize: 15)),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('حسنا', style: TextStyle(color: Color(0xFFC62828))),
+              child: Text(tr('ok'), style: const TextStyle(color: Color(0xFFC62828))),
             ),
           ],
         ),
@@ -107,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> login() async {
     if (emailController.text.trim().isEmpty || passwordController.text.trim().isEmpty) {
-      _showErrorPopup('يرجى ملء جميع الحقول');
+      _showErrorPopup(tr('fill_all_fields'));
       return;
     }
     try {
@@ -148,49 +150,52 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } else {
         if (!mounted) return;
-        _showErrorPopup('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        _showErrorPopup(tr('invalid_credentials'));
       }
     } on DioException catch (e) {
       if (!mounted) return;
       if (e.response?.statusCode == 401) {
-        _showErrorPopup('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        _showErrorPopup(tr('invalid_credentials'));
       } else {
-        _showErrorPopup('تعذّر الاتصال بالخادم. تحقّق من الإنترنت وحاول مرة أخرى.');
+        _showErrorPopup(tr('server_unreachable'));
       }
     } catch (e) {
       if (!mounted) return;
-      _showErrorPopup('حدث خطأ غير متوقع. حاول مرة أخرى.');
+      _showErrorPopup(tr('unexpected_error'));
     }
   }
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFAF6F0),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/logo_eidmaj.png',
-                    height: 80,
-                  ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFFAF6F0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: LanguageToggle(),
+                ),
+                const SizedBox(height: 8),
+                Image.asset(
+                  'assets/images/logo_eidmaj.png',
+                  height: 80,
+                ),
                   const SizedBox(height: 16),
                   Text(
-                    'تسجيل الدخول',
-                    style: TextStyle(
+                    tr('login'),
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xFFC62828),
+                      color: Color(0xFFC62828),
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'أدخل بياناتك للمتابعة',
+                    tr('login_subtitle'),
                     style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                   ),
                   const SizedBox(height: 24),
@@ -209,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextField(
                             controller: emailController,
                             decoration: InputDecoration(
-                              labelText: "البريد الإلكتروني",
+                              labelText: tr('email'),
                               prefixIcon: Icon(Icons.email, color: const Color(0xFFC62828)),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                               focusedBorder: OutlineInputBorder(
@@ -223,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: passwordController,
                             obscureText: true,
                             decoration: InputDecoration(
-                              labelText: "كلمة المرور",
+                              labelText: tr('password'),
                               prefixIcon: Icon(Icons.lock, color: const Color(0xFFC62828)),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                               focusedBorder: OutlineInputBorder(
@@ -242,7 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                               ),
                               onPressed: login,
-                              child: const Text("تسجيل الدخول", style: TextStyle(fontSize: 18, color: Colors.white)),
+                              child: Text(tr('login_btn'), style: const TextStyle(fontSize: 18, color: Colors.white)),
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -260,7 +265,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFC62828)))
                                   : const Icon(Icons.g_mobiledata, color: Color(0xFFC62828), size: 28),
                               label: Text(
-                                "تسجيل الدخول بـ Google",
+                                tr('google_login'),
                                 style: TextStyle(fontSize: 16, color: _googleLoading ? Colors.grey : const Color(0xFFC62828)),
                               ),
                             ),
@@ -273,9 +278,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.pushNamed(context, '/forgot-password');
                               },
                               child: Text(
-                                "نسيت كلمة المرور؟",
-                                style: TextStyle(
-                                  color: const Color(0xFF2E7D32),
+                                tr('forgot_password_q'),
+                                style: const TextStyle(
+                                  color: Color(0xFF2E7D32),
                                   fontSize: 14,
                                   decoration: TextDecoration.underline,
                                 ),
@@ -290,15 +295,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("ليس لديك حساب؟ ", style: TextStyle(fontSize: 15)),
+                      Text(tr('no_account'), style: const TextStyle(fontSize: 15)),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacementNamed(context, '/register');
                         },
                         child: Text(
-                          "إنشاء حساب",
-                          style: TextStyle(
-                            color: const Color(0xFF2E7D32),
+                          tr('create_account'),
+                          style: const TextStyle(
+                            color: Color(0xFF2E7D32),
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             decoration: TextDecoration.underline,
@@ -312,8 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
 
   }
 

@@ -5,7 +5,6 @@ import 'core/i18n/app_i18n.dart';
 import 'features/auth/register_screen.dart';
 import 'features/auth/welcome_screen.dart';
 import 'features/onboarding/onboarding_flow.dart';
-import 'features/onboarding/language_screen.dart';
 import 'features/auth/login_screen.dart';
 import 'features/auth/forgot_password_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
@@ -38,7 +37,6 @@ class MyApp extends StatelessWidget {
           ],
           home: const _SplashGate(),
           routes: {
-            '/language': (_) => const LanguageScreen(),
             '/welcome': (_) => const WelcomeScreen(),
             '/register': (_) => RegisterScreen(),
             '/login': (_) => LoginScreen(),
@@ -70,17 +68,8 @@ class _SplashGateState extends State<_SplashGate> {
 
   Future<void> _route() async {
     final storage = const FlutterSecureStorage();
-    // First launch (no language chosen) → language selection screen.
-    final langChosen = await storage.read(key: 'app_lang');
-    if (!mounted) return;
-    if (langChosen == null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LanguageScreen()),
-      );
-      return;
-    }
-
+    // French is the default language; users switch via the toggle on screens
+    // (no forced language-selection page).
     final token = await storage.read(key: 'token');
     if (!mounted) return;
     if (token != null && token.isNotEmpty) {
