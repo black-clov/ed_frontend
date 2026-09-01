@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'parts/tr_auth2.dart';
+import 'parts/tr_onboarding.dart';
+import 'parts/tr_dashboard.dart';
+import 'parts/tr_employment1.dart';
+import 'parts/tr_employment2.dart';
+import 'parts/tr_entrepreneurship.dart';
+import 'parts/tr_admin.dart';
 
 /// Lightweight i18n: a global locale notifier + a `tr()` lookup.
 /// French is the default language. Arabic is RTL, French is LTR.
@@ -43,10 +50,27 @@ String tr(String key) {
   return _t[code]?[key] ?? _t[_fallback]?[key] ?? key;
 }
 
+/// Full table = core + per-feature parts merged (parts filled screen-group by group).
+final Map<String, Map<String, String>> _t = _mergeAll();
+
+Map<String, Map<String, String>> _mergeAll() {
+  const parts = [
+    _core, trAuth2, trOnboarding, trDashboard,
+    trEmployment1, trEmployment2, trEntrepreneurship, trAdmin,
+  ];
+  final fr = <String, String>{};
+  final ar = <String, String>{};
+  for (final p in parts) {
+    fr.addAll(p['fr'] ?? const {});
+    ar.addAll(p['ar'] ?? const {});
+  }
+  return {'fr': fr, 'ar': ar};
+}
+
 // ─────────────────────────────────────────────────────────────────────────
-// Translations. Add keys here as screens are internationalized (phased).
+// Core translations (common + auth entry). Feature groups live in parts/.
 // ─────────────────────────────────────────────────────────────────────────
-const Map<String, Map<String, String>> _t = {
+const Map<String, Map<String, String>> _core = {
   'fr': {
     // language screen
     'choose_language': 'Choisissez votre langue',
