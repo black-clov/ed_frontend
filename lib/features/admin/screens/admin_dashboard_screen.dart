@@ -22,7 +22,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
   @override
   void initState() {
     super.initState();
-
+    _tabController = TabController(length: 3, vsync: this);
     _loadData();
   }
 
