@@ -256,6 +256,92 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> with Single
     );
   }
 
+  Widget _buildVideosTab() {
+    return RefreshIndicator(
+      onRefresh: _loadData,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.blue.withAlpha(25),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Text(
+              'لإضافة فيديو جديد، استعمل لوحة التحكم على الويب (الصق رابط يوتيوب).',
+              style: TextStyle(fontSize: 13),
+            ),
+          ),
+          Expanded(
+            child: (_videos == null || _videos!.isEmpty)
+                ? const Center(child: Text('لا توجد فيديوهات'))
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    itemCount: _videos!.length,
+                    itemBuilder: (context, index) {
+                      final v = _videos![index] as Map<String, dynamic>;
+                      final id = v['id']?.toString() ?? '';
+                      return Card(
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            backgroundColor: Colors.redAccent,
+                            child: Icon(Icons.play_arrow, color: Colors.white),
+                          ),
+                          title: Text(v['title']?.toString() ?? ''),
+                          subtitle: Text(
+                            v['category']?.toString() ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete_outline, color: Colors.red),
+                            onPressed: id.isEmpty
+                                ? null
+                                : () => _confirmDeleteVideo(id, v['title']?.toString() ?? ''),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _confirmDeleteVideo(String id, String title) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          title: const Text('حذف الفيديو'),
+          content: Text('هل تريد حذف "$title"؟'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('إلغاء')),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('حذف', style: TextStyle(color: Colors.white)),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await _adminService.deleteVideo(id);
+      await _loadData();
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر حذف الفيديو')),
+      );
+    }
+  }
+
   Future<void> _showUserDetails(String userId) async {
     showDialog(
       context: context,
