@@ -13,6 +13,8 @@ import '../profile/screens/profile_screen.dart';
 import '../recommendations/screens/recommendations_screen.dart';
 import '../skills/screens/skills_screen.dart';
 import '../interests/screens/interests_screen.dart';
+import '../questionnaire/screens/questionnaire_screen.dart';
+import '../softskills/screens/soft_skills_screen.dart';
 import '../videos/screens/videos_screen.dart';
 import '../sectors/screens/sectors_screen.dart';
 import '../entrepreneurship/screens/entrepreneurship_screen.dart';
@@ -68,6 +70,20 @@ class _DashboardScreenState extends State<DashboardScreen>
       Color(0xFFC62828),
       InterestsScreen(),
       tr('dash_sec_interests_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_personality_title'),
+      Icons.emoji_people_rounded,
+      Color(0xFFC62828),
+      QuestionnaireScreen(),
+      tr('dash_sec_personality_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_softskills_title'),
+      Icons.self_improvement_rounded,
+      Color(0xFFC62828),
+      SoftSkillsScreen(),
+      tr('dash_sec_softskills_subtitle'),
     ),
     _DashboardSection(
       tr('dash_sec_opportunities_title'),
