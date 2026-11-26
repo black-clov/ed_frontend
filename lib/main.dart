@@ -10,6 +10,8 @@ import 'features/auth/forgot_password_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
 import 'features/admin/screens/admin_dashboard_screen.dart';
 import 'services/api_service.dart';
+import 'services/session.dart';
+import 'features/about/about_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
             '/forgot-password': (_) => const ForgotPasswordScreen(),
             '/dashboard': (_) => const DashboardScreen(),
             '/admin': (_) => const AdminDashboardScreen(),
+        '/about': (_) => const AboutScreen(),
           },
         );
       },
@@ -73,20 +76,14 @@ class _SplashGateState extends State<_SplashGate> {
     final token = await storage.read(key: 'token');
     if (!mounted) return;
     if (token != null && token.isNotEmpty) {
-      final role = await storage.read(key: 'role');
-      final onboardingDone = await storage.read(key: 'onboarding_done');
+      // Pick up gender/track saved on the server (e.g. set on another phone).
+      await Session.refreshPrefs();
+      final home = await Session.homeAfterLogin();
       if (!mounted) return;
-      if (role == 'admin' || onboardingDone == 'true') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const DashboardScreen()),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const OnboardingFlow()),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => home),
+      );
     } else {
       Navigator.pushReplacement(
         context,

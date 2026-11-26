@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../../core/i18n/app_i18n.dart';
+import '../../services/session.dart';
+import 'track_portal.dart';
 
 class OnboardingFlow extends StatefulWidget {
   const OnboardingFlow({super.key});
@@ -12,8 +14,25 @@ class OnboardingFlow extends StatefulWidget {
 
 class _OnboardingFlowState extends State<OnboardingFlow> {
   int _step = 0;
-  String _gender = 'boy';
+  /// 'boy' | 'girl' | null (not chosen yet, e.g. Google sign-in).
+  String? _gender;
+  /// Chosen on the portal step; decides which track's steps are shown.
+  String? _track;
   final _storage = const FlutterSecureStorage();
+
+  static const _empSteps = ['emp_door', 'emp1', 'emp2', 'emp3', 'emp4'];
+  static const _entSteps = ['ent_door', 'ent1', 'ent2', 'ent3', 'ent4'];
+
+  /// Steps actually shown: intro, the portal, then only the chosen track(s).
+  List<String> get _steps => [
+        'intro',
+        'portal',
+        if (_track == Tracks.employment || _track == Tracks.both) ..._empSteps,
+        if (_track == Tracks.entrepreneurship || _track == Tracks.both) ..._entSteps,
+      ];
+
+  String get _id => _steps[_step.clamp(0, _steps.length - 1)];
+  bool get _isEmpStep => _id.startsWith('emp');
 
   // Employment Key 1 controllers
   final _empLikes = TextEditingController();
@@ -43,17 +62,33 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   final _entFunding = TextEditingController();
   final _entContact = TextEditingController();
 
-  static const int _totalSteps = 11;
-
   @override
   void initState() {
     super.initState();
-    _loadGender();
+    _loadPrefs();
   }
 
-  Future<void> _loadGender() async {
-    final g = await _storage.read(key: 'gender');
-    if (g != null && mounted) setState(() => _gender = g);
+  Future<void> _loadPrefs() async {
+    final g = await Session.gender();
+    final t = await Session.track();
+    if (!mounted) return;
+    setState(() {
+      if (g == 'boy' || g == 'girl') _gender = g;
+      if (t != null && t.isNotEmpty) _track = t;
+    });
+  }
+
+  Future<void> _chooseGender(String g) async {
+    setState(() => _gender = g);
+    await Session.setGender(g);
+  }
+
+  Future<void> _chooseTrack(String t) async {
+    setState(() {
+      _track = t;
+      _step = 2; // first step of the chosen track
+    });
+    await Session.setTrack(t);
   }
 
   @override
@@ -80,7 +115,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   void _next() async {
-    if (_step < _totalSteps - 1) {
+    if (_step < _steps.length - 1) {
       setState(() => _step++);
     } else {
       await _saveData();
@@ -125,11 +160,13 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
     }
   }
 
+  bool get _isPlainStep => _id == 'intro' || _id == 'portal';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _bgColor,
-      body: _step == 0
+      body: _isPlainStep
           ? SafeArea(child: _buildCurrentStep())
           : Stack(
               children: [
@@ -151,32 +188,31 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                     width: double.infinity,
                     height: double.infinity,
                     color: Colors.black.withValues(
-                      alpha: (_step == 1 || _step == 6) ? 0.0 : 0.15,
+                      alpha: _id.endsWith('_door') ? 0.0 : 0.15,
                     ), // optional slight dim on text steps
                     child: _buildCurrentStep(),
                   ),
                 ),
               ],
             ),
-      bottomNavigationBar: _step == 0 ? null : _buildNavBar(),
+      bottomNavigationBar: _isPlainStep ? null : _buildNavBar(),
     );
   }
 
   String get _bgImage {
-    if (_step == 1) return 'assets/images/porte_emploi.png';
-    if (_step == 6) return 'assets/images/porte_entreprenariat.png';
-    if (_step <= 5) return 'assets/images/cle_emploi.png';
+    if (_id == 'emp_door') return 'assets/images/porte_emploi.png';
+    if (_id == 'ent_door') return 'assets/images/porte_entreprenariat.png';
+    if (_isEmpStep) return 'assets/images/cle_emploi.png';
     return 'assets/images/cle_entreprenariat.png';
   }
 
   Color get _bgColor {
-    if (_step <= 1) return const Color(0xFFFAF6F0);
-    if (_step <= 5) return const Color(0xFFFAF6F0);
+    if (_isPlainStep || _isEmpStep) return const Color(0xFFFAF6F0);
     return const Color(0xFFFFEBEE);
   }
 
   Widget _buildNavBar() {
-    final isEmp = _step <= 5;
+    final isEmp = _isEmpStep;
     final color = isEmp ? const Color(0xFFC62828) : const Color(0xFF2E7D32);
     return Container(
       padding: const EdgeInsets.all(16),
@@ -206,7 +242,7 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
               child: Text(
-                _step == _totalSteps - 1 ? tr('onb_finish') : tr('onb_next'),
+                _step == _steps.length - 1 ? tr('onb_finish') : tr('onb_next'),
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -220,37 +256,59 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
   }
 
   Widget _buildCurrentStep() {
-    switch (_step) {
-      case 0:
+    switch (_id) {
+      case 'intro':
         return _buildIntro();
-      case 1:
+      case 'portal':
+        return TrackPortal(current: _track, onSelected: _chooseTrack);
+      case 'emp_door':
         return _buildDoor(true);
-      case 2:
+      case 'emp1':
         return _buildEmpKey1();
-      case 3:
+      case 'emp2':
         return _buildEmpKey2();
-      case 4:
+      case 'emp3':
         return _buildEmpKey3();
-      case 5:
+      case 'emp4':
         return _buildEmpKey4();
-      case 6:
+      case 'ent_door':
         return _buildDoor(false);
-      case 7:
+      case 'ent1':
         return _buildEntKey1();
-      case 8:
+      case 'ent2':
         return _buildEntKey2();
-      case 9:
+      case 'ent3':
         return _buildEntKey3();
-      case 10:
+      case 'ent4':
         return _buildEntKey4();
       default:
         return const SizedBox();
     }
   }
 
+  Widget _genderChip(String value, String label, Color color) {
+    final selected = _gender == value;
+    return Expanded(
+      child: SizedBox(
+        height: 44,
+        child: ElevatedButton(
+          onPressed: () => _chooseGender(value),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: selected ? color : Colors.white,
+            foregroundColor: selected ? Colors.white : color,
+            side: BorderSide(color: color, width: 1.5),
+            elevation: selected ? 2 : 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          child: Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  }
+
   // ──────────── STEP 0: INTRO ────────────
   Widget _buildIntro() {
-    final isBoy = _gender == 'boy';
+    final isBoy = _gender != 'girl';
     return Column(
       children: [
         const SizedBox(height: 40),
@@ -271,12 +329,33 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
           ),
         ),
         const Spacer(),
-        Image.asset(
-          isBoy
-              ? 'assets/images/mascott_garcon.png'
-              : 'assets/images/mascott_fille.png',
-          height: 300,
-          fit: BoxFit.contain,
+        Flexible(
+          flex: 6,
+          child: Image.asset(
+            isBoy
+                ? 'assets/images/mascott_garcon.png'
+                : 'assets/images/mascott_fille.png',
+            height: 260,
+            fit: BoxFit.contain,
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Gender = which mascot accompanies the user. Always editable here,
+        // and required once (Google sign-in never asked for it).
+        Text(
+          tr('onb_choose_mascot'),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+        ),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          child: Row(
+            children: [
+              _genderChip('boy', tr('boy'), const Color(0xFF2E7D32)),
+              const SizedBox(width: 12),
+              _genderChip('girl', tr('girl'), const Color(0xFFC62828)),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         Padding(
@@ -285,7 +364,11 @@ class _OnboardingFlowState extends State<OnboardingFlow> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton(
-              onPressed: _next,
+              onPressed: _gender == null
+                  ? () => ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(tr('onb_choose_mascot_first'))),
+                      )
+                  : _next,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFC62828),
                 shape: RoundedRectangleBorder(

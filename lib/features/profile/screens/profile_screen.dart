@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/profile_service.dart';
 import '../../../core/config/env.dart';
 import '../../../core/i18n/app_i18n.dart';
+import '../../../services/session.dart';
 import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -297,7 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     try {
       await ProfileService().deleteAccount();
-      await const FlutterSecureStorage().deleteAll();
+      await Session.clear();
       if (!mounted) return;
       Navigator.of(context).pop(); // close progress
       Navigator.of(context)

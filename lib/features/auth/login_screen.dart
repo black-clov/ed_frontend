@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../dashboard/dashboard_screen.dart';
+import '../../services/session.dart';
 import '../../core/i18n/app_i18n.dart';
 import '../../core/i18n/language_toggle.dart';
 
@@ -31,34 +31,22 @@ class _LoginScreenState extends State<LoginScreen> {
         return; // User cancelled
       }
       
-      final token = result['access_token'];
-      if (token != null) {
-        await storage.write(key: 'token', value: token);
-        final userId = result['userId'];
-        if (userId != null) {
-          await storage.write(key: 'user_id', value: userId.toString());
-        }
-        final role = result['role'];
-        if (role != null) {
-          await storage.write(key: 'role', value: role.toString());
-        }
-        if (!mounted) return;
-        final onboardingDone = await storage.read(key: 'onboarding_done');
-        if (!mounted) return;
-        if (role == 'admin' || onboardingDone == 'true') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const DashboardScreen()),
-          );
-        } else {
-          Navigator.pushReplacementNamed(context, '/onboarding');
-        }
+      if (result['access_token'] != null) {
+        await _goHome(result);
       }
     } catch (e) {
       if (!mounted) return;
       _showErrorPopup(tr('google_login_failed'));
     }
     if (mounted) setState(() => _googleLoading = false);
+  }
+
+  Future<void> _goHome(Map<String, dynamic> authData) async {
+    await Session.saveAuth(authData);
+    await Session.pushLocalPrefs();
+    final home = await Session.homeAfterLogin();
+    if (!mounted) return;
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => home));
   }
 
   @override
@@ -108,34 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
       debugPrint('Login response: ${response.statusCode} ${response.data}');
       // Check for HTTP 200 and access_token in response
       if ((response.statusCode == 200 || response.statusCode == 201) && response.data != null && response.data["access_token"] != null) {
-        final token = response.data["access_token"];
-        await storage.write(
-          key: "token",
-          value: token
-        );
-        // Store userId and role from login response
-        final userId = response.data["userId"];
-        if (userId != null) {
-          await storage.write(key: "user_id", value: userId.toString());
-        }
-        final role = response.data["role"];
-        if (role != null) {
-          await storage.write(key: "role", value: role.toString());
-        }
-        if (!mounted) return;
-        // Admin users skip onboarding; regular users must complete it
-        final onboardingDone = await storage.read(key: 'onboarding_done');
-        if (!mounted) return;
-        if (role == 'admin' || onboardingDone == 'true') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const DashboardScreen()
-            )
-          );
-        } else {
-          Navigator.pushReplacementNamed(context, '/onboarding');
-        }
+        await _goHome(Map<String, dynamic>.from(response.data));
       } else {
         if (!mounted) return;
         _showErrorPopup(tr('invalid_credentials'));

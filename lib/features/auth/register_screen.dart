@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../../core/config/env.dart';
 import '../../core/i18n/app_i18n.dart';
+import '../../services/session.dart';
 
 class RegisterScreen extends StatefulWidget {
 	const RegisterScreen({super.key});
@@ -132,8 +133,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 			setState(() => _loading = false);
 			if (response.statusCode == 201 || response.statusCode == 200) {
 				final storage = const FlutterSecureStorage();
-				// Clear any stale data from previous sessions
-				await storage.deleteAll();
+				// Clear any stale data from previous sessions, but keep the gender
+				// the user picked on the welcome screen just before signing up
+				// (wiping it was why every new account showed the boy mascot).
+				final chosenGender = await storage.read(key: 'gender');
+				await Session.clear();
+				if (chosenGender != null) {
+					await storage.write(key: 'gender', value: chosenGender);
+				}
 				final userId = response.data['id']?.toString();
 				if (userId != null && userId.isNotEmpty) {
 					await storage.write(key: 'user_id', value: userId);
@@ -145,15 +152,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 						_passwordController.text.trim(),
 					);
 					if (loginResp.data != null && loginResp.data['access_token'] != null) {
-						await storage.write(key: 'token', value: loginResp.data['access_token']);
-						final loginUserId = loginResp.data['userId'];
-						if (loginUserId != null) {
-							await storage.write(key: 'user_id', value: loginUserId.toString());
-						}
-						final role = loginResp.data['role'];
-						if (role != null) {
-							await storage.write(key: 'role', value: role.toString());
-						}
+						await Session.saveAuth(Map<String, dynamic>.from(loginResp.data));
+						// Save the chosen gender on the new account (server side).
+						await Session.pushLocalPrefs();
 					}
 				} catch (_) {
 					// If auto-login fails, user can login manually later

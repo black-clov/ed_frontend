@@ -22,6 +22,9 @@ import '../support/screens/support_screen.dart';
 import '../commtraining/screens/comm_training_screen.dart';
 import '../admin/screens/admin_dashboard_screen.dart';
 import '../content/screens/content_screen.dart';
+import '../onboarding/track_portal.dart';
+import '../about/about_screen.dart';
+import '../../services/session.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -35,7 +38,9 @@ class _DashboardScreenState extends State<DashboardScreen>
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   bool _isAdmin = false;
-  String _gender = 'boy';
+  String? _gender;
+  /// 'employment' | 'entrepreneurship' | 'both' | null (treated as both).
+  String? _track;
   String _userName = '';
   String _userVille = '';
 
@@ -180,17 +185,35 @@ class _DashboardScreenState extends State<DashboardScreen>
     _loadUserData().then((_) => _controller.forward());
   }
 
+  bool get _showEmployment =>
+      _track == null || _track == Tracks.employment || _track == Tracks.both;
+  bool get _showEntrepreneurship =>
+      _track == null || _track == Tracks.entrepreneurship || _track == Tracks.both;
+
+  Future<void> _loadPrefsFromStorage() async {
+    final g = await Session.gender();
+    final t = await Session.track();
+    if (!mounted) return;
+    setState(() {
+      _gender = (g == 'boy' || g == 'girl') ? g : null;
+      _track = (t != null && t.isNotEmpty) ? t : null;
+    });
+  }
+
   Future<void> _loadUserData() async {
     final role = await _storage.read(key: 'role');
-    final g = await _storage.read(key: 'gender');
     final userId = await _storage.read(key: 'user_id');
 
     if (mounted && role == 'admin') {
       setState(() => _isAdmin = true);
     }
-    if (mounted && g != null) {
-      setState(() => _gender = g);
-    }
+    await _loadPrefsFromStorage();
+    // Server copy wins (set on another phone, or after reinstall).
+    Session.refreshPrefs().then((_) async {
+      await _loadPrefsFromStorage();
+      // Users from v1.0.0 never picked a track: show the portal once.
+      if (mounted && !_isAdmin && _track == null) _changeTrack();
+    });
 
     if (userId != null) {
       try {
@@ -268,13 +291,84 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   void _logout(BuildContext context) async {
-    await _storage.deleteAll();
+    await Session.clear();
     if (!context.mounted) return;
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 
   void _goToOnboarding() {
     Navigator.pushNamed(context, '/onboarding');
+  }
+
+  Future<void> _changeTrack() async {
+    final chosen = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => TrackPortalScreen(current: _track)),
+    );
+    if (chosen != null && mounted) setState(() => _track = chosen);
+  }
+
+  void _openAbout() {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutScreen()));
+  }
+
+  Future<void> _pickMascot() async {
+    final chosen = await showModalBottomSheet<String>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(tr('onb_choose_mascot'),
+                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  for (final g in const ['boy', 'girl'])
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => Navigator.pop(ctx, g),
+                        borderRadius: BorderRadius.circular(14),
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: _gender == g ? const Color(0xFFC62828) : Colors.grey.shade300,
+                              width: _gender == g ? 2.5 : 1,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                g == 'boy'
+                                    ? 'assets/images/mascott_garcon.png'
+                                    : 'assets/images/mascott_fille.png',
+                                height: 110,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(tr(g), style: const TextStyle(fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (chosen == null) return;
+    setState(() => _gender = chosen);
+    await Session.setGender(chosen);
   }
 
   void _openSection(_DashboardSection section) {
@@ -365,24 +459,30 @@ class _DashboardScreenState extends State<DashboardScreen>
                         children: [
                           Row(
                             children: [
-                              // Mascot avatar
-                              Container(
-                                width: 76,
-                                height: 76,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white.withAlpha(40),
-                                  border: Border.all(
-                                    color: Colors.white.withAlpha(80),
-                                    width: 2,
+                              // Mascot avatar (tap to change)
+                              GestureDetector(
+                                onTap: _pickMascot,
+                                child: Container(
+                                  width: 76,
+                                  height: 76,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withAlpha(40),
+                                    border: Border.all(
+                                      color: Colors.white.withAlpha(80),
+                                      width: 2,
+                                    ),
                                   ),
-                                ),
-                                child: ClipOval(
-                                  child: Image.asset(
-                                    _gender == 'boy'
-                                        ? 'assets/images/mascott_garcon.png'
-                                        : 'assets/images/mascott_fille.png',
-                                    fit: BoxFit.cover,
+                                  child: ClipOval(
+                                    child: _gender == null
+                                        ? const Icon(Icons.person_add_alt_1_rounded,
+                                            color: Colors.white, size: 36)
+                                        : Image.asset(
+                                            _gender == 'boy'
+                                                ? 'assets/images/mascott_garcon.png'
+                                                : 'assets/images/mascott_fille.png',
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ),
                               ),
@@ -417,43 +517,27 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ],
                           ),
                           const SizedBox(height: 14),
-                          // Quick action: edit onboarding
-                          InkWell(
-                            onTap: _goToOnboarding,
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withAlpha(30),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.white.withAlpha(60),
+                          // Quick actions: switch track (the "portal") + about
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: _buildHeaderAction(
+                                  icon: Icons.door_front_door_outlined,
+                                  label: tr('dash_change_track'),
+                                  onTap: _changeTrack,
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.edit_note_rounded,
-                                    color: Colors.white.withAlpha(220),
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    tr('dash_edit_steps_btn'),
-                                    style: TextStyle(
-                                      color: Colors.white.withAlpha(220),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
+                              const SizedBox(width: 10),
+                              Expanded(
+                                flex: 2,
+                                child: _buildHeaderAction(
+                                  icon: Icons.info_outline_rounded,
+                                  label: tr('about_title'),
+                                  onTap: _openAbout,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -471,6 +555,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ══════ EMPLOYMENT PATH ══════
+                    if (_showEmployment) ...[
                     _buildPathHeader(
                       icon: Icons.business_center_rounded,
                       title: tr('dash_employment_path_title'),
@@ -495,10 +580,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                       itemBuilder: (context, index) =>
                           _buildSectionCard(_employmentSections[index], index),
                     ),
+                    ],
 
-                    const SizedBox(height: 28),
+                    if (_showEmployment && _showEntrepreneurship)
+                      const SizedBox(height: 28),
 
                     // ══════ ENTREPRENEURSHIP PATH ══════
+                    if (_showEntrepreneurship) ...[
                     _buildPathHeader(
                       icon: Icons.rocket_launch_rounded,
                       title: tr('dash_entrepreneurship_path_title'),
@@ -525,6 +613,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                         index,
                       ),
                     ),
+                    ],
 
                     // Admin
                     if (_isAdmin) ...[
@@ -534,6 +623,44 @@ class _DashboardScreenState extends State<DashboardScreen>
 
                     const SizedBox(height: 24),
                   ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderAction({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha(30),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withAlpha(60)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white.withAlpha(220), size: 19),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.white.withAlpha(230),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),

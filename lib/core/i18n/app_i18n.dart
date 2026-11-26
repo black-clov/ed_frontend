@@ -7,6 +7,7 @@ import 'parts/tr_employment1.dart';
 import 'parts/tr_employment2.dart';
 import 'parts/tr_entrepreneurship.dart';
 import 'parts/tr_admin.dart';
+import 'parts/tr_tracks.dart';
 
 /// Lightweight i18n: a global locale notifier + a `tr()` lookup.
 /// French is the default language. Arabic is RTL, French is LTR.
@@ -56,7 +57,7 @@ final Map<String, Map<String, String>> _t = _mergeAll();
 Map<String, Map<String, String>> _mergeAll() {
   const parts = [
     _core, trAuth2, trOnboarding, trDashboard,
-    trEmployment1, trEmployment2, trEntrepreneurship, trAdmin,
+    trEmployment1, trEmployment2, trEntrepreneurship, trAdmin, trTracks,
   ];
   final fr = <String, String>{};
   final ar = <String, String>{};

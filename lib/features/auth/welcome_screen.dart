@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../dashboard/dashboard_screen.dart';
 import '../onboarding/gender_welcome_screen.dart';
+import '../../services/session.dart';
 import '../../core/i18n/app_i18n.dart';
 import '../../core/i18n/language_toggle.dart';
 
@@ -41,19 +41,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       if ((response.statusCode == 200 || response.statusCode == 201) &&
           response.data != null &&
           response.data['access_token'] != null) {
-        await _storage.write(key: 'token', value: response.data['access_token']);
-        final userId = response.data['userId'];
-        if (userId != null) await _storage.write(key: 'user_id', value: userId.toString());
-        final role = response.data['role'];
-        if (role != null) await _storage.write(key: 'role', value: role.toString());
-        if (!mounted) return;
-        final onboardingDone = await _storage.read(key: 'onboarding_done');
-        if (!mounted) return;
-        if (role == 'admin' || onboardingDone == 'true') {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const DashboardScreen()));
-        } else {
-          Navigator.pushReplacementNamed(context, '/onboarding');
-        }
+        await _goHome(Map<String, dynamic>.from(response.data));
       } else {
         _showSnack(tr('invalid_credentials'));
       }
@@ -61,6 +49,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       _showSnack(tr('login_error'));
     }
     if (mounted) setState(() => _isLoading = false);
+  }
+
+  Future<void> _goHome(Map<String, dynamic> authData) async {
+    await Session.saveAuth(authData);
+    await Session.pushLocalPrefs();
+    final home = await Session.homeAfterLogin();
+    if (!mounted) return;
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => home));
   }
 
   void _selectGender(String gender) async {
@@ -82,19 +78,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     try {
       final data = await _authService.signInWithGoogle();
       if (data != null && data['access_token'] != null) {
-        await _storage.write(key: 'token', value: data['access_token']);
-        final userId = data['userId'];
-        if (userId != null) await _storage.write(key: 'user_id', value: userId.toString());
-        final role = data['role'];
-        if (role != null) await _storage.write(key: 'role', value: role.toString());
-        if (!mounted) return;
-        final onboardingDone = await _storage.read(key: 'onboarding_done');
-        if (!mounted) return;
-        if (role == 'admin' || onboardingDone == 'true') {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const DashboardScreen()));
-        } else {
-          Navigator.pushReplacementNamed(context, '/onboarding');
-        }
+        await _goHome(data);
       } else {
         _showSnack(tr('google_failed'));
       }
@@ -261,7 +245,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                onPressed: () => Navigator.pushNamed(context, '/about'),
+                icon: const Icon(Icons.info_outline_rounded, size: 18, color: Color(0xFF2E7D32)),
+                label: Text(tr('welcome_about_link'),
+                    style: const TextStyle(color: Color(0xFF2E7D32), fontSize: 13)),
+              ),
+              const SizedBox(height: 8),
             ],
           ),
         ),
