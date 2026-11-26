@@ -12,6 +12,7 @@ import '../opportunities/screens/opportunities_screen.dart';
 import '../profile/screens/profile_screen.dart';
 import '../recommendations/screens/recommendations_screen.dart';
 import '../skills/screens/skills_screen.dart';
+import '../interests/screens/interests_screen.dart';
 import '../videos/screens/videos_screen.dart';
 import '../sectors/screens/sectors_screen.dart';
 import '../entrepreneurship/screens/entrepreneurship_screen.dart';
@@ -60,6 +61,13 @@ class _DashboardScreenState extends State<DashboardScreen>
       Color(0xFFC62828),
       SkillsScreen(),
       tr('dash_sec_skills_subtitle'),
+    ),
+    _DashboardSection(
+      tr('dash_sec_interests_title'),
+      Icons.interests_outlined,
+      Color(0xFFC62828),
+      InterestsScreen(),
+      tr('dash_sec_interests_subtitle'),
     ),
     _DashboardSection(
       tr('dash_sec_opportunities_title'),

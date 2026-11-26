@@ -15,6 +15,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   final InterestsService _service = InterestsService();
   List<InterestCategory>? _categories;
   bool _loading = true;
+  bool _saving = false;
   int _expandedIndex = -1;
 
   @override
@@ -24,11 +25,26 @@ class _InterestsScreenState extends State<InterestsScreen> {
   }
 
   Future<void> _loadCategories() async {
-    final cats = await _service.fetchCategories();
+    final results = await Future.wait([
+      _service.fetchCategories(),
+      _service.loadSaved(),
+    ]);
+    if (!mounted) return;
     setState(() {
-      _categories = cats;
+      _categories = results[0] as List<InterestCategory>;
       _loading = false;
     });
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    final ok = await _service.save();
+    if (!mounted) return;
+    setState(() => _saving = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(tr(ok ? 'int_saved' : 'int_save_error'))),
+    );
+    if (ok) Navigator.pop(context);
   }
 
   IconData _iconForCategory(String iconName) {
@@ -66,6 +82,34 @@ class _InterestsScreenState extends State<InterestsScreen> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _buildContent(),
+      bottomNavigationBar: _loading
+          ? null
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                child: SizedBox(
+                  height: 50,
+                  child: ElevatedButton.icon(
+                    onPressed: _saving ? null : _save,
+                    icon: _saving
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          )
+                        : const Icon(Icons.check_rounded, color: Colors.white),
+                    label: Text(
+                      tr('int_save'),
+                      style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC62828),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
     );
   }
 

@@ -21,6 +21,35 @@ class InterestsService {
     }
   }
 
+  /// Load the interests already saved on the user's account.
+  Future<void> loadSaved() async {
+    try {
+      final response = await _api.get('/questionnaire/me/interests');
+      final raw = response.data is Map ? response.data['selections'] : null;
+      _selections.clear();
+      if (raw is Map) {
+        raw.forEach((cat, ids) {
+          if (ids is List) _selections[cat.toString()] = ids.map((e) => e.toString()).toList();
+        });
+      }
+    } catch (_) {
+      // Nothing saved yet or offline: start with an empty selection.
+    }
+  }
+
+  /// Save the selection on the user's account (used for offer matching).
+  Future<bool> save() async {
+    try {
+      final response = await _api.put(
+        '/questionnaire/me/interests',
+        data: {'selections': getSelections()},
+      );
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (_) {
+      return false;
+    }
+  }
+
   void toggleSubItem(String categoryId, String subItemId) {
     _selections.putIfAbsent(categoryId, () => []);
     final list = _selections[categoryId]!;

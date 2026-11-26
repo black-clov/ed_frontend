@@ -1,3 +1,14 @@
+import '../../../core/i18n/app_i18n.dart';
+
+/// Label in the app's current language (server sends labelFr / labelAr since
+/// v1.0.2; `label` is the older Arabic-only field, kept as fallback).
+String _localized(Map<String, dynamic> json) {
+  final fr = json['labelFr'] as String?;
+  final ar = (json['labelAr'] ?? json['label']) as String?;
+  final preferred = isRtl ? ar : fr;
+  return (preferred != null && preferred.isNotEmpty) ? preferred : (ar ?? fr ?? '');
+}
+
 class InterestCategory {
   final String id;
   final String label;
@@ -14,7 +25,7 @@ class InterestCategory {
   factory InterestCategory.fromJson(Map<String, dynamic> json) {
     return InterestCategory(
       id: json['id'] as String,
-      label: json['label'] as String,
+      label: _localized(json),
       icon: json['icon'] as String? ?? '',
       subItems: (json['subItems'] as List<dynamic>?)
               ?.map((e) => InterestSubItem.fromJson(e as Map<String, dynamic>))
@@ -33,7 +44,7 @@ class InterestSubItem {
   factory InterestSubItem.fromJson(Map<String, dynamic> json) {
     return InterestSubItem(
       id: json['id'] as String,
-      label: json['label'] as String,
+      label: _localized(json),
     );
   }
 }

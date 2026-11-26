@@ -1,3 +1,8 @@
+import '../../../core/i18n/app_i18n.dart';
+
+List<String> _strings(dynamic v) =>
+    (v as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+
 class OpportunityModel {
   final String id;
   final String title;
@@ -25,10 +30,12 @@ class OpportunityModel {
       location: json['location'] as String? ?? '',
       description: json['description'] as String? ?? '',
       matchScore: json['matchScore'] as int? ?? 0,
-      matchReasons: (json['matchReasons'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
-          [],
+      // Reasons in the app's language when the server provides them
+      // (matchReasonsFr / matchReasonsAr), else the bilingual fallback.
+      matchReasons: () {
+        final localized = _strings(isRtl ? json['matchReasonsAr'] : json['matchReasonsFr']);
+        return localized.isNotEmpty ? localized : _strings(json['matchReasons']);
+      }(),
     );
   }
 }

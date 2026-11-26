@@ -27,6 +27,12 @@ const Map<String, Map<String, String>> trTracks = {
     'about_load_error': 'Impossible de charger la page. Vérifie ta connexion.',
     'about_open_error': 'Impossible d’ouvrir ce lien.',
     'welcome_about_link': 'À propos d’Eidmaj',
+    // v1.0.2: interests
+    'dash_sec_interests_title': 'Centres d’intérêt',
+    'dash_sec_interests_subtitle': 'Ce qui vous plaît',
+    'int_save': 'Enregistrer mes centres d’intérêt',
+    'int_saved': 'Centres d’intérêt enregistrés ✓',
+    'int_save_error': 'Enregistrement impossible. Vérifie ta connexion.',
   },
   'ar': {
     // portal
@@ -54,5 +60,11 @@ const Map<String, Map<String, String>> trTracks = {
     'about_load_error': 'ما قدرناش نحمّلو الصفحة. تأكد من الاتصال ديالك.',
     'about_open_error': 'ما قدرناش نحلّو هاد الرابط.',
     'welcome_about_link': 'حول إدماج',
+    // v1.0.2: interests
+    'dash_sec_interests_title': 'الاهتمامات',
+    'dash_sec_interests_subtitle': 'شنو كيعجبك',
+    'int_save': 'سجّل الاهتمامات ديالي',
+    'int_saved': 'تسجّلو الاهتمامات ✓',
+    'int_save_error': 'ما قدرناش نسجّلو. تأكد من الاتصال ديالك.',
   },
 };
